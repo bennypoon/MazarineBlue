@@ -8,4 +8,5 @@
 [MazarineBlue-Engine] ---> [junit]
 [MazarineBlue-Engine] --> [junit-hierarchicalcontextrunner]
 [MazarineBlue-Engine] --> [MazarineBlue-EventBus]
+[MazarineBlue-Engine] --> [MazarineBlue-Utilities]
 @enduml
