@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff
+ * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -18,10 +18,13 @@
 package org.mazarineblue.pictures.exceptions;
 
 /**
+ * A {@code PictureMissingException} is thrown by {@link Picture} when a
+ * {@link Picture} was not provided.
  *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-@SuppressWarnings("serial")
 public class PictureMissingException
-        extends RuntimeException {
+        extends PictureException {
+
+    private static final long serialVersionUID = 1L;
 }

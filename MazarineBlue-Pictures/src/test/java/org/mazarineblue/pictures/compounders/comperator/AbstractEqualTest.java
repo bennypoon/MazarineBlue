@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff
+ * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -15,34 +15,43 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.pictures;
+package org.mazarineblue.pictures.compounders.comperator;
 
 import java.awt.Dimension;
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import org.mazarineblue.pictures.compounders.EqualCompounder;
+import org.mazarineblue.pictures.Picture;
+import org.mazarineblue.pictures.PictureTest;
+import org.mazarineblue.pictures.compounders.CompareCompounder;
 import org.mazarineblue.pictures.compounders.PixelComperator;
 
 /**
- *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
 public abstract class AbstractEqualTest {
 
-    static protected final int ALPHA = 255 << 24;
-    static protected final int RED = 255 << 16;
-    static protected final int GREEN = 255 << 8;
-    static protected final int BLUE = 255;
+    protected static final int ALPHA = 255 << 24;
+    protected static final int RED = 255 << 16;
+    protected static final int GREEN = 255 << 8;
+    protected static final int BLUE = 255;
 
-    static protected final int ALPHA_RED = ALPHA + RED;
-    static protected final int ALPHA_GREEN = ALPHA + GREEN;
-    static protected final int ALPHA_BLUE = ALPHA + BLUE;
+    protected static final int ALPHA_RED = ALPHA + RED;
+    protected static final int ALPHA_GREEN = ALPHA + GREEN;
+    protected static final int ALPHA_BLUE = ALPHA + BLUE;
 
-    static protected final int ALL = ALPHA + RED + GREEN + BLUE;
+    protected static final int ALL = ALPHA + RED + GREEN + BLUE;
 
-    static protected PixelComperator comperator;
-    static protected Picture base, equal, alpha, red, green, blue;
-    static protected EqualCompounder.Result equalResult, alphaResult, redResult, greenResult, blueResult;
+    protected static PixelComperator comperator;
+    protected static Picture base, equal, alpha, red, green, blue;
+    protected static CompareCompounder.Result equalResult, alphaResult, redResult, greenResult, blueResult;
+
+    @AfterClass
+    public static void teardownClass() {
+        comperator = null;
+        base = equal = alpha = red = green = blue = null;
+        equalResult = alphaResult = redResult = greenResult = blueResult = null;
+    }
 
     @Test
     public void testEqual()
@@ -74,7 +83,7 @@ public abstract class AbstractEqualTest {
         assertEquals(blueResult, blue.compare(base, comperator));
     }
 
-    static protected Picture createPicture(Dimension d, int... rgb)
+    protected static Picture createPicture(Dimension d, int... rgb)
             throws Exception {
         return PictureTest.createPictureByImage(d, rgb);
     }

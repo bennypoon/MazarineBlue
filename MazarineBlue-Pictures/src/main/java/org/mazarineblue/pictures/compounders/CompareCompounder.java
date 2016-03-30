@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2014 Alex de Kruijff
+ * Copyright (c) 2012-2014 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  * Copyright (c) 2014-2015 Specialisterren
  *
  * This program is free software; you can redistribute it and/or
@@ -18,47 +18,78 @@
  */
 package org.mazarineblue.pictures.compounders;
 
-import java.io.IOException;
-import org.mazarineblue.pictures.Compounder;
-import org.mazarineblue.pictures.Raster;
+import org.mazarineblue.pictures.Picture;
+import org.mazarineblue.utililities.exceptions.NeverThrownException;
 
 /**
+ * An {@code CompareCompounder} is a {@code Compounder} that compares two
+ * {@link Picture pictures}, using a {@link PixelComperator} and report if they
+ * the two {@code pictures} are deemed identical or not.
  *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class EqualCompounder
-        extends Compounder {
+public class CompareCompounder
+        extends Compounder<CompareCompounder.Result> {
 
     private Result result;
     private boolean stop = false;
 
     private final PixelComperator pixelComperator;
 
-    static public enum Result {
+    /**
+     * The result of {@link #compound()}.
+     */
+    @SuppressWarnings("PublicInnerClass")
+    public enum Result {
 
-        EQUAL, FAIL, DIFF_WIDTH, DIFF_HEIGHT,
-        DIFF_WIDTH_AND_HEIGHT, DIFF_CONTENT,
+        /**
+         * Indicates both pictures are equal.
+         */
+        EQUAL,
+        /**
+         * Indicates both pictures have different width.
+         */
+        DIFF_WIDTH,
+        /**
+         * Indicates both pictures have different height.
+         */
+        DIFF_HEIGHT,
+        /**
+         * Indicates both pictures have different width and height.
+         */
+        DIFF_WIDTH_AND_HEIGHT,
+        /**
+         * Indicates both pictures have different width and height.
+         */
+        DIFF_CONTENT,
+        /**
+         * Indicates some failure comparing both pictures.
+         */
+        FAIL,
     }
 
-    public EqualCompounder(Raster left, Raster right,
-                           PixelComperator pixelComperator)
-            throws IOException {
+    /**
+     * Constructs an {@link Compounder compounder} capable of testing the
+     * equality of the two specified pictures using the specified
+     * {@code PixelComperator}.
+     *
+     * @param left            the first picture.
+     * @param right           the second picture.
+     * @param pixelComperator the comperator to use in the equality test.
+     */
+    public CompareCompounder(Picture left, Picture right, PixelComperator pixelComperator) {
         super(left, right);
         this.pixelComperator = pixelComperator;
         result = Result.EQUAL;
     }
 
     @Override
-    protected void compareWidth() {
+    protected void compoundDimension() {
         compareWidthOrHeight(left.getWidth(), right.getWidth(), Result.DIFF_WIDTH);
-    }
-
-    @Override
-    protected void compareHeight() {
         compareWidthOrHeight(left.getHeight(), right.getHeight(), Result.DIFF_HEIGHT);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Helper methods for compareWidth() and compareHeight()">
+    // <editor-fold defaultstate="collapsed" desc="Helper methods for compoundDimension()">
     private void compareWidthOrHeight(int expected, int actual, Result type) {
         switch (result) {
             case EQUAL:
@@ -70,12 +101,14 @@ public class EqualCompounder
                 if (expected != actual)
                     result = Result.DIFF_WIDTH_AND_HEIGHT;
                 break;
+            default:
+                throw new UnsupportedOperationException("Type: " + type + " is unsupported.");
         }
     }
     // </editor-fold>
 
     @Override
-    protected boolean shouldComputeContent() {
+    protected boolean shouldCompoundContent() {
         return isWidthEqual() && isHeightEqual();
     }
 
@@ -88,33 +121,33 @@ public class EqualCompounder
     }
 
     @Override
-    protected void computeNone(int x, int y) {
+    protected void compoundNone(int x, int y) {
         /* This method is never called, because we only check the content if the
          * width and height of both screenshots are equal.
          */
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new NeverThrownException();
     }
 
     @Override
-    protected void computeRight(int x, int y) {
+    protected void compoundRight(int x, int y) {
         /* This method is never called, because we only check the content if the
          * width and height of both screenshots are equal.
          */
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new NeverThrownException();
     }
 
     @Override
-    protected void computeLeft(int x, int y) {
+    protected void compoundLeft(int x, int y) {
         /* This method is never called, because we only check the content if the
          * width and height of both screenshots are equal.
          */
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new NeverThrownException();
     }
 
     @Override
-    protected void computeBoth(int x, int y) {
-        int expectedPixel = left.getRGB(x, y);
-        int actualPixel = right.getRGB(x, y);
+    protected void compoundUsingBothPixels(int x, int y) {
+        int expectedPixel = left.getPixel(x, y);
+        int actualPixel = right.getPixel(x, y);
         if (pixelComperator.isPixelEqual(expectedPixel, actualPixel))
             return;
         result = Result.DIFF_CONTENT;
@@ -122,11 +155,12 @@ public class EqualCompounder
     }
 
     @Override
-    protected boolean stopComputingContent() {
+    protected boolean stopComputing() {
         return stop;
     }
 
-    public Result getComperation() {
+    @Override
+    public Result getResult() {
         return result;
     }
 }

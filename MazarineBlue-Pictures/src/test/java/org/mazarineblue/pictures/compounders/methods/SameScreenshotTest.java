@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff
+ * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -15,13 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.pictures.exceptions;
+package org.mazarineblue.pictures.compounders.methods;
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
- *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-@SuppressWarnings("serial")
-public class InputStreamMissingException
-        extends RuntimeException {
+public class SameScreenshotTest
+        extends AbstractScreenshotTest {
+
+    @Test
+    public void test()
+            throws Exception {
+        assertEquals(check, left.same(right));
+    }
+
+    @Override
+    protected int getPixel(int x, int y) {
+        return x < dimensionOverlap.width && y < dimensionOverlap.height ? RED : 0;
+    }
 }

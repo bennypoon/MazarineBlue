@@ -35,4 +35,12 @@
             <timezone>+1</timezone>
         </developer>
     </developers>
+
+    <dependencies>
+        <dependency>
+            <artifactId>MazarineBlue-Utilities</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

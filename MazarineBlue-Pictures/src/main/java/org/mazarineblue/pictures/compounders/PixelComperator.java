@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff
+ * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -18,23 +18,19 @@
 package org.mazarineblue.pictures.compounders;
 
 /**
+ * A {@code PixelComparator} test the equality of two pixels.
  *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@FunctionalInterface
 public interface PixelComperator {
 
-    static final int ALPHA = 24;
-    static final int RED = 16;
-    static final int GREEN = 8;
-    static final int BLUE = 0;
-
+    /**
+     * Test if two specified pixels are equal.
+     *
+     * @param leftPixel  one pixel to use in the test.
+     * @param rightPixel one pixel to use in the test.
+     * @return {@code true} if both pixels are equivalent.
+     */
     public abstract boolean isPixelEqual(int leftPixel, int rightPixel);
-
-    static boolean isPixelPartEqual(int leftPixel, int rightPixel, int part) {
-        return getPixelPart(leftPixel, part) == getPixelPart(rightPixel, part);
-    }
-
-    static int getPixelPart(int argb, int part) {
-        return (argb >> part) & 0xFF;
-    }
 }

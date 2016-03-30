@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff 
+ * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -17,35 +17,28 @@
  */
 package org.mazarineblue.pictures.compounders.methods;
 
-import org.mazarineblue.pictures.compounders.CompoundMethod;
-import org.mazarineblue.pictures.compounders.PixelComperator;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import static org.mazarineblue.pictures.compounders.methods.AbstractScreenshotTest.RED;
 
 /**
- *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public abstract class SameDiffFilter
-        implements CompoundMethod {
+public class DiffScreenshotTest
+        extends AbstractScreenshotTest {
 
-    protected final PixelComperator comparator;
-
-    static protected final int DEFAULT_PIXEL = 0;
-
-    public SameDiffFilter(PixelComperator comparator) {
-        this.comparator = comparator;
+    @Test
+    public void test()
+            throws Exception {
+        assertEquals(check, left.diff(right));
     }
 
     @Override
-    public abstract int compute(int leftPixel, int rightPixel);
-
-    @Override
-    public abstract int computeLeft(int leftPixel);
-
-    @Override
-    public abstract int computeRigth(int rightPixel);
-
-    @Override
-    public int computeNeither() {
-        return DEFAULT_PIXEL;
+    protected int getPixel(int x, int y) {
+        if (x >= dimensionOverlap.width && y < dimensionOverlap.height)
+            return RED;
+        if (x < dimensionOverlap.width && y >= dimensionOverlap.height)
+            return RED;
+        return 0;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff
+ * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -17,32 +17,51 @@
  */
 package org.mazarineblue.pictures.compounders.methods;
 
+import org.mazarineblue.pictures.compounders.CompoundMethod;
 import org.mazarineblue.pictures.compounders.PixelComperator;
 
 /**
+ * A {@code DiffFilter} is a {@link CompoundMethod} that filters out pixels
+ * that are different.
  *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
 public class DiffFilter
-        extends SameDiffFilter {
+        implements CompoundMethod {
 
+    private static final int TRANSPARENT_PIXEL = 0;
+
+    protected final PixelComperator comparator;
+
+    /**
+     * Constructs a {@code DiffFilter} that uses the specified
+     * {@link PixelComparator} to determine which pixels are different an which
+     * doesn't.
+     *
+     * @param comparator the pixel comparator.
+     */
     public DiffFilter(PixelComperator comparator) {
-        super(comparator);
+        this.comparator = comparator;
     }
 
     @Override
-    public int compute(int leftPixel, int rightPixel) {
+    public int compoundBoth(int leftPixel, int rightPixel) {
         boolean same = comparator.isPixelEqual(leftPixel, rightPixel);
-        return same ? DEFAULT_PIXEL : rightPixel;
+        return same ? TRANSPARENT_PIXEL : rightPixel;
     }
 
     @Override
-    public int computeLeft(int leftPixel) {
+    public int compoundLeft(int leftPixel) {
         return leftPixel;
     }
 
     @Override
-    public int computeRigth(int rightPixel) {
+    public int compoundRigth(int rightPixel) {
         return rightPixel;
+    }
+
+    @Override
+    public int compoundNeither() {
+        return TRANSPARENT_PIXEL;
     }
 }

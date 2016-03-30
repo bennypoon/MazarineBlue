@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff
+ * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -18,10 +18,18 @@
 package org.mazarineblue.pictures.exceptions;
 
 /**
+ * A {@code PictureException} is the base class of all exceptions thrown
+ * by the pictures module.
  *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-@SuppressWarnings("serial")
-public class BufferedImageMissingException
+/**
+ * A {@code PictureException} is the base exception class of the .
+ *
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ */
+public class PictureException
         extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
 }

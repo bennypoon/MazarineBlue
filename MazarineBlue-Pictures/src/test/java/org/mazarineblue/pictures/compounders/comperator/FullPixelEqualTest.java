@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff
+ * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -15,22 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.pictures;
+package org.mazarineblue.pictures.compounders.comperator;
 
 import java.awt.Dimension;
 import org.junit.BeforeClass;
-import org.mazarineblue.pictures.compounders.EqualCompounder;
-import org.mazarineblue.pictures.compounders.comperator.FullPixelComperator;
+import org.mazarineblue.pictures.compounders.CompareCompounder;
 
 /**
- *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
 public class FullPixelEqualTest
         extends AbstractEqualTest {
 
     @BeforeClass
-    static public void setupClass()
+    public static void setupClass()
             throws Exception {
         AbstractEqualTest.comperator = new FullPixelComperator();
         Dimension dimension4x4 = new Dimension(4, 4);
@@ -42,10 +40,10 @@ public class FullPixelEqualTest
         green = createPicture(dimension4x4, ALPHA, RED, GREEN + BLUE, BLUE);
         blue = createPicture(dimension4x4, ALPHA, RED, GREEN, GREEN + BLUE);
 
-        equalResult = EqualCompounder.Result.EQUAL;
-        alphaResult = EqualCompounder.Result.DIFF_CONTENT;
-        redResult = EqualCompounder.Result.DIFF_CONTENT;
-        greenResult = EqualCompounder.Result.DIFF_CONTENT;
-        blueResult = EqualCompounder.Result.DIFF_CONTENT;
+        equalResult = CompareCompounder.Result.EQUAL;
+        alphaResult = CompareCompounder.Result.DIFF_CONTENT;
+        redResult = CompareCompounder.Result.DIFF_CONTENT;
+        greenResult = CompareCompounder.Result.DIFF_CONTENT;
+        blueResult = CompareCompounder.Result.DIFF_CONTENT;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff
+ * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -15,13 +15,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.pictures.exceptions;
+package org.mazarineblue.pictures;
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
- *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-@SuppressWarnings("serial")
-public class DimensionMissingException
-        extends RuntimeException {
+public class RasterTest {
+
+    @Test
+    public void toString_ReturnsWidthAndHeight() {
+        Raster raster = new Raster(3, 4);
+        assertEquals("width=3, height=4", raster.toString());
+    }
 }

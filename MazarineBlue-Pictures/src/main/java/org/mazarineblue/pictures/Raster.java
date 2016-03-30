@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff
+ * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -17,24 +17,17 @@
  */
 package org.mazarineblue.pictures;
 
-/**
- *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
- */
-public class Raster {
+import java.awt.Dimension;
+import java.util.Arrays;
+
+class Raster {
 
     final int[] rgbArray;
-    final int width;
-    final int height;
+    private final int width;
+    private final int height;
 
-    public Raster(int width, int height) {
+    Raster(int width, int height) {
         this.rgbArray = new int[width * height];
-        this.width = width;
-        this.height = height;
-    }
-
-    public Raster(int[] arr, int width, int height) {
-        this.rgbArray = arr;
         this.width = width;
         this.height = height;
     }
@@ -44,24 +37,81 @@ public class Raster {
         return "width=" + width + ", height=" + height;
     }
 
-    public int getWidth() {
+    Dimension getDimension() {
+        return new Dimension(width, height);
+    }
+
+    int getWidth() {
         return width;
     }
 
-    public int getHeight() {
+    int getHeight() {
         return height;
     }
 
-    public int getRGB(int x, int y) {
+    int[] getRGB(int startX, int startY, int width, int height, int[] rgbArray, int offset) {
+        if (areParametersOutOfBounds(startX, width, startY, height, rgbArray, offset))
+            throw new ArrayIndexOutOfBoundsException();
+        int[] arr = rgbArray != null ? rgbArray : new int[width * height + offset];
+        for (int i = 0; i < width; ++i)
+            for (int j = 0; j < height; ++j)
+                arr[offset + i + j * width] = getRGB(startX + i, startY + j);
+        return arr;
+    }
+
+    int getRGB(int x, int y) {
+        if (x < 0 || x > width || y < 0 || y > height)
+            throw new ArrayIndexOutOfBoundsException();
         return rgbArray[x + y * width];
     }
 
-    public void setRGB(int x, int y, int rgb) {
+    void setRGB(int startX, int startY, int width, int height, int[] rgbArray, int offset) {
+        if (areParametersOutOfBounds(startX, width, startY, height, rgbArray, offset))
+            throw new ArrayIndexOutOfBoundsException();
+        for (int i = 0; i < width; ++i)
+            for (int j = 0; j < height; ++j)
+                setRGB(startX + i, startY + j, rgbArray[offset + i + j * width]);
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="Helper methods for scale()">
+    private boolean areParametersOutOfBounds(int x, int width, int y, int height, int[] rgbArray, int offset) {
+        return isXOrWidthOutOfBounds(x, width) || isYOrHeightOutOfBounds(y, height)
+                || isOffsetOutOfBoundsOrRgbArrayToSmall(width, height, rgbArray, offset);
+    }
+
+    private boolean isXOrWidthOutOfBounds(int x, int width) {
+        return x < 0 || width < 0 || x + width > this.width;
+    }
+
+    private boolean isYOrHeightOutOfBounds(int y, int height) {
+        return y < 0 || height < 0 || y + height > this.height;
+    }
+
+    private boolean isOffsetOutOfBoundsOrRgbArrayToSmall(int width, int height, int[] rgbArray, int offset) {
+        return offset < 0 || rgbArray != null && offset + width * height > rgbArray.length;
+    }
+    // </editor-fold>
+
+    void setRGB(int x, int y, int rgb) {
+        if (x < 0 || x > width || y < 0 || y > height)
+            throw new ArrayIndexOutOfBoundsException();
         rgbArray[x + y * width] = rgb;
     }
 
     void copyAndClip(Raster raster) {
         for (int y = 0; y < height; ++y)
             System.arraycopy(raster.rgbArray, y * raster.width, rgbArray, y * width, width);
+    }
+
+    @Override
+    public int hashCode() {
+        return 1588867 + 3721 * Arrays.hashCode(this.rgbArray) + 61 * this.width + this.height;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && getClass() == obj.getClass()
+                && this.width == ((Raster) obj).width && this.height == ((Raster) obj).height
+                && Arrays.equals(this.rgbArray, ((Raster) obj).rgbArray);
     }
 }

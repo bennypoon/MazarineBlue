@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff
+ * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -17,23 +17,24 @@
  */
 package org.mazarineblue.pictures.compounders.comperator;
 
+import org.mazarineblue.pictures.PixelUtil;
 import org.mazarineblue.pictures.compounders.PixelComperator;
 
 /**
+ * A {@code IgnoreAlphaComperator} is an {@code PixelComperator} that indicates
+ * that pixels are equal when the components alpha, red, green and blue are
+ * equal.
  *
- * @author Alex de Kruijff {@literal <alex.de.kruijff@MazarineBlue.org>}
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
 public class FullPixelComperator
         implements PixelComperator {
 
     @Override
     public boolean isPixelEqual(int leftPixel, int rightPixel) {
-        if (PixelComperator.isPixelPartEqual(leftPixel, rightPixel, ALPHA) == false)
-            return false;
-        if (PixelComperator.isPixelPartEqual(leftPixel, rightPixel, RED) == false)
-            return false;
-        if (PixelComperator.isPixelPartEqual(leftPixel, rightPixel, GREEN) == false)
-            return false;
-        return PixelComperator.isPixelPartEqual(leftPixel, rightPixel, BLUE);
+        return PixelUtil.getAlpha(leftPixel) == PixelUtil.getAlpha(rightPixel)
+                && PixelUtil.getRed(leftPixel) == PixelUtil.getRed(rightPixel)
+                && PixelUtil.getGreen(leftPixel) == PixelUtil.getGreen(rightPixel)
+                && PixelUtil.getBlue(leftPixel) == PixelUtil.getBlue(rightPixel);
     }
 }
