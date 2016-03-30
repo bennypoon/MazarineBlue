@@ -23,36 +23,48 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.tree;
 
-import org.mazarineblue.parser.Parser;
+import org.mazarineblue.parser.tokens.Token;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * A {@code Leaf} is tree leaf in a {@code SyntaxTree} containing an {@code
+ * Token}.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ * @see Token
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+class Leaf<T>
+        implements SyntaxTreeNode<T> {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
+    private final Token<T> token;
 
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
+    /**
+     * Creates a {@code Leaf} with the specified token.
+     *
+     * @param token the value for this leaf.
+     */
+    Leaf(Token<T> token) {
+        this.token = token;
     }
 
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
+    @Override
+    public Token<T> getToken() {
+        return token;
     }
 
-    public int getIndex() {
-        return index;
+    @Override
+    public String toString() {
+        return token.toString().trim();
+    }
+
+    @Override
+    public SyntaxTreeNode<T> getLeftChild() {
+        return null;
+    }
+
+    @Override
+    public SyntaxTreeNode<T> getRightChild() {
+        return null;
     }
 }

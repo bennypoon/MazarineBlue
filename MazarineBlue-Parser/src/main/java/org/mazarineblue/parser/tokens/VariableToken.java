@@ -23,36 +23,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
-
-import org.mazarineblue.parser.Parser;
+package org.mazarineblue.parser.tokens;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * A {@code VariableToken} is a @{code Token} that holds a variable name.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+class VariableToken
+        extends AbstractToken<String> {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
-
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
-    }
-
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return index;
+    /**
+     * Creates an {@code VariableToken} with the specified value.
+     *
+     * @param value the value to construct the token with.
+     */
+    VariableToken(String value, int index) {
+        super(value, index);
     }
 }

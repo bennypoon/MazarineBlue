@@ -23,36 +23,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.analyser.lexical;
 
-import org.mazarineblue.parser.Parser;
+import org.mazarineblue.parser.tokens.Token;
+import org.mazarineblue.parser.tokens.Tokens;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * A {@code LiteralMatcher} is a {@code Matcher} that matches any string
+ * that is not catched by another {@code Matcher}.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+class DefaultStringMatcher
+        extends Matcher<String> {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
-
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
+    @Override
+    public Token<String> createToken(String input, int startIndex, int endIndex) {
+        return Tokens.createLiteralToken(input.substring(startIndex, endIndex), startIndex);
     }
 
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return index;
+    @Override
+    public void processChar(char c, int index) {
+        if (getStart() == -1)
+            setStart(index);
+        else
+            setMatch(true);
+        setEnd(index);
     }
 }

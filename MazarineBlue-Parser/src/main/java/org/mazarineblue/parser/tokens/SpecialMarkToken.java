@@ -23,36 +23,53 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.tokens;
 
-import org.mazarineblue.parser.Parser;
+import java.util.Objects;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * A {@code EndToken} is a {@code Token} that signals the end of Token.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ * @param <T> this can be whatever you need it to be.
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+class SpecialMarkToken<T>
+        implements Token<T> {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
+    private final String identifier;
 
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
+    /**
+     * Constructs a {@code SpecialMarkToken}.
+     *
+     * @param identifier the identifier used as the identifing mark.
+     */
+    public SpecialMarkToken(String identifier) {
+        this.identifier = identifier;
     }
 
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
+    @Override
+    public T getValue() {
+        return null;
     }
 
+    @Override
     public int getIndex() {
-        return index;
+        return -1;
+    }
+
+    @Override
+    public String toString() {
+        return "*** " + identifier + " ***";
+    }
+
+    @Override
+    public int hashCode() {
+        return 335 + Objects.hashCode(this.identifier);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && getClass() == obj.getClass()
+                && Objects.equals(this.identifier, ((SpecialMarkToken<?>) obj).identifier);
     }
 }

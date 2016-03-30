@@ -25,34 +25,20 @@
  */
 package org.mazarineblue.parser.exceptions;
 
-import org.mazarineblue.parser.Parser;
-
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * A {@code SyntacticExpressionException} is thrown by a {@link Parser}
+ * when an exception was thrown during the syntax phase. During the syntax
+ * phase the specified tokens are converted into a {@link SyntaxTreeNode syntax
+ * tree}.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+public class SyntacticExpressionException
+        extends InvalidExpressionException {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
     private static final long serialVersionUID = 1L;
 
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
-    }
-
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return index;
+    public SyntacticExpressionException(int index) {
+        super(index);
     }
 }

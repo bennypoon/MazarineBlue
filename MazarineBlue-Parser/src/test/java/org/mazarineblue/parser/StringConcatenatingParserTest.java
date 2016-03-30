@@ -25,27 +25,57 @@
  */
 package org.mazarineblue.parser;
 
-import org.mazarineblue.parser.exceptions.InvalidExpressionException;
+import de.bechte.junit.runners.context.HierarchicalContextRunner;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mazarineblue.parser.exceptions.LexicalExpressionException;
 
 /**
- * A {@code Parser} converts an expression in to data structure.
- * <p>
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
- * @param <T> the parser input type.
- * @param <R> the parser output type.
  */
-@FunctionalInterface
-public interface Parser<T, R> {
+@RunWith(HierarchicalContextRunner.class)
+public class StringConcatenatingParserTest {
 
-    /**
-     * Parses the specified input data and returns a syntax tree.
-     *
-     * @param input the specified data.
-     * @return a syntax tree representing the data.
-     *
-     * @throws InvalidExpressionException when an invalid expression was
-     *                                    encountered during parsing.
-     */
-    public R parse(T input);
+    public class UsingVariableSource {
+
+        Parser<String, String> parser;
+
+        @Before
+        public void setup() {
+            parser = new StringVariableParser(name -> "oof");
+        }
+
+        @After
+        public void teardown() {
+            parser = null;
+        }
+
+        @Test
+        public void parse_NoVariable() {
+            assertEquals("foo", parser.parse("foo"));
+        }
+
+        @Test(expected = LexicalExpressionException.class)
+        public void parse_WrongPositionForOpenBracker() {
+            assertEquals("oof", parser.parse("$f{oo"));
+        }
+
+        @Test(expected = LexicalExpressionException.class)
+        public void parse_ForgetToClose() {
+            assertEquals("oof", parser.parse("${foo"));
+        }
+
+        @Test(expected = LexicalExpressionException.class)
+        public void parse_CloseWithoutOpening() {
+            assertEquals("oof", parser.parse("$foo}"));
+        }
+
+        @Test
+        public void parse_CurrectVariable() {
+            assertEquals("oof", parser.parse("${foo}"));
+        }
+    }
 }

@@ -23,36 +23,34 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.util;
 
-import org.mazarineblue.parser.Parser;
+import static java.util.Collections.unmodifiableList;
+import java.util.List;
+import org.mazarineblue.parser.analyser.syntax.SyntacticAnalyser;
+import org.mazarineblue.parser.tokens.Token;
+import org.mazarineblue.parser.tree.SyntaxTreeNode;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+public class TestSyntacticAnalyser<T>
+        implements SyntacticAnalyser<T> {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
+    private List<Token<T>> tokens;
+    private SyntaxTreeNode<T> tree;
 
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
+    public void setTree(SyntaxTreeNode<T> tree) {
+        this.tree = tree;
     }
 
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
+    public List<Token<T>> getTokens() {
+        return unmodifiableList(tokens);
     }
 
-    public int getIndex() {
-        return index;
+    @Override
+    public SyntaxTreeNode<T> buildTree(List<Token<T>> tokens) {
+        this.tokens = unmodifiableList(tokens);
+        return tree;
     }
 }

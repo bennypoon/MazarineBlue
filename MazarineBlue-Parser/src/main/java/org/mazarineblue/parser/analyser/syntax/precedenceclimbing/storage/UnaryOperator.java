@@ -23,36 +23,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.analyser.syntax.precedenceclimbing.storage;
 
-import org.mazarineblue.parser.Parser;
+import org.mazarineblue.parser.analyser.syntax.precedenceclimbing.Associativity;
+import org.mazarineblue.parser.analyser.syntax.precedenceclimbing.Operator;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * An {@code UnaryOperator} is a {@code Operator} that works with a single
+ * child node.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+public class UnaryOperator
+        extends Operator {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
-
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
-    }
-
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return index;
+    /**
+     * Creates an operator with a specified precedence and associativity.
+     *
+     * @param precedence    the priority of the operator.
+     * @param associativity the grouping order of the operator.
+     * @see Associativity
+     */
+    public UnaryOperator(int precedence, Associativity associativity) {
+        super(precedence, associativity);
     }
 }

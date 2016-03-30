@@ -23,36 +23,30 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.analyser.semantic;
 
-import org.mazarineblue.parser.Parser;
+import org.mazarineblue.parser.exceptions.IllegalSyntaxTreeException;
+import org.mazarineblue.parser.tree.SyntaxTreeNode;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * A {@code SemanticAnalyser} evaluates a {@link SyntaxTreeNode} and produces a
+ * result.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ * @param <T> the parser input type.
+ * @param <R> the parser output type.
+ * @see Parser
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+@FunctionalInterface
+public interface SemanticAnalyser<T, R> {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
-
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
-    }
-
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return index;
-    }
+    /**
+     * Converts a {@code SyntaxTree} into a result.
+     *
+     * @param tree the syntax tree representing the tokens.
+     * @return the final product.
+     *
+     * @throws IllegalSyntaxTreeException when the tree is invalid.
+     */
+    public R evaluate(SyntaxTreeNode<T> tree);
 }

@@ -23,36 +23,38 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.util;
 
-import org.mazarineblue.parser.Parser;
+import java.util.Collections;
+import static java.util.Collections.unmodifiableList;
+import java.util.List;
+import org.mazarineblue.parser.analyser.lexical.LexicalAnalyser;
+import org.mazarineblue.parser.tokens.Token;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+public class TestLexicalAnalyser
+        implements LexicalAnalyser<String> {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
+    private String input;
+    private List<Token<String>> tokens;
 
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
+    public TestLexicalAnalyser() {
+        tokens = Collections.emptyList();
     }
 
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
+    public String getInput() {
+        return input;
     }
 
-    public int getIndex() {
-        return index;
+    public void setTokens(List<Token<String>> tokens) {
+        this.tokens = unmodifiableList(tokens);
+    }
+
+    @Override
+    public List<Token<String>> breakdown(String input) {
+        this.input = input;
+        return unmodifiableList(tokens);
     }
 }

@@ -23,36 +23,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.analyser.syntax;
 
-import org.mazarineblue.parser.Parser;
+import java.util.List;
+import org.mazarineblue.parser.tokens.Token;
+import org.mazarineblue.parser.tree.SyntaxTreeNode;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * A {@code SyntacticAnalyser} converts a set of tokens in to a syntax tree.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ * @param <T> the parser input type.
+ * @see Parser
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+@FunctionalInterface
+public interface SyntacticAnalyser<T> {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
-
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
-    }
-
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return index;
-    }
+    /**
+     * Converts the specified tokens into a syntax tree.
+     *
+     * @param tokens the specified input to convert.
+     * @return the syntax tree representing the tokens.
+     */
+    public SyntaxTreeNode<T> buildTree(List<Token<T>> tokens);
 }

@@ -26,54 +26,49 @@
 package org.mazarineblue.parser;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
-import org.mazarineblue.parser.exceptions.InvalidExpressionException;
+import org.mazarineblue.parser.analyser.lexical.StringLexicalAnalyser;
+import org.mazarineblue.parser.analyser.lexical.matchers.StringMatcher;
 import org.mazarineblue.parser.tokens.Token;
-import org.mazarineblue.parser.tree.SyntaxTreeNode;
-import org.mazarineblue.parser.util.TestLexicalAnalyser;
-import org.mazarineblue.parser.util.TestSemanticParser;
-import org.mazarineblue.parser.util.TestSyntacticAnalyser;
-import org.mazarineblue.parser.util.TestSyntaxTree;
-import org.mazarineblue.parser.util.TestToken;
+import org.mazarineblue.parser.tokens.Tokens;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class ParserTest {
+public class OperatorLexicalAnalyserTest {
 
-    private TestLexicalAnalyser lexicalAnalyser;
-    private TestSyntacticAnalyser<String> syntacticAnalyser;
-    private TestSemanticParser semanticParsing;
-    private GenericParser<String, String> parser;
+    private StringLexicalAnalyser analyser;
 
     @Before
     public void setup() {
-        lexicalAnalyser = new TestLexicalAnalyser();
-        syntacticAnalyser = new TestSyntacticAnalyser<>();
-        semanticParsing = new TestSemanticParser();
-        parser = new GenericParser<>(lexicalAnalyser, syntacticAnalyser, semanticParsing);
-    }
-
-    @Test(expected = InvalidExpressionException.class)
-    public void parse_Null() {
-        parser.parse(null);
+        analyser = new StringLexicalAnalyser();
+        analyser.add(new StringMatcher("++"));
     }
 
     @Test
-    public void parse_Input() {
-        List<Token<String>> tokens = asList(new TestToken("token"));
-        SyntaxTreeNode<String> tree = new TestSyntaxTree();
-        lexicalAnalyser.setTokens(tokens);
-        syntacticAnalyser.setTree(new TestSyntaxTree());
-        semanticParsing.setOutput("output");
+    public void breakdown_Empty() {
+        assertBreakdown("", asList());
+    }
 
-        String output = parser.parse("input");
-        assertEquals("input", lexicalAnalyser.getInput());
-        assertEquals(tokens, syntacticAnalyser.getTokens());
-        assertEquals(tree, semanticParsing.getTree());
-        assertEquals("output", output);
+    @Test
+    public void breakdown_Literal() {
+        assertBreakdown("foo", asList(Tokens.createLiteralToken("foo", 0)));
+    }
+
+    @Test
+    public void breakdown_LiteralOperatorLiteral() {
+        List<Token<String>> expected = asList(Tokens.createLiteralToken("foo", 0),
+                                              Tokens.createLiteralToken("++", 3),
+                                              Tokens.createLiteralToken("++", 6),
+                                              Tokens.createLiteralToken("foo", 8));
+        assertBreakdown("foo++ ++foo", expected);
+    }
+
+    private void assertBreakdown(String input, List<Token<String>> tokens) {
+        assertEquals(analyser.breakdown(input), unmodifiableList(tokens));
     }
 }

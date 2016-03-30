@@ -25,34 +25,31 @@
  */
 package org.mazarineblue.parser.exceptions;
 
-import org.mazarineblue.parser.Parser;
+import org.mazarineblue.parser.analyser.semantic.SemanticAnalyser;
+import org.mazarineblue.parser.tokens.Token;
+import org.mazarineblue.parser.tree.SyntaxTreeNode;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * A {@code IllegalSyntaxTreeException} is thrown by a {@link SemanticAnalyser}
+ * when evaluating a {@link SyntaxTreeNode syntax tree} and an error was
+ * encountered during evaluating.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+public class IllegalSyntaxTreeException
+        extends InvalidExpressionException {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
     private static final long serialVersionUID = 1L;
 
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
+    public IllegalSyntaxTreeException(SyntaxTreeNode<String> tree) {
+        super(convert(tree));
     }
 
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
+    private static int convert(SyntaxTreeNode<String> tree) {
+        return tree == null ? -1 : convert(tree.getToken());
     }
 
-    public int getIndex() {
-        return index;
+    private static int convert(Token<String> token) {
+        return token == null ? -1 : token.getIndex();
     }
 }

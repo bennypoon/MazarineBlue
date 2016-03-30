@@ -23,36 +23,34 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.analyser.lexical;
 
-import org.mazarineblue.parser.Parser;
+import java.util.List;
+import org.mazarineblue.parser.exceptions.BracketUnclosedException;
+import org.mazarineblue.parser.exceptions.IllegalCloseBacketException;
+import org.mazarineblue.parser.exceptions.VariableSignMissingException;
+import org.mazarineblue.parser.tokens.Token;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * A {@code LexicalAnalyser} converts data into an set of tokens.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ * @param <T> the parser input type.
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+@FunctionalInterface
+public interface LexicalAnalyser<T> {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
-
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
-    }
-
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return index;
-    }
+    /**
+     * Converts the specified input into an array of {@link Token Tokens}.
+     *
+     * @param input the input data.
+     * @return a list of tokens representing the input data.
+     *
+     * @throws VariableSignMissingException when an open bracket was used with
+     *                                      no variable sign in front of it.
+     * @throws BracketUnclosedException     when an open bracket was not closed.
+     * @throws IllegalCloseBacketException  when an close bracket was used with
+     *                                      no opening bracket in front of it.
+     */
+    public List<Token<T>> breakdown(T input);
 }

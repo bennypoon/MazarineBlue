@@ -25,55 +25,33 @@
  */
 package org.mazarineblue.parser;
 
-import static java.util.Arrays.asList;
-import java.util.List;
 import static org.junit.Assert.assertEquals;
-import org.junit.Before;
 import org.junit.Test;
-import org.mazarineblue.parser.exceptions.InvalidExpressionException;
-import org.mazarineblue.parser.tokens.Token;
 import org.mazarineblue.parser.tree.SyntaxTreeNode;
-import org.mazarineblue.parser.util.TestLexicalAnalyser;
-import org.mazarineblue.parser.util.TestSemanticParser;
-import org.mazarineblue.parser.util.TestSyntacticAnalyser;
-import org.mazarineblue.parser.util.TestSyntaxTree;
+import org.mazarineblue.parser.tree.TreeUtil;
 import org.mazarineblue.parser.util.TestToken;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class ParserTest {
+public class NeverExecutedCodeTest {
 
-    private TestLexicalAnalyser lexicalAnalyser;
-    private TestSyntacticAnalyser<String> syntacticAnalyser;
-    private TestSemanticParser semanticParsing;
-    private GenericParser<String, String> parser;
-
-    @Before
-    public void setup() {
-        lexicalAnalyser = new TestLexicalAnalyser();
-        syntacticAnalyser = new TestSyntacticAnalyser<>();
-        semanticParsing = new TestSemanticParser();
-        parser = new GenericParser<>(lexicalAnalyser, syntacticAnalyser, semanticParsing);
-    }
-
-    @Test(expected = InvalidExpressionException.class)
-    public void parse_Null() {
-        parser.parse(null);
+    @Test
+    public void leafHasNoLeftChild() {
+        SyntaxTreeNode<String> leaf = TreeUtil.mkLeaf(new TestToken(""));
+        assertEquals(null, leaf.getLeftChild());
     }
 
     @Test
-    public void parse_Input() {
-        List<Token<String>> tokens = asList(new TestToken("token"));
-        SyntaxTreeNode<String> tree = new TestSyntaxTree();
-        lexicalAnalyser.setTokens(tokens);
-        syntacticAnalyser.setTree(new TestSyntaxTree());
-        semanticParsing.setOutput("output");
+    public void leafHasNoRightChild() {
+        SyntaxTreeNode<String> leaf = TreeUtil.mkLeaf(new TestToken(""));
+        assertEquals(null, leaf.getRightChild());
+    }
 
-        String output = parser.parse("input");
-        assertEquals("input", lexicalAnalyser.getInput());
-        assertEquals(tokens, syntacticAnalyser.getTokens());
-        assertEquals(tree, semanticParsing.getTree());
-        assertEquals("output", output);
+    @Test
+    public void unaryHasNoLeftChild() {
+        SyntaxTreeNode<String> leaf = TreeUtil.mkLeaf(new TestToken(""));
+        SyntaxTreeNode<String> unary = TreeUtil.mkNode(new TestToken(""), leaf);
+        assertEquals(null, unary.getLeftChild());
     }
 }

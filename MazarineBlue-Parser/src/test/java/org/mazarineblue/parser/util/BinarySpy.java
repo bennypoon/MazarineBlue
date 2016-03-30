@@ -23,36 +23,36 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.util;
 
-import org.mazarineblue.parser.Parser;
+import java.util.function.BiFunction;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+public class BinarySpy<T, U, R>
+        implements BiFunction<T, U, R> {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
+    private T left;
+    private U right;
+    private final R value;
 
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
+    public BinarySpy(R value) {
+        this.value = value;
     }
 
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
+    public T getLeft() {
+        return left;
     }
 
-    public int getIndex() {
-        return index;
+    public U getRight() {
+        return right;
+    }
+
+    @Override
+    public R apply(T left, U right) {
+        this.left = left;
+        this.right = right;
+        return value;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff
+ * Copyright (c) 2016 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,154 +25,108 @@
  */
 package org.mazarineblue.parser;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.io.StringReader;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.mazarineblue.parser.precedenceclimbing.Calculator;
+import org.junit.rules.ExpectedException;
+import org.mazarineblue.parser.analyser.syntax.precedenceclimbing.Associativity;
+import org.mazarineblue.parser.analyser.syntax.precedenceclimbing.storage.BinaryOperator;
+import org.mazarineblue.parser.analyser.syntax.precedenceclimbing.storage.UnaryOperator;
+import org.mazarineblue.parser.exceptions.InvalidExpressionException;
+import org.mazarineblue.parser.exceptions.SemanticExpressionException;
 
 /**
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
 public class CalculatorTest {
 
-    private static final String HELP
-            = "Copyright (c) 2011-2013 Alex de Kruijff\n"
-            + "Usage: <Calculator> number (operator number)*";
-
-    private PrintStream old;
-    private ByteArrayOutputStream output;
+    @Rule
+    @SuppressWarnings("PublicField")
+    public ExpectedException exception = ExpectedException.none();
+    private StringPrecedenceClimbingParser parser;
 
     @Before
-    @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public void setup() {
-        old = System.out;
-        output = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(output));
+        parser = new StringPrecedenceClimbingParser();
     }
 
     @After
     public void teardown() {
-        System.setOut(old);
+        parser = null;
     }
 
-    private void assertSystemOutEquals(String input)
-            throws IOException {
-        BufferedReader expected = getExpectedReader(input);
-        BufferedReader actual = getActualReader();
-        assertLinesEquals(expected, actual);
-    }
-
-    private BufferedReader getExpectedReader(String input) {
-        Reader reader = new StringReader(input);
-        return new BufferedReader(reader);
-    }
-
-    private BufferedReader getActualReader() {
-        InputStream inputStream = new ByteArrayInputStream(output.toByteArray());
-        Reader reader = new InputStreamReader(inputStream);
-        return new BufferedReader(reader);
-    }
-
-    private void assertLinesEquals(BufferedReader expected, BufferedReader actual)
-            throws IOException {
-        String line = null;
-        while ((line = expected.readLine()) != null)
-            assertEquals(line, actual.readLine());
-        assertEquals(line, actual.readLine());
+    private static long convert(Object obj)
+            throws NumberFormatException {
+        if (obj instanceof Long)
+            return (Long) obj;
+        if (obj instanceof String)
+            return Long.parseLong(((String) obj).trim());
+        throw new UnsupportedOperationException();
     }
 
     @Test
-    public void main_Null_ReturnsHelp()
-            throws Exception {
-        Calculator.main(null);
-        assertSystemOutEquals(HELP);
+    public void parse_Initial_ExpressionIsTakenLiteral() {
+        assertEquals("4 * 4 + 4", parser.parse("4 * 4 + 4"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addUnaryOperator_NullKey_ThrowsIllegalArgumentException() {
+        parser.addOperator(null, new UnaryOperator(1, Associativity.LEFT), t -> -convert(t));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addUnaryOperator_NullOperator_ThrowsIllegalArgumentException() {
+        parser.addOperator("+", null, t -> -convert(t));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addUnaryOperator_NullFunction_ThrowsIllegalArgumentException() {
+        parser.addOperator("+", new UnaryOperator(1, Associativity.LEFT), null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addBinaryOperator_NullKey_ThrowsIllegalArgumentException() {
+        parser.addOperator(null, new BinaryOperator(1, Associativity.LEFT), (t, u) -> convert(t) + convert(u));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addBinaryOperator_NullOperator_ThrowsIllegalArgumentException() {
+        parser.addOperator("+", null, (t, u) -> convert(t) + convert(u));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addBinaryOperator_NullFunction_ThrowsIllegalArgumentException() {
+        parser.addOperator("+", new BinaryOperator(1, Associativity.LEFT), null);
     }
 
     @Test
-    public void main_Empty_ReturnsHelp()
-            throws Exception {
-        Calculator.main(new String[]{});
-        assertSystemOutEquals(HELP);
+    public void parse_Alphanumeric_ThrowsSemanticExpressionException() {
+        exception.expect(SemanticExpressionException.class);
+        exception.expectMessage(String.format(InvalidExpressionException.FORMAT_CAUSE, 2, "For input string: \"4a\""));
+        parser.addOperator("+", new BinaryOperator(1, Associativity.LEFT), (t, u) -> convert(t) + convert(u));
+        assertEquals(12, (long) parser.parse("4 + 4a"));
     }
 
     @Test
-    public void main_SingleArgument_ReturnsHelp()
-            throws Exception {
-        String str = "Copyright (c) 2011-2013 Alex de Kruijff\n"
-                + "Input: 2+2\n"
-                + "Output: 4";
-        Calculator.main(new String[]{"2+2"});
-        assertSystemOutEquals(str);
+    public void parse_PlusOparetor() {
+        parser.addOperator("+", new BinaryOperator(1, Associativity.LEFT), (t, u) -> convert(t) + convert(u));
+        assertEquals(12, (long) parser.parse("4 + 4 + 4"));
     }
 
     @Test
-    public void main_MultipleArguments_ReturnsHelp()
-            throws Exception {
-        String str = "Copyright (c) 2011-2013 Alex de Kruijff\n"
-                + "Input: 2 + 2\n"
-                + "Output: 4";
-        Calculator.main(new String[]{"2", "+", "2"});
-        assertSystemOutEquals(str);
+    public void parse_PlusMultiplyOperatorWithPrecedenceDifference() {
+        parser.addOperator("+", new BinaryOperator(1, Associativity.LEFT), (t, u) -> convert(t) + convert(u));
+        parser.addOperator("*", new BinaryOperator(2, Associativity.LEFT), (t, u) -> convert(t) * convert(u));
+        assertEquals(32, (long) parser.parse("4 * 4 + 4 * 4"));
     }
 
     @Test
-    public void main_SquarRootLetter_ReturnsError()
-            throws Exception {
-        String str = "Copyright (c) 2011-2013 Alex de Kruijff\n"
-                + "Input: sqrt a\n"
-                + "Error near index: 5";
-        Calculator.main(new String[]{"sqrt", "a"});
-        assertSystemOutEquals(str);
-    }
-
-    @Test
-    public void main_SquarRootFour_ReturnsTwo()
-            throws Exception {
-        String str = "Copyright (c) 2011-2013 Alex de Kruijff\n"
-                + "Input: sqrt 4\n"
-                + "Output: 2.0";
-        Calculator.main(new String[]{"sqrt", "4"});
-        assertSystemOutEquals(str);
-    }
-
-    @Test
-    public void main_TwoPlusLetter_ReturnsError()
-            throws Exception {
-        String str = "Copyright (c) 2011-2013 Alex de Kruijff\n"
-                + "Input: 2 + b\n"
-                + "Error near index: 4";
-        Calculator.main(new String[]{"2", "+", "b"});
-        assertSystemOutEquals(str);
-    }
-
-    @Test
-    public void main_LetterPlusTwo_ReturnsError()
-            throws Exception {
-        String str = "Copyright (c) 2011-2013 Alex de Kruijff\n"
-                + "Input: a + 2\n"
-                + "Error near index: 1";
-        Calculator.main(new String[]{"a", "+", "2"});
-        assertSystemOutEquals(str);
-    }
-
-    @Test
-    public void main_LetterPlusLetter_ReturnsError()
-            throws Exception {
-        String str = "Copyright (c) 2011-2013 Alex de Kruijff\n"
-                + "Input: a + b\n"
-                + "Error near index: 1";
-        Calculator.main(new String[]{"a", "+", "b"});
-        assertSystemOutEquals(str);
+    public void parse_PlusMultiplyBinaryMinusUnaryOperatorWithPrecedenceDifference() {
+        parser.addOperator("+", new BinaryOperator(1, Associativity.LEFT), (t, u) -> convert(t) + convert(u));
+        parser.addOperator("*", new BinaryOperator(2, Associativity.LEFT), (t, u) -> convert(t) * convert(u));
+        parser.addOperator("-", new UnaryOperator(1, Associativity.LEFT), t -> -convert(t));
+        assertEquals(0, (long) parser.parse("4 * 4 + 4 * -4"));
     }
 }

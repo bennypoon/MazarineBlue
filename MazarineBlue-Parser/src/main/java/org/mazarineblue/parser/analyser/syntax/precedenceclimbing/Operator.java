@@ -23,36 +23,41 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.analyser.syntax.precedenceclimbing;
 
-import org.mazarineblue.parser.Parser;
+import org.mazarineblue.parser.analyser.syntax.precedenceclimbing.storage.BinaryOperator;
+import org.mazarineblue.parser.analyser.syntax.precedenceclimbing.storage.UnaryOperator;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * An {@code Operator} is an function that is used semantically different
+ * than usual functions.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ * @see BinaryOperator
+ * @see UnaryOperator
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+public abstract class Operator {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
+    private final int precedence;
+    private final Associativity associativity;
 
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
+    /**
+     * Creates an operator with a specified precedence and associativity.
+     *
+     * @param precedence    the priority of the operator.
+     * @param associativity the grouping order of the operator.
+     * @see Associativity
+     */
+    protected Operator(int precedence, Associativity associativity) {
+        this.precedence = precedence;
+        this.associativity = associativity;
     }
 
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
+    public int getPrecedence() {
+        return precedence;
     }
 
-    public int getIndex() {
-        return index;
+    protected Associativity getAssociativity() {
+        return associativity;
     }
 }

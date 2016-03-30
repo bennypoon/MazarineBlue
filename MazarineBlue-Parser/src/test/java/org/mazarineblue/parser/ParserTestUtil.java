@@ -23,36 +23,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser;
 
-import org.mazarineblue.parser.Parser;
+import java.util.ArrayList;
+import java.util.List;
+import org.mazarineblue.parser.tokens.Token;
+import org.mazarineblue.parser.tokens.Tokens;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+public class ParserTestUtil {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
-
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
+    private ParserTestUtil() {
     }
 
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return index;
+    public static List<Token<String>> createTokens(String... elements) {
+        List<Token<String>> list = new ArrayList<>(elements.length);
+        for (String e : elements)
+            list.add(Tokens.createLiteralToken(e, -1));
+        return list;
     }
 }

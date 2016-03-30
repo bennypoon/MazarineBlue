@@ -25,55 +25,77 @@
  */
 package org.mazarineblue.parser;
 
-import static java.util.Arrays.asList;
-import java.util.List;
+import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import org.junit.Before;
 import org.junit.Test;
-import org.mazarineblue.parser.exceptions.InvalidExpressionException;
 import org.mazarineblue.parser.tokens.Token;
-import org.mazarineblue.parser.tree.SyntaxTreeNode;
-import org.mazarineblue.parser.util.TestLexicalAnalyser;
-import org.mazarineblue.parser.util.TestSemanticParser;
-import org.mazarineblue.parser.util.TestSyntacticAnalyser;
-import org.mazarineblue.parser.util.TestSyntaxTree;
 import org.mazarineblue.parser.util.TestToken;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class ParserTest {
+abstract class AbstractTest {
 
-    private TestLexicalAnalyser lexicalAnalyser;
-    private TestSyntacticAnalyser<String> syntacticAnalyser;
-    private TestSemanticParser semanticParsing;
-    private GenericParser<String, String> parser;
+    private Token<String> loremIpsum, loremIpsumDeepCopy, empty;
 
     @Before
     public void setup() {
-        lexicalAnalyser = new TestLexicalAnalyser();
-        syntacticAnalyser = new TestSyntacticAnalyser<>();
-        semanticParsing = new TestSemanticParser();
-        parser = new GenericParser<>(lexicalAnalyser, syntacticAnalyser, semanticParsing);
+        loremIpsum = new TestToken("lorem ipsum");
+        loremIpsumDeepCopy = new TestToken("lorem ipsum");
+        empty = new TestToken("");
     }
 
-    @Test(expected = InvalidExpressionException.class)
-    public void parse_Null() {
-        parser.parse(null);
+    @After
+    public void teardown() {
+        loremIpsum = loremIpsumDeepCopy = empty = null;
     }
 
     @Test
-    public void parse_Input() {
-        List<Token<String>> tokens = asList(new TestToken("token"));
-        SyntaxTreeNode<String> tree = new TestSyntaxTree();
-        lexicalAnalyser.setTokens(tokens);
-        syntacticAnalyser.setTree(new TestSyntaxTree());
-        semanticParsing.setOutput("output");
+    public void hashCode_Orig_Copy_Equal() {
+        assertEquals(loremIpsum.hashCode(), loremIpsumDeepCopy.hashCode());
+    }
 
-        String output = parser.parse("input");
-        assertEquals("input", lexicalAnalyser.getInput());
-        assertEquals(tokens, syntacticAnalyser.getTokens());
-        assertEquals(tree, semanticParsing.getTree());
-        assertEquals("output", output);
+    @Test
+    public void hashCode_Copy_Orig_Equal() {
+        assertEquals(loremIpsumDeepCopy.hashCode(), loremIpsum.hashCode());
+    }
+
+    @Test
+    public void hashCode_Orig_Empty_Unequal() {
+        assertNotEquals(loremIpsum.hashCode(), empty.hashCode());
+    }
+
+    @Test
+    public void hashCode_Copy_Empty_Unequal() {
+        assertNotEquals(loremIpsumDeepCopy.hashCode(), empty.hashCode());
+    }
+
+    @Test
+    public void equals_Orig_Orig_True() {
+        assertEquals(true, loremIpsum.equals(loremIpsumDeepCopy));
+    }
+
+    @Test
+    @SuppressWarnings("ObjectEqualsNull")
+    public void equals_Orig_Null_False() {
+        assertEquals(false, loremIpsum.equals(null));
+    }
+
+    @Test
+    @SuppressWarnings("IncompatibleEquals")
+    public void equals_Orig_String_False() {
+        assertEquals(false, loremIpsum.equals(""));
+    }
+
+    @Test
+    public void equals_Orig_Empty_False() {
+        assertEquals(false, loremIpsum.equals(empty));
+    }
+
+    @Test
+    public void equals_Orig_Copy_True() {
+        assertEquals(true, loremIpsum.equals(loremIpsum));
     }
 }

@@ -23,36 +23,50 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
+package org.mazarineblue.parser.tokens;
 
-import org.mazarineblue.parser.Parser;
+import java.util.Objects;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * An {@code AbstractlToken} is a {@code Token} that holds a value.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ * @param <T> the parser input type.
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+public class AbstractToken<T>
+        implements Token<T> {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
-
+    private final T value;
     private final int index;
 
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
+    protected AbstractToken(T value, int index) {
+        this.value = value;
         this.index = index;
     }
 
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
+    @Override
+    public T getValue() {
+        return value;
     }
 
+    @Override
     public int getIndex() {
         return index;
+    }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return 12943 + 43 * Objects.hashCode(this.value) + this.index;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && getClass() == obj.getClass()
+                && Objects.equals(this.value, ((AbstractToken<?>) obj).value);
     }
 }

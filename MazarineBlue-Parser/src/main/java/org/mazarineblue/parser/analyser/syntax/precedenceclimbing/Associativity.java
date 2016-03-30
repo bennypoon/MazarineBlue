@@ -23,36 +23,26 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.mazarineblue.parser.exceptions;
-
-import org.mazarineblue.parser.Parser;
+package org.mazarineblue.parser.analyser.syntax.precedenceclimbing;
 
 /**
- * A {@code InvalidExpressionException} is thrown by a {@link Parser} when
- * evaluating an expression and an error was encountered during parsing.
+ * An {@code Associativity} determines how how operators of the same precedence
+ * are group in the absence of parentheses.
+ * <p>
+ * An {@code Operator} can be left-associative or right-associative. If an
+ * {@code Operator} is left-associative then operations are grouped from the
+ * left. And of an {@code Operator} is right-associative then operations are
+ * grouped from the right.
+ * <p>
+ * Consider the expression {@code a ~ b ~ c}. If the operator {@code ~} has a
+ * left associativity, then this expression would be grouped as {@code (a ~ b)
+ * ~ c}.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ * @see Operator
  */
-public class InvalidExpressionException
-        extends RuntimeException {
+public enum Associativity {
 
-    public static final String FORMAT = "Invalid expression found near index %d";
-    public static final String FORMAT_CAUSE = FORMAT + ": %s";
-    private static final long serialVersionUID = 1L;
-
-    private final int index;
-
-    public InvalidExpressionException(int index) {
-        super(String.format(FORMAT, index));
-        this.index = index;
-    }
-
-    public InvalidExpressionException(int index, Throwable cause) {
-        super(String.format(FORMAT_CAUSE, index, cause.getMessage()), cause);
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return index;
-    }
+    LEFT,
+    RIGHT
 }

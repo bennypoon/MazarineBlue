@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2013 Alex de Kruijff
+ * Copyright (c) 2011-2013 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,26 +25,19 @@
 package org.mazarineblue.parser;
 
 /**
+ * A {@code VariableSource} is source that's able to variable
  *
  * @author Alex de Kruijff {@literal <akruijff@dds.nl>}
+ * @param <R> the output type.
  */
-public interface VariableSource {
+@FunctionalInterface
+public interface VariableSource<R> {
 
     /**
      * Return the object at the specified column.
      *
-     * @param variable the variable name.
-     * @return the object at the specified index or null if it could not be
-     *         fetched.
+     * @param name the variable name.
+     * @return the value or {@code null} if such a variable doesn't exist.
      */
-    public Object getData(String variable);
-
-    /**
-     * Sets the specified value to the specified key.
-     *
-     * @param variable the variable name.
-     * @param value    the object to be stored in the specified variable name.
-     * @return true if the specified value was set to the specified variable.
-     */
-    public boolean setData(String variable, Object value);
+    public R getData(String name);
 }
