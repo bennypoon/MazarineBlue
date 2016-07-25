@@ -15,17 +15,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.util.exceptions;
+package org.mazarineblue.utililities.util;
+
+import org.mazarineblue.utililities.TwoWayPipe;
+import org.mazarineblue.utililities.TwoWayPipeFactory;
 
 /**
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-@SuppressWarnings("serial")
-public class UnkownIssueException
-        extends RuntimeException {
+public class TwoWayPipeFactoryAdopter<Type>
+        implements TwoWayPipeFactory<Type> {
 
-    public UnkownIssueException(String message, Throwable cause) {
-        super(message, cause);
+    private final TwoWayPipe<Type> pipe;
+
+    public TwoWayPipeFactoryAdopter(TwoWayPipe<Type> pipe) {
+        this.pipe = pipe;
+    }
+
+    @Override
+    public TwoWayPipe<Type> createPipe(int capacity) {
+        return pipe;
+    }
+
+    @Override
+    public TwoWayPipe<Type> createLoopedBackedPipe(int capacity) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -15,18 +15,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.util;
+package org.mazarineblue.utililities;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * The {@code Pirmatives] class allows for the conversion of primatives into
+ * there class parts.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
 public class Primatives {
 
     private static Primatives singleton;
+    private final Map<Class<?>, Class<?>> map = new HashMap<>(16);
+
+    private Primatives() {
+        map.put(boolean.class, Boolean.class);
+        map.put(byte.class, Byte.class);
+        map.put(char.class, Character.class);
+        map.put(short.class, Short.class);
+        map.put(int.class, Integer.class);
+        map.put(long.class, Long.class);
+        map.put(float.class, Float.class);
+        map.put(double.class, Double.class);
+    }
 
     public static Primatives getDefaultInstance() {
         if (singleton == null)
@@ -34,24 +48,23 @@ public class Primatives {
         return singleton;
     }
 
-    private final Map<Class<?>, Class<?>> primatives = new HashMap<>(16);
-
-    private Primatives() {
-        primatives.put(boolean.class, Boolean.class);
-        primatives.put(byte.class, Byte.class);
-        primatives.put(char.class, Character.class);
-        primatives.put(short.class, Short.class);
-        primatives.put(int.class, Integer.class);
-        primatives.put(long.class, Long.class);
-        primatives.put(float.class, Float.class);
-        primatives.put(double.class, Double.class);
-    }
-
+    /**
+     * Test if the specified type is a primative.
+     *
+     * @param type the specified type to test.
+     * @return {@code true} if the specified type was a primative.
+     */
     public boolean isPrimative(Class<?> type) {
-        return primatives.containsKey(type);
+        return map.containsKey(type);
     }
 
+    /**
+     * Returns the equivalent type of the specified primative.
+     *
+     * @param type the primative type to return the qeuivalant type for.
+     * @return {@code null} if the specified type was not a primative.
+     */
     public Class<?> getEquivalentType(Class<?> type) {
-        return primatives.get(type);
+        return map.get(type);
     }
 }

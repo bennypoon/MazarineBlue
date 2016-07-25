@@ -15,51 +15,42 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.util;
+package org.mazarineblue.utililities.util;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Arrays;
+import org.mazarineblue.utililities.Immutable;
 
 /**
- * A tupel is a data structure that allows to store multiple variables in one record.
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
- * @param <T> the type to store in the record.
  */
-public class Tupel<T> {
+public class ImmutableArray
+        implements Serializable {
 
-    private final int capacity;
-    private final T[] array;
+    private static final long serialVersionUID = 1L;
+    @Immutable
+    private Object[] arr = new ImmutableObject[0];
 
-    @SuppressWarnings("unchecked")
-    public Tupel(T... array) {
-        this.capacity = array.length;
-        this.array = array;
+    private void writeObject(ObjectOutputStream output)
+            throws IOException {
+        output.writeObject(arr);
     }
 
-    @Override
-    public String toString() {
-        return Arrays.deepToString(array);
+    private void readObject(ObjectInputStream input)
+            throws IOException, ClassNotFoundException {
+        arr = (Object[]) input.readObject();
     }
 
     @Override
     public int hashCode() {
-        return 237 + Arrays.deepHashCode(this.array);
+        return 469 + Arrays.deepHashCode(this.arr);
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && getClass() == obj.getClass() && equals((Tupel<?>) obj);
-    }
-
-    private boolean equals(Tupel<?> other) {
-        return Arrays.deepEquals(this.array, other.array);
-    }
-
-    public T get(int index) {
-        return array[index];
-    }
-
-    public int size() {
-        return array.length;
+        return obj != null && getClass() == obj.getClass() && Arrays.deepEquals(this.arr, ((ImmutableArray) obj).arr);
     }
 }

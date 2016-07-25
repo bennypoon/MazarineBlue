@@ -15,17 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.util;
+package org.mazarineblue.utililities;
 
 import static java.util.Arrays.asList;
 import java.util.List;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
 public class PrimativesTest {
@@ -46,16 +47,14 @@ public class PrimativesTest {
     public void isPrimative_Primative_IsAnPrimative() {
         List<Class<?>> list = asList(byte.class, short.class, int.class, long.class,
                                      float.class, double.class, boolean.class, char.class);
-        for (Class<?> type : list)
-            assertEquals(true, primatives.isPrimative(type));
+        list.stream().forEach(type -> assertTrue(primatives.isPrimative(type)));
     }
 
     @Test
     public void isPrimative_Object_IsNotAnPrimative() {
         List<Class<?>> list = asList(Byte.class, Short.class, Integer.class, Long.class, String.class,
                                      Float.class, Double.class, Boolean.class, Character.class);
-        for (Class<?> type : list)
-            assertEquals(false, primatives.isPrimative(type));
+        list.stream().forEach(type -> assertFalse(primatives.isPrimative(type)));
     }
 
     @Test
@@ -70,7 +69,6 @@ public class PrimativesTest {
                 new Tupel<Class<?>>(Boolean.class, boolean.class),
                 new Tupel<Class<?>>(Character.class, char.class),
                 new Tupel<Class<?>>(null, String.class));
-        for (Tupel<Class<?>> tupel : list)
-            assertEquals(tupel.get(0), primatives.getEquivalentType(tupel.get(1)));
+        list.stream().forEach(tupel -> assertEquals(tupel.get(0), primatives.getEquivalentType(tupel.get(1))));
     }
 }

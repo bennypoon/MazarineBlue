@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ * Copyright (c) 2016 Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -15,32 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.util;
-
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.core.IsInstanceOf;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+package org.mazarineblue.utililities.exceptions;
 
 /**
+ * An {@code InterruptedRuntimeException} is thrown when an
+ * {@link InterruptedException} was catch and could not be thrown.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class TestUtil {
+public class InterruptedRuntimeException
+        extends RuntimeException {
 
-    @Rule
-    @SuppressWarnings("PublicField")
-    public ExpectedException thrown = ExpectedException.none();
+    private static final long serialVersionUID = 1L;
 
-    protected void expect(Class<? extends Throwable> exception,
-                          Class<? extends Throwable> cause) {
-        thrown.expect(exception);
-        expectCause(cause);
+    public InterruptedRuntimeException(Throwable cause) {
+        super(cause);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    protected void expectCause(Class<? extends Throwable> cause) {
-        BaseMatcher coreMatcher = new IsInstanceOf(cause);
-        thrown.expectCause(coreMatcher);
+    @Override
+    public synchronized InterruptedException getCause() {
+        return (InterruptedException) super.getCause();
     }
 }

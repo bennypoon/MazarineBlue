@@ -15,16 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.util;
+package org.mazarineblue.utililities;
 
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
 public class TupelTest {
@@ -64,31 +65,31 @@ public class TupelTest {
     @Test
     @SuppressWarnings("ObjectEqualsNull")
     public void equals_TupleNull_AreNotEqual() {
-        assertEquals(false, tupel.equals(null));
+        assertFalse(tupel.equals(null));
     }
 
     @Test
     @SuppressWarnings("IncompatibleEquals")
     public void equals_TupelNonTupel_AreNotEqual() {
-        assertEquals(false, tupel.equals(1));
+        assertFalse(tupel.equals(1));
     }
 
     @Test
     public void equals_TupelDifferentTypeTupel_AreNotEqual() {
         Tupel<Boolean> t = new Tupel<>(false);
-        assertEquals(false, tupel.equals(t));
+        assertFalse(tupel.equals(t));
     }
 
     @Test
     public void equals_TupelDifferentSizeTupel_AreNotEqual() {
         Tupel<Integer> t = new Tupel<>(1, 1);
-        assertEquals(false, tupel.equals(t));
+        assertFalse(tupel.equals(t));
     }
 
     @Test
     public void equals_TupelEquivalentTupel_AreEqual() {
         Tupel<Integer> t = new Tupel<>(1);
-        assertEquals(true, tupel.equals(t));
+        assertTrue(tupel.equals(t));
     }
 
     @Test

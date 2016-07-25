@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.util;
+package org.mazarineblue.utililities;
 
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
@@ -24,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
 public class TypeConvertorTest {
@@ -146,10 +145,10 @@ public class TypeConvertorTest {
         assertIsConvertable(true, Double.class, "1.7976931348623158e+308");
         assertIsConvertable(false, Double.class, "abc");
 
-        assertIsConvertable(false, Boolean.class, (byte) 2);
-        assertIsConvertable(false, Boolean.class, (short) 3);
-        assertIsConvertable(false, Boolean.class, 4);
-        assertIsConvertable(false, Boolean.class, 5L);
+        assertIsConvertable(true, Boolean.class, (byte) 2);
+        assertIsConvertable(true, Boolean.class, (short) 3);
+        assertIsConvertable(true, Boolean.class, 4);
+        assertIsConvertable(true, Boolean.class, 5L);
         assertIsConvertable(false, Boolean.class, 6.0f);
         assertIsConvertable(false, Boolean.class, 7.0d);
         assertIsConvertable(true, Boolean.class, true);
@@ -177,6 +176,24 @@ public class TypeConvertorTest {
         assertIsConvertable(true, String.class, '9');
         assertIsConvertable(true, String.class, "10");
 
+        assertIsConvertable(false, byte.class, new Object());
+        assertIsConvertable(false, short.class, new Object());
+        assertIsConvertable(false, int.class, new Object());
+        assertIsConvertable(false, long.class, new Object());
+        assertIsConvertable(false, float.class, new Object());
+        assertIsConvertable(false, double.class, new Object());
+        assertIsConvertable(false, boolean.class, new Object());
+        assertIsConvertable(false, char.class, new Object());
+        assertIsConvertable(false, String.class, new Object());
+
+        assertIsConvertable(true, Object.class, (byte) 2);
+        assertIsConvertable(true, Object.class, (short) 3);
+        assertIsConvertable(true, Object.class, 4);
+        assertIsConvertable(true, Object.class, 5L);
+        assertIsConvertable(true, Object.class, 6.0f);
+        assertIsConvertable(true, Object.class, 7.0d);
+        assertIsConvertable(true, Object.class, true);
+        assertIsConvertable(true, Object.class, 'a');
         assertIsConvertable(true, Object.class, "a");
     }
 
@@ -266,13 +283,27 @@ public class TypeConvertorTest {
         assertConvertEquals(new Double(10), Double.class, "10");
 
         assertConvertEquals(new Boolean(true), Boolean.class, true);
+        assertConvertEquals(new Boolean(true), Boolean.class, (byte) 1);
+        assertConvertEquals(new Boolean(true), Boolean.class, (short) 1);
+        assertConvertEquals(new Boolean(true), Boolean.class, 1);
+        assertConvertEquals(new Boolean(true), Boolean.class, 1L);
         assertConvertEquals(new Boolean(true), Boolean.class, '9');
         assertConvertEquals(new Boolean(true), Boolean.class, "true");
         assertConvertEquals(new Boolean(true), Boolean.class, "True");
         assertConvertEquals(new Boolean(true), Boolean.class, "TRUE");
         assertConvertEquals(new Boolean(true), Boolean.class, "TruE");
-        assertConvertEquals(new Boolean(false), Boolean.class, "1");
+
+        assertConvertEquals(new Boolean(false), Boolean.class, false);
+        assertConvertEquals(new Boolean(false), Boolean.class, (byte) 0);
+        assertConvertEquals(new Boolean(false), Boolean.class, (short) 0);
+        assertConvertEquals(new Boolean(false), Boolean.class, 0);
+        assertConvertEquals(new Boolean(false), Boolean.class, 0L);
+        assertConvertEquals(new Boolean(false), Boolean.class, (char) 0);
+        assertConvertEquals(new Boolean(false), Boolean.class, "0");
         assertConvertEquals(new Boolean(false), Boolean.class, "false");
+        assertConvertEquals(new Boolean(false), Boolean.class, "False");
+        assertConvertEquals(new Boolean(false), Boolean.class, "FALSE");
+        assertConvertEquals(new Boolean(false), Boolean.class, "FalsE");
         assertConvertEquals(new Boolean(false), Boolean.class, "yes");
 
         assertConvertEquals(new Character('9'), Character.class, '9');
@@ -287,6 +318,16 @@ public class TypeConvertorTest {
         assertConvertEquals("true", String.class, true);
         assertConvertEquals("9", String.class, '9');
         assertConvertEquals("10", String.class, "10");
+
+        assertConvertEquals((byte) 2, Object.class, (byte) 2);
+        assertConvertEquals((short) 3, Object.class, (short) 3);
+        assertConvertEquals(4, Object.class, 4);
+        assertConvertEquals(5L, Object.class, 5L);
+        assertConvertEquals(6.0f, Object.class, 6.0f);
+        assertConvertEquals(7.0d, Object.class, 7.0d);
+        assertConvertEquals(true, Object.class, true);
+        assertConvertEquals('a', Object.class, 'a');
+        assertConvertEquals("a", Object.class, "a");
     }
 
     private void assertConvertEquals(Object result, Class<?> outputType, Object input) {
@@ -302,10 +343,6 @@ public class TypeConvertorTest {
         assertConvertThrowsException(Long.class, true);
         assertConvertThrowsException(Float.class, true);
         assertConvertThrowsException(Double.class, true);
-        assertConvertThrowsException(Boolean.class, (byte) 2);
-        assertConvertThrowsException(Boolean.class, (short) 3);
-        assertConvertThrowsException(Boolean.class, 4);
-        assertConvertThrowsException(Boolean.class, 5L);
         assertConvertThrowsException(Boolean.class, 6.0f);
         assertConvertThrowsException(Boolean.class, 7.0d);
         assertConvertThrowsException(Character.class, (byte) 2);

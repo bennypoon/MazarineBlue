@@ -15,16 +15,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.util.exceptions;
+package org.mazarineblue.swing;
+
+import java.awt.Component;
+import java.awt.Window;
 
 /**
- *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-@SuppressWarnings("serial")
-public class InputConvertException
-        extends RuntimeException {
+class WindowFetcher<T extends Component>
+        implements SwingUtil.Fetcher<T> {
 
-    public InputConvertException() {
+    @Override
+    public Component[] getChilderen(Component parent) {
+        return (parent instanceof Window) ? ((Window) parent).getOwnedWindows() : new Component[0];
     }
 }
