@@ -19,6 +19,8 @@ public class TestPrimativesUsedBeyongMinimumLibrary
 
     public static final String PRIMATIVES_USED_BEYOND_MINIMUM_INSTRUCTION = "Wrong use of primatives";
 
+    private static final long serialVersionUID = 1L;
+
     public TestPrimativesUsedBeyongMinimumLibrary() {
         super("");
     }

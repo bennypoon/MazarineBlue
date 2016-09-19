@@ -23,6 +23,7 @@ import org.mazarineblue.eventbus.Subscriber;
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@SuppressWarnings("serial")
 public class SubscriberEventDummy
         extends AbstractSubscriberEvent {
 

@@ -19,6 +19,7 @@ package org.mazarineblue.keyworddriven.exceptions;
 
 import java.lang.reflect.Method;
 import org.mazarineblue.keyworddriven.Library;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * A {@code DeclaringMethodClassNotEqualToCalleeException} is thrown when
@@ -28,6 +29,7 @@ import org.mazarineblue.keyworddriven.Library;
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  * @see Library#registerInstruction(String, Method)
  */
+@Immutable
 public class DeclaringMethodClassNotEqualToCalleeException
         extends KeywordDrivenException {
 

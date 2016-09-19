@@ -24,7 +24,9 @@
  */
 package org.mazarineblue.eventbus.link;
 
+import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventbus.Subscriber;
+import org.mazarineblue.eventdriven.Interpreter;
 
 /**
  * An {@code UnsubscribeEvent} is an {@link Event} that instructs
@@ -41,14 +43,7 @@ import org.mazarineblue.eventbus.Subscriber;
 public class UnsubscribeEvent
         extends AbstractSubscriberEvent {
 
-    /**
-     * A copy constructor that copies all values from another event.
-     *
-     * @param e the event to copy all values from.
-     */
-    public UnsubscribeEvent(UnsubscribeEvent e) {
-        super(e.getSubscriber());
-    }
+    private static final long serialVersionUID = 1L;
 
     /**
      * Constructs an {@code UnsubscribeEvent} to instruct the removal of the
@@ -56,7 +51,7 @@ public class UnsubscribeEvent
      *
      * @param subscriber the subscriber to remove from {@link EventBusLink}.
      */
-    public UnsubscribeEvent(Subscriber subscriber) {
+    public UnsubscribeEvent(Subscriber<Event> subscriber) {
         super(subscriber);
     }
 }

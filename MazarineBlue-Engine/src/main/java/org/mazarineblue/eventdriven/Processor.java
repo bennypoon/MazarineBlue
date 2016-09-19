@@ -31,6 +31,8 @@ public class Processor
         extends ChainManager
         implements Interpreter {
 
+    private static final long serialVersionUID = 1L;
+
     Processor(ChainImpl chain) {
         super(new ChainImpl(chain));
     }
@@ -38,21 +40,23 @@ public class Processor
     @Override
     public void execute(Feed feed) {
         while (feed.hasNext()) {
-            Event e = feed.next();
+            Event event = feed.next();
             try {
-                publish(e);
+                publish(event);
             } catch (RuntimeException ex) {
-                setException(e, ex);
-                publishExceptionThrown(new ExceptionThrownEvent(e, ex), ex);
+                setException(event, ex);
+                publishExceptionThrown(new ExceptionThrownEvent(event, ex), ex);
                 break;
             } finally {
-                feed.done(e);
+                feed.done(event);
             }
         }
         feed.reset();
     }
 
     private void publish(Event event) {
+        if (event instanceof InvokerEvent)
+            ((InvokerEvent) event).setInvoker(new InvokerImpl(this, getChain()));
         getChain().publish(event);
     }
 

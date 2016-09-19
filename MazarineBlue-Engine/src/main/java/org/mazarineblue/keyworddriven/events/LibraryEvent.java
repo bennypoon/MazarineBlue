@@ -20,11 +20,10 @@ package org.mazarineblue.keyworddriven.events;
 import java.util.Objects;
 import org.mazarineblue.keyworddriven.Library;
 
-/**
- * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
- */
 abstract class LibraryEvent
         extends KeywordDrivenEvent {
+
+    private static final long serialVersionUID = 1L;
 
     private final Library library;
 
@@ -48,7 +47,7 @@ abstract class LibraryEvent
 
     @Override
     public int hashCode() {
-        return 65 + Objects.hashCode(this.library);
+        return 65 + Objects.hashCode(library);
     }
 
     @Override

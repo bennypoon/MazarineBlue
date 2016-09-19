@@ -6,6 +6,7 @@
 package org.mazarineblue.keyworddriven.exceptions;
 
 import org.mazarineblue.keyworddriven.Library;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * A {@code KeywordConflictException} is thrown by a {@link Library} when
@@ -21,6 +22,7 @@ import org.mazarineblue.keyworddriven.Library;
  * @see Library#Library(String)
  * @see Library#registerInstruction(String, Method, int)
  */
+@Immutable
 public class KeywordConflictException
         extends KeywordDrivenException {
 

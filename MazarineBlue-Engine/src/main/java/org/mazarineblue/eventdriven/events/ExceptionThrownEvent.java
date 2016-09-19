@@ -30,18 +30,10 @@ import org.mazarineblue.eventbus.events.AbstractEvent;
 public class ExceptionThrownEvent
         extends AbstractEvent {
 
+    private static final long serialVersionUID = 1L;
+
     private final Event cause;
     private final RuntimeException ex;
-
-    /**
-     * A copy constructor that copies all values from another event.
-     *
-     * @param e the event to copy all values from.
-     */
-    public ExceptionThrownEvent(ExceptionThrownEvent e) {
-        this.cause = e.cause;
-        this.ex = e.ex;
-    }
 
     /**
      * Constructs an {@code ExceptionThrownEvent} to indicate an exception was
@@ -75,7 +67,7 @@ public class ExceptionThrownEvent
 
     @Override
     public int hashCode() {
-        return 2527 + 19 * Objects.hashCode(this.cause) + Objects.hashCode(this.ex);
+        return 2527 + 19 * Objects.hashCode(cause) + Objects.hashCode(ex);
     }
 
     @Override

@@ -15,6 +15,8 @@ import org.mazarineblue.keyworddriven.events.ValidateInstructionLineEvent;
 public class TestEmptyLibraryStub
         extends Library {
 
+    private static final long serialVersionUID = 1L;
+
     public TestEmptyLibraryStub(String test) {
         super(test);
     }

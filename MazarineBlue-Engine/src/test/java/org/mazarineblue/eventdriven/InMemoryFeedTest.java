@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +59,7 @@ public class InMemoryFeedTest {
 
         @Test
         public void hasNext_HasNoNext() {
-            assertEquals(false, feed.hasNext());
+            assertFalse(feed.hasNext());
         }
 
         @Test(expected = NoEventsLeftException.class)
@@ -68,19 +70,19 @@ public class InMemoryFeedTest {
         @Test
         public void reset_Accepted() {
             feed.reset();
-            assertEquals(false, feed.hasNext());
+            assertFalse(feed.hasNext());
         }
 
         @SuppressWarnings("PublicInnerClass")
         public class FilledFeed {
 
-            private static final int n = 3;
+            private static final int N = 3;
             private List<Event> list;
 
             @Before
             public void setup() {
-                list = new ArrayList<>(3);
-                for (int i = 0; i < n; ++i) {
+                list = new ArrayList<>(N);
+                for (int i = 0; i < N; ++i) {
                     Event e = new TestEvent();
                     list.add(e);
                     feed.add(e);
@@ -94,22 +96,21 @@ public class InMemoryFeedTest {
 
             @Test
             public void hasNext_Accepted() {
-                for (int i = 0; i < n; ++i) {
-                    assertEquals(true, feed.hasNext());
+                for (int i = 0; i < N; ++i) {
+                    assertTrue(feed.hasNext());
                     feed.next();
                 }
-                assertEquals(false, feed.hasNext());
+                assertFalse(feed.hasNext());
             }
 
             @Test
             public void next_Accepted() {
-                for (Event e : list)
-                    assertEquals(e, feed.next());
+                list.stream().forEach(e -> assertEquals(e, feed.next()));
             }
 
             @Test(expected = NoEventsLeftException.class)
             public void next_ExceptionThrown() {
-                for (int i = 0; i < n; ++i)
+                for (int i = 0; i < N; ++i)
                     feed.next();
                 feed.next();
             }
@@ -117,11 +118,11 @@ public class InMemoryFeedTest {
             @Test
             public void reset_Accepted() {
                 feed.reset();
-                for (int i = 0; i < n; ++i)
+                for (int i = 0; i < N; ++i)
                     feed.next();
                 feed.reset();
-                assertEquals(true, feed.hasNext());
-                for (int i = 0; i < n; ++i)
+                assertTrue(feed.hasNext());
+                for (int i = 0; i < N; ++i)
                     feed.next();
             }
         }
@@ -146,6 +147,7 @@ public class InMemoryFeedTest {
          * information about this event handler.
          *
          * @param event the event this {@code EventHandler} processes.
+         * @see TestEvent
          */
         @EventHandler
         public void eventHandler(TestEvent event) {

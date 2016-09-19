@@ -18,6 +18,7 @@
 package org.mazarineblue.eventdriven.exceptions;
 
 import org.mazarineblue.eventdriven.Feed;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * A {@code NoEventsLeftException} is thrown by an {@link Feed} when the
@@ -27,6 +28,7 @@ import org.mazarineblue.eventdriven.Feed;
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  * @see Feed#next()
  */
+@Immutable
 public class NoEventsLeftException
         extends EventDrivenException {
 

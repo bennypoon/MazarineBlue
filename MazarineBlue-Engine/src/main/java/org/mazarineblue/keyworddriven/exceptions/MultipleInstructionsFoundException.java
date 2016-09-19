@@ -21,6 +21,7 @@ import org.mazarineblue.keyworddriven.Keyword;
 import org.mazarineblue.keyworddriven.LibraryRegistry;
 import org.mazarineblue.keyworddriven.Parameters;
 import org.mazarineblue.keyworddriven.events.ExecuteInstructionLineEvent;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * A {@code MultipleInstructionsFoundException} is thrown by the
@@ -34,6 +35,7 @@ import org.mazarineblue.keyworddriven.events.ExecuteInstructionLineEvent;
  * @see Parameters
  * @see LibraryRegistry
  */
+@Immutable
 public class MultipleInstructionsFoundException
         extends KeywordDrivenException {
 

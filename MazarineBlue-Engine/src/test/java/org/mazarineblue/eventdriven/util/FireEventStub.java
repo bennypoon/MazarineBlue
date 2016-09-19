@@ -24,4 +24,6 @@ import org.mazarineblue.eventdriven.InvokerEvent;
  */
 public class FireEventStub
         extends InvokerEvent {
+
+    private static final long serialVersionUID = 1L;
 }

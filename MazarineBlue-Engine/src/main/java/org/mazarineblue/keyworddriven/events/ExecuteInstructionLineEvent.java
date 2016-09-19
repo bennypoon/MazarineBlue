@@ -20,6 +20,8 @@
 package org.mazarineblue.keyworddriven.events;
 
 import java.util.Objects;
+import org.mazarineblue.keyworddriven.Library;
+import org.mazarineblue.utililities.SerializableObjectWrapper;
 
 /**
  * An {@code ExecuteInstructionLineEvent} is used to call an instruction within
@@ -31,16 +33,9 @@ import java.util.Objects;
 public class ExecuteInstructionLineEvent
         extends InstructionLineEvent {
 
-    private Object result;
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * A copy constructor that copies all values from another event.
-     *
-     * @param e the event to copy all values from.
-     */
-    public ExecuteInstructionLineEvent(ExecuteInstructionLineEvent e) {
-        super(e.getPath(), e.getArguments());
-    }
+    private transient SerializableObjectWrapper result;
 
     /**
      * Constructs an {@code ExecuteInstructionLineEvent} with an specified path
@@ -66,16 +61,16 @@ public class ExecuteInstructionLineEvent
     }
 
     public void setResult(Object result) {
-        this.result = result;
+        this.result = new SerializableObjectWrapper(result);
     }
 
     public Object getResult() {
-        return result;
+        return result == null ? null : result.getObject();
     }
 
     @Override
     public int hashCode() {
-        return 111 + Objects.hashCode(this.result);
+        return 111 + Objects.hashCode(result);
     }
 
     @Override

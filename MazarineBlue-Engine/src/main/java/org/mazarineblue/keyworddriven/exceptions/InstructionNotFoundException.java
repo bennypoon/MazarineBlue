@@ -18,6 +18,7 @@
 package org.mazarineblue.keyworddriven.exceptions;
 
 import org.mazarineblue.keyworddriven.events.ExecuteInstructionLineEvent;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * An {@code InstructionNotFoundException} is thrown by a {@link Library}
@@ -26,6 +27,7 @@ import org.mazarineblue.keyworddriven.events.ExecuteInstructionLineEvent;
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class InstructionNotFoundException
         extends KeywordDrivenException {
 

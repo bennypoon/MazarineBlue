@@ -24,7 +24,9 @@
  */
 package org.mazarineblue.eventbus.link;
 
+import java.util.Objects;
 import org.mazarineblue.eventbus.Event;
+import org.mazarineblue.eventbus.EventHandler;
 import org.mazarineblue.eventbus.EventService;
 import org.mazarineblue.eventbus.Filter;
 import org.mazarineblue.eventbus.SimpleEventService;
@@ -36,10 +38,14 @@ import org.mazarineblue.eventdriven.Link;
  * registered {@code Subscribers}.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ * @see SubscribeEvent
+ * @see UnsubscribeEvent
  */
 public class EventBusLink
         extends Link
         implements EventService<Event> {
+
+    private static final long serialVersionUID = 1L;
 
     private final EventService<Event> service;
 
@@ -52,7 +58,6 @@ public class EventBusLink
      */
     public EventBusLink() {
         service = new SimpleEventService<>();
-        service.subscribe(AbstractSubscriberEvent.class, null, new EventBusLinkSubscriber(service));
     }
 
     /**
@@ -62,7 +67,7 @@ public class EventBusLink
      * @param filter     the filter to apply.
      * @param subscriber the subscriber to register.
      */
-    public EventBusLink(Class<?> eventType, Filter<Event> filter, Subscriber subscriber) {
+    public EventBusLink(Class<?> eventType, Filter<Event> filter, Subscriber<Event> subscriber) {
         service = new SimpleEventService<>();
         service.subscribe(eventType, filter, subscriber);
     }
@@ -88,7 +93,46 @@ public class EventBusLink
     }
 
     @Override
-    public final void eventHandler(Event event) {
+    protected void uncatchedEventHandler(Event event) {
         service.publish(event);
+    }
+
+    /**
+     * Event handlers are not meant to be called directly, instead publish an
+     * event to an {@link Interpreter}; please see the specified event for more
+     * information about this event handler.
+     *
+     * @param event the event this {@code EventHandler} processes.
+     * @see SubscribeEvent
+     */
+    @EventHandler
+    public void eventHandler(SubscribeEvent event) {
+        service.subscribe(event.getType(), event.getFilter(), event.getSubscriber());
+        event.setConsumed(true);
+    }
+
+    /**
+     * Event handlers are not meant to be called directly, instead publish an
+     * event to an {@link Interpreter}; please see the specified event for more
+     * information about this event handler.
+     *
+     * @param event the event this {@code EventHandler} processes.
+     * @see UnsubscribeEvent
+     */
+    @EventHandler
+    public void eventHandler(UnsubscribeEvent event) {
+        service.unsubscribe(event.getType(), event.getFilter(), event.getSubscriber());
+        event.setConsumed(true);
+    }
+
+    @Override
+    public int hashCode() {
+        return 201 + Objects.hashCode(service);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && getClass() == obj.getClass()
+                && Objects.equals(this.service, ((EventBusLink) obj).service);
     }
 }

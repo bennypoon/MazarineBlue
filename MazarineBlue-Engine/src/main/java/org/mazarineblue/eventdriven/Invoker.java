@@ -17,7 +17,9 @@
  */
 package org.mazarineblue.eventdriven;
 
+import java.io.Serializable;
 import org.mazarineblue.eventbus.Event;
+import org.mazarineblue.eventbus.Subscriber;
 
 /**
  * An {@code Invoker} is representation of the object that publishes
@@ -25,39 +27,22 @@ import org.mazarineblue.eventbus.Event;
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public interface Invoker {
-
-    /* Invoker should not extends Chain. Although Invoker defines many of the
-     * same methods as Chain, it is conceptually a different thing. 
-     */
-    /**
-     * Counts the link in the chain.
-     *
-     * @return the amount of links in the chain.
-     */
-    public int countLinks();
+public interface Invoker
+        extends Serializable {
 
     /**
-     * Adds a link to the front of the chain.
+     * Returns the {@code Interpreter} used to deliver {@link Event events}.
      *
-     * @param link to add to the chain.
+     * @return the {@code Interpreter} used to deliver {@link Event events}.
      */
-    public void addLink(Link link);
+    public Interpreter interpreter();
 
     /**
-     * Adds a link behind another link in the chain.
+     * Returns the {@code Chain} used to deliver {@link Event events}.
      *
-     * @param link  to add to the chain.
-     * @param after insert link after this link.
+     * @return the {@code Chain} used to deliver {@link Event events}.
      */
-    public void addLink(Link link, Link after);
-
-    /**
-     * Removes the specified link from the chain.
-     *
-     * @param link to remove from the chain.
-     */
-    public void removeLink(Link link);
+    public Chain chain();
 
     /**
      * Publish a new event on the bus.

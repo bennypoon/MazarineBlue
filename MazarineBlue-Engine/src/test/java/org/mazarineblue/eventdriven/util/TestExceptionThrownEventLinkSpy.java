@@ -28,6 +28,8 @@ import org.mazarineblue.eventdriven.events.ExceptionThrownEvent;
 public class TestExceptionThrownEventLinkSpy
         extends Link {
 
+    private static final long serialVersionUID = 1L;
+
     private RuntimeException exception;
     private Event owner;
     private String message;

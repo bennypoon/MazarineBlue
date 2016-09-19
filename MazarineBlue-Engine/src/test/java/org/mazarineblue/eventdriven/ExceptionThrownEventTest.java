@@ -17,8 +17,11 @@
  */
 package org.mazarineblue.eventdriven;
 
+import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import org.junit.Before;
 import org.junit.Test;
 import org.mazarineblue.eventbus.events.TestEvent;
 import org.mazarineblue.eventdriven.events.ExceptionThrownEvent;
@@ -28,64 +31,66 @@ import org.mazarineblue.eventdriven.events.ExceptionThrownEvent;
  */
 public class ExceptionThrownEventTest {
 
+    private RuntimeException ex;
+    private TestEvent e;
+    private ExceptionThrownEvent a;
+
+    @Before
+    public void setup() {
+        ex = new RuntimeException();
+        e = new TestEvent();
+        a = new ExceptionThrownEvent(e, ex);
+    }
+
+    @After
+    public void teardown() {
+        ex = null;
+        e = null;
+        a = null;
+    }
+
     @Test
     public void equals_Null() {
-        ExceptionThrownEvent a = new ExceptionThrownEvent(new TestEvent(), new RuntimeException());
-        assertNotEquals(a, null);
+        assertNotNull(a);
     }
 
     @Test
     public void equals_DifferentClasses() {
-        ExceptionThrownEvent a = new ExceptionThrownEvent(new TestEvent(), new RuntimeException());
         assertNotEquals(a, "");
     }
 
     @Test
     public void equals_DifferentEvents() {
-        RuntimeException ex = new RuntimeException();
-        ExceptionThrownEvent a = new ExceptionThrownEvent(new TestEvent(), ex);
         ExceptionThrownEvent b = new ExceptionThrownEvent(new TestEvent(), ex);
         assertNotEquals(a, b);
     }
 
     @Test
     public void hashCode_DifferentEvents() {
-        RuntimeException ex = new RuntimeException();
-        ExceptionThrownEvent a = new ExceptionThrownEvent(new TestEvent(), ex);
         ExceptionThrownEvent b = new ExceptionThrownEvent(new TestEvent(), ex);
         assertNotEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void equals_DifferentExceptions() {
-        TestEvent e = new TestEvent();
-        ExceptionThrownEvent a = new ExceptionThrownEvent(e, new RuntimeException());
         ExceptionThrownEvent b = new ExceptionThrownEvent(e, new RuntimeException());
         assertNotEquals(a, b);
     }
 
     @Test
     public void hashCode_DifferentExceptions() {
-        TestEvent e = new TestEvent();
-        ExceptionThrownEvent a = new ExceptionThrownEvent(e, new RuntimeException());
         ExceptionThrownEvent b = new ExceptionThrownEvent(e, new RuntimeException());
         assertNotEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void equals_IdenticalExceptionThrownEvents() {
-        TestEvent e = new TestEvent();
-        RuntimeException ex = new RuntimeException();
-        ExceptionThrownEvent a = new ExceptionThrownEvent(e, ex);
         ExceptionThrownEvent b = new ExceptionThrownEvent(e, ex);
         assertEquals(a, b);
     }
 
     @Test
     public void hashCode_IdenticalExceptionThrownEvents() {
-        TestEvent e = new TestEvent();
-        RuntimeException ex = new RuntimeException();
-        ExceptionThrownEvent a = new ExceptionThrownEvent(e, ex);
         ExceptionThrownEvent b = new ExceptionThrownEvent(e, ex);
         assertEquals(a.hashCode(), b.hashCode());
     }

@@ -27,6 +27,9 @@ package org.mazarineblue.eventbus.link;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,16 +49,18 @@ public class EventBusLinkTest {
         link = null;
     }
 
+    @SuppressWarnings("PublicInnerClass")
     public class Uninitialized {
 
         @Test
         public void unsubscribe() {
             link = new EventBusLink(null, null, new SubscriberDummy<>());
             boolean flag = link.unsubscribe(null, null, new SubscriberDummy<>());
-            assertEquals(true, flag);
+            assertTrue(flag);
         }
     }
 
+    @SuppressWarnings("PublicInnerClass")
     public class Intialized {
 
         @Before
@@ -66,7 +71,7 @@ public class EventBusLinkTest {
         @Test
         public void subscribe() {
             boolean flag = link.subscribe(null, null, new SubscriberDummy<>());
-            assertEquals(true, flag);
+            assertTrue(flag);
         }
 
         @Test
@@ -84,6 +89,42 @@ public class EventBusLinkTest {
             link.publish(new UnsubscribeEvent(subscriber));
             link.publish(new TestEvent());
             assertEquals(0, subscriber.count());
+        }
+
+        @Test
+        @SuppressWarnings("ObjectEqualsNull")
+        public void equals_Null() {
+            assertFalse(link.equals(null));
+        }
+
+        @Test
+        @SuppressWarnings("IncompatibleEquals")
+        public void equals_DifferentClass() {
+            assertFalse(link.equals(""));
+        }
+
+        @Test
+        public void hashCode_DifferentContent() {
+            EventBusLink b = new EventBusLink(null, null, new SubscriberDummy<>());
+            assertNotEquals(link.hashCode(), b.hashCode());
+        }
+
+        @Test
+        public void equals_DifferentContent() {
+            EventBusLink b = new EventBusLink(null, null, new SubscriberDummy<>());
+            assertNotEquals(link, b);
+        }
+
+        @Test
+        public void hashCode_IdenticalContent() {
+            EventBusLink b = new EventBusLink();
+            assertEquals(link.hashCode(), b.hashCode());
+        }
+
+        @Test
+        public void equals_IdenticalContent() {
+            EventBusLink b = new EventBusLink();
+            assertEquals(link, b);
         }
     }
 }

@@ -16,6 +16,8 @@ import org.mazarineblue.keyworddriven.events.ValidateInstructionLineEvent;
 public class TestConflictingKeywordsLibraryStub
         extends Library {
 
+    private static final long serialVersionUID = 1L;
+
     public TestConflictingKeywordsLibraryStub() {
         super("");
     }

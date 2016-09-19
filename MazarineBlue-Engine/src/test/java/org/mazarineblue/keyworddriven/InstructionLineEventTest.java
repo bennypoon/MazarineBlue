@@ -21,6 +21,7 @@ public class InstructionLineEventTest {
     @Before
     public void setup() {
         event = new InstructionLineEvent("namespace.keyword") {
+            private static final long serialVersionUID = 1L;
         };
     }
 

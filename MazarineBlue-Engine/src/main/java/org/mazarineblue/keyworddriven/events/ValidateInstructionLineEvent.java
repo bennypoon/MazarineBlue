@@ -36,18 +36,10 @@ public class ValidateInstructionLineEvent
     private static final int TO_FEW_ARGUMENTS = 0x04;
     private static final int ARGUMENTS_ARE_INCOMPATIBLE = 0x08;
     public static final int CUSTOM_VALIDATION_FAILED = 0x10;
+    private static final long serialVersionUID = 1L;
 
     private int flags = 0;
     private int customFlags = 0;
-
-    /**
-     * A copy constructor that copies all values from another event.
-     *
-     * @param e the event to copy all values from.
-     */
-    public ValidateInstructionLineEvent(ValidateInstructionLineEvent e) {
-        super(e.getPath(), e.getArguments());
-    }
 
     /**
      * Constructs an {@code ValidateInstructionLineEvent} with an specified path

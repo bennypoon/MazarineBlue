@@ -18,6 +18,7 @@
 package org.mazarineblue.keyworddriven.exceptions;
 
 import org.mazarineblue.keyworddriven.Library;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * A {@code LibraryNotFoundException} is thrown by {@link Library} by any
@@ -26,6 +27,7 @@ import org.mazarineblue.keyworddriven.Library;
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class LibraryNotFoundException
         extends KeywordDrivenException {
 

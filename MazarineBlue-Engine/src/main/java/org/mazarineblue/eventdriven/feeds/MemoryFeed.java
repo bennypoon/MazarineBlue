@@ -62,8 +62,7 @@ public class MemoryFeed
      * @param events the {@code Events} to the list.
      */
     public void add(Event... events) {
-        for (Event e : events)
-            list.add(e);
+        list.addAll(Arrays.asList(events));
     }
 
     @Override

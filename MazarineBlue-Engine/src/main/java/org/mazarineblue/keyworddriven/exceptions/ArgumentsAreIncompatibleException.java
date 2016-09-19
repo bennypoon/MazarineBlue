@@ -18,6 +18,7 @@
 package org.mazarineblue.keyworddriven.exceptions;
 
 import org.mazarineblue.keyworddriven.events.ExecuteInstructionLineEvent;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * An {@code ArgumentsAreIncompatibleException} is thrown by a {@link Library}
@@ -29,6 +30,7 @@ import org.mazarineblue.keyworddriven.events.ExecuteInstructionLineEvent;
  * @see Parameters
  * @see Library
  */
+@Immutable
 public class ArgumentsAreIncompatibleException
         extends KeywordDrivenException {
 

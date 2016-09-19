@@ -17,12 +17,15 @@
  */
 package org.mazarineblue.eventdriven.exceptions;
 
+import org.mazarineblue.utililities.Immutable;
+
 /**
  * An {@code EventDrivenException} is the base class of all exceptions thrown
  * by the event driven component.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class EventDrivenException
         extends RuntimeException {
 

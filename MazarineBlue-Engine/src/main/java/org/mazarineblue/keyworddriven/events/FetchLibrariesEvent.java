@@ -22,7 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import org.mazarineblue.function.Condition;
 import org.mazarineblue.keyworddriven.Library;
+import org.mazarineblue.keyworddriven.LibraryRegistry;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * An {@code FetchLibrariesEvent} is used to query a {@link LibraryRegistry}
@@ -35,18 +38,12 @@ import org.mazarineblue.keyworddriven.Library;
 public class FetchLibrariesEvent
         extends KeywordDrivenEvent {
 
-    private final List<Library> libraries;
-    private final Function<Library, Boolean> filter;
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * A copy constructor that copies all values from another event.
-     *
-     * @param e the event to copy all values from.
-     */
-    public FetchLibrariesEvent(FetchLibrariesEvent e) {
-        this.libraries = new ArrayList<>(e.libraries);
-        this.filter = e.filter;
-    }
+    private final List<Library> libraries;
+
+    @Immutable
+    private Condition<Library> filter;
 
     /**
      * Constructs an {@code FetchLibrariesEvent} that fetches all
@@ -64,7 +61,7 @@ public class FetchLibrariesEvent
      *               should be returned by {@code getLbiraries()}.
      * @see #getLibraries()
      */
-    public FetchLibrariesEvent(Function<Library, Boolean> filter) {
+    public FetchLibrariesEvent(Condition<Library> filter) {
         this.libraries = new ArrayList<>(4);
         this.filter = filter;
     }
@@ -102,7 +99,7 @@ public class FetchLibrariesEvent
 
     @Override
     public int hashCode() {
-        return 43687 + 79 * Objects.hashCode(this.libraries) + Objects.hashCode(this.filter);
+        return 43687 + 79 * Objects.hashCode(libraries) + Objects.hashCode(filter);
     }
 
     @Override

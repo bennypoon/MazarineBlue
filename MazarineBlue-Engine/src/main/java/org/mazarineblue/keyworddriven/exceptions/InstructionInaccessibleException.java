@@ -17,12 +17,15 @@
  */
 package org.mazarineblue.keyworddriven.exceptions;
 
+import org.mazarineblue.utililities.Immutable;
+
 /**
  * A {@code InstructionInaccessibleException} is thrown by a {@link Library}
  * when initializing it and an {@link Instruction} is not public.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class InstructionInaccessibleException
         extends InstructionException {
 

@@ -19,8 +19,10 @@ package org.mazarineblue.eventdriven.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventdriven.Link;
+import org.mazarineblue.utililities.ID;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
@@ -28,12 +30,15 @@ import org.mazarineblue.eventdriven.Link;
 public class LinkSpy
         extends Link {
 
+    private static final long serialVersionUID = 1L;
+
+    private final ID id = new ID();
     private final List<Event> list = new ArrayList<>(4);
     private int index = -1;
 
     @Override
     public String toString() {
-        return "size = " + list.size();
+        return "LinkSpy{size = " + list.size() + "}";
     }
 
     @Override
@@ -47,5 +52,15 @@ public class LinkSpy
 
     public Event next() {
         return list.get(++index);
+    }
+
+    @Override
+    public int hashCode() {
+        return 203 + Objects.hashCode(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && getClass() == obj.getClass() && Objects.equals(this.id, ((LinkSpy) obj).id);
     }
 }

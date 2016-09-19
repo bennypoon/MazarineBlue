@@ -17,6 +17,8 @@
  */
 package org.mazarineblue.eventdriven.exceptions;
 
+import org.mazarineblue.utililities.Immutable;
+
 /**
  * A {@code NullLinkException} is thrown by {@link Interpreter} and
  * {@link InterpreterFactory} when the {@link Chain} is manipulated using a
@@ -24,6 +26,7 @@ package org.mazarineblue.eventdriven.exceptions;
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class NullLinkException
         extends EventDrivenException {
 

@@ -17,6 +17,7 @@ public class TestNonPublicInstructionLibraryStub
         extends Library {
 
     public static final String NON_PUBLIC_LIBRARY_INSTRUCTION = "Non public library instruction";
+    private static final long serialVersionUID = 1L;
 
     public TestNonPublicInstructionLibraryStub() {
         super("");

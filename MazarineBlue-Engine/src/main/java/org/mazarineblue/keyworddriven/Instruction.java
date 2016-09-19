@@ -17,18 +17,24 @@
  */
 package org.mazarineblue.keyworddriven;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Objects;
 import org.mazarineblue.keyworddriven.events.ExecuteInstructionLineEvent;
 import org.mazarineblue.keyworddriven.events.ValidateInstructionLineEvent;
 import org.mazarineblue.keyworddriven.exceptions.ArgumentsAreIncompatibleException;
 import org.mazarineblue.keyworddriven.exceptions.InstructionInaccessibleException;
 import org.mazarineblue.keyworddriven.exceptions.PrimativesNotAllowedByondMinimumBorderException;
 import org.mazarineblue.keyworddriven.exceptions.ToFewArgumentsException;
+import org.mazarineblue.utililities.Immutable;
 import org.mazarineblue.utililities.Primatives;
-import org.mazarineblue.utililities.exceptions.UnkownIssueException;
+import org.mazarineblue.utililities.exceptions.UnknownIssueException;
 
 /**
  * An {@code Instruction} is an java method with the annotation {@link Keyword}
@@ -42,13 +48,18 @@ import org.mazarineblue.utililities.exceptions.UnkownIssueException;
  * @see Parameters
  * @see PassInvoker
  */
-class Instruction {
+@Immutable
+class Instruction
+        implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Primatives PRIMATIVES = Primatives.getDefaultInstance();
-    private final Method method;
-    private boolean beta = false; // Currently unused but intented for reports and such.
-    private boolean deprecated = false; // Currently unused but intented for reports and such.
-    private int minimumRequiredArguments;
+
+    @Immutable
+    private transient Method method;
+    private final boolean beta; // Currently unused but intented for reports and such.
+    private final boolean deprecated; // Currently unused but intented for reports and such.
+    private final int minimumRequiredArguments;
 
     Instruction(Method method) {
         this(method, minimumRequiredArguments(method));
@@ -139,7 +150,7 @@ class Instruction {
             Object result = method.invoke(callee, arguments);
             event.setResult(result);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            throw new UnkownIssueException("Please report this unknown issue.", ex);
+            throw new UnknownIssueException("Please report this unknown issue.", ex);
         }
     }
 
@@ -163,5 +174,30 @@ class Instruction {
 
     private int theMaximumArguments() {
         return method.getParameterCount();
+    }
+
+    private void writeObject(ObjectOutputStream output)
+            throws IOException {
+        output.defaultWriteObject();
+        output.writeObject(new MethodProfile(method));
+    }
+
+    private void readObject(ObjectInputStream input)
+            throws IOException, ClassNotFoundException {
+        input.defaultReadObject();
+        MethodProfile profile = (MethodProfile) input.readObject();
+        method = profile.getMethod();
+    }
+
+    @Override
+    public int hashCode() {
+        return 847 + 11 * Objects.hashCode(method) + Arrays.deepHashCode(method.getParameterTypes());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && getClass() == obj.getClass()
+                && Objects.equals(this.method.getName(), ((Instruction) obj).method.getName())
+                && Arrays.equals(this.method.getParameterTypes(), ((Instruction) obj).method.getParameterTypes());
     }
 }

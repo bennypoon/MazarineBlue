@@ -18,6 +18,7 @@
 package org.mazarineblue.eventdriven.exceptions;
 
 import org.mazarineblue.eventbus.Event;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * An {@code EventNotConsumedException} thrown by
@@ -26,6 +27,7 @@ import org.mazarineblue.eventbus.Event;
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class EventNotConsumedException
         extends EventDrivenException {
 

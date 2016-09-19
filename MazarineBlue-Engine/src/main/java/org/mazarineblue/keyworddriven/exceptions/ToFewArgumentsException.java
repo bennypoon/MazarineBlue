@@ -20,6 +20,7 @@ package org.mazarineblue.keyworddriven.exceptions;
 import org.mazarineblue.keyworddriven.Keyword;
 import org.mazarineblue.keyworddriven.Parameters;
 import org.mazarineblue.keyworddriven.events.ExecuteInstructionLineEvent;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * A {@code ToFewArgumentsException} is thrown by a {@link Library} when
@@ -32,6 +33,7 @@ import org.mazarineblue.keyworddriven.events.ExecuteInstructionLineEvent;
  * @see Parameters
  * @see Library
  */
+@Immutable
 public class ToFewArgumentsException
         extends KeywordDrivenException {
 

@@ -25,14 +25,5 @@ import org.mazarineblue.eventdriven.InvokerEvent;
 public class TestInvokerEvent
         extends InvokerEvent {
 
-    /**
-     * A copy constructor that copies all values from another event.
-     *
-     * @param e the event to copy all values from.
-     */
-    public TestInvokerEvent(TestInvokerEvent e) {
-    }
-
-    public TestInvokerEvent() {
-    }
+    private static final long serialVersionUID = 1L;
 }

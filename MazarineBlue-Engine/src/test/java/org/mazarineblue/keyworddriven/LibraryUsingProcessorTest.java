@@ -8,6 +8,8 @@ package org.mazarineblue.keyworddriven;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -117,11 +119,11 @@ public class LibraryUsingProcessorTest {
                     UNREGISTERED_NAMESPACE_ZERO_ARGUMENTS_INSTRUCTION);
             feed.add(event);
             interpreter.execute(feed);
-            assertEquals(false, event.isValid());
-            assertEquals(false, event.isArgumentsAreIncompatible());
-            assertEquals(true, event.isInstructionNotFound());
-            assertEquals(false, event.isLineHasToFewArguments());
-            assertEquals(false, event.isMultipleInstructionsFound());
+            assertFalse(event.isValid());
+            assertFalse(event.isArgumentsAreIncompatible());
+            assertTrue(event.isInstructionNotFound());
+            assertFalse(event.isLineHasToFewArguments());
+            assertFalse(event.isMultipleInstructionsFound());
             assertEquals(0, event.getUserErrorFlags());
         }
 
@@ -137,11 +139,11 @@ public class LibraryUsingProcessorTest {
                     NO_NAMESPACE_ZERO_ARGUMENTS_INSTRUCTION);
             feed.add(event);
             interpreter.execute(feed);
-            assertEquals(false, event.isValid());
-            assertEquals(false, event.isArgumentsAreIncompatible());
-            assertEquals(true, event.isInstructionNotFound());
-            assertEquals(false, event.isLineHasToFewArguments());
-            assertEquals(false, event.isMultipleInstructionsFound());
+            assertFalse(event.isValid());
+            assertFalse(event.isArgumentsAreIncompatible());
+            assertTrue(event.isInstructionNotFound());
+            assertFalse(event.isLineHasToFewArguments());
+            assertFalse(event.isMultipleInstructionsFound());
             assertEquals(0, event.getUserErrorFlags());
         }
 
@@ -166,11 +168,11 @@ public class LibraryUsingProcessorTest {
                     UNREGISTERED_NAMESPACE_ZERO_ARGUMENTS_INSTRUCTION);
             feed.add(event);
             interpreter.execute(feed);
-            assertEquals(false, event.isValid());
-            assertEquals(false, event.isArgumentsAreIncompatible());
-            assertEquals(true, event.isInstructionNotFound());
-            assertEquals(false, event.isLineHasToFewArguments());
-            assertEquals(false, event.isMultipleInstructionsFound());
+            assertFalse(event.isValid());
+            assertFalse(event.isArgumentsAreIncompatible());
+            assertTrue(event.isInstructionNotFound());
+            assertFalse(event.isLineHasToFewArguments());
+            assertFalse(event.isMultipleInstructionsFound());
             assertEquals(0, event.getUserErrorFlags());
         }
 
@@ -185,11 +187,11 @@ public class LibraryUsingProcessorTest {
             ValidateInstructionLineEvent event = new ValidateInstructionLineEvent(NO_NAMESPACE_NON_EXISTING_INSTRUCTION);
             feed.add(event);
             interpreter.execute(feed);
-            assertEquals(false, event.isValid());
-            assertEquals(false, event.isArgumentsAreIncompatible());
-            assertEquals(true, event.isInstructionNotFound());
-            assertEquals(false, event.isLineHasToFewArguments());
-            assertEquals(false, event.isMultipleInstructionsFound());
+            assertFalse(event.isValid());
+            assertFalse(event.isArgumentsAreIncompatible());
+            assertTrue(event.isInstructionNotFound());
+            assertFalse(event.isLineHasToFewArguments());
+            assertFalse(event.isMultipleInstructionsFound());
             assertEquals(0, event.getUserErrorFlags());
         }
 
@@ -222,11 +224,11 @@ public class LibraryUsingProcessorTest {
                     UNREGISTERED_NAMESPACE_ZERO_ARGUMENTS_INSTRUCTION);
             feed.add(event);
             interpreter.execute(feed);
-            assertEquals(false, event.isValid());
-            assertEquals(false, event.isArgumentsAreIncompatible());
-            assertEquals(true, event.isInstructionNotFound());
-            assertEquals(false, event.isLineHasToFewArguments());
-            assertEquals(false, event.isMultipleInstructionsFound());
+            assertFalse(event.isValid());
+            assertFalse(event.isArgumentsAreIncompatible());
+            assertTrue(event.isInstructionNotFound());
+            assertFalse(event.isLineHasToFewArguments());
+            assertFalse(event.isMultipleInstructionsFound());
             assertEquals(0, event.getUserErrorFlags());
         }
 
@@ -241,11 +243,11 @@ public class LibraryUsingProcessorTest {
             ValidateInstructionLineEvent event = new ValidateInstructionLineEvent(NO_NAMESPACE_NON_EXISTING_INSTRUCTION);
             feed.add(event);
             interpreter.execute(feed);
-            assertEquals(false, event.isValid());
-            assertEquals(false, event.isArgumentsAreIncompatible());
-            assertEquals(true, event.isInstructionNotFound());
-            assertEquals(false, event.isLineHasToFewArguments());
-            assertEquals(false, event.isMultipleInstructionsFound());
+            assertFalse(event.isValid());
+            assertFalse(event.isArgumentsAreIncompatible());
+            assertTrue(event.isInstructionNotFound());
+            assertFalse(event.isLineHasToFewArguments());
+            assertFalse(event.isMultipleInstructionsFound());
             assertEquals(0, event.getUserErrorFlags());
         }
 
@@ -261,11 +263,11 @@ public class LibraryUsingProcessorTest {
                     NO_NAMESPACE_ZERO_ARGUMENTS_INSTRUCTION, 1);
             feed.add(event);
             interpreter.execute(feed);
-            assertEquals(true, event.isValid());
-            assertEquals(false, event.isArgumentsAreIncompatible());
-            assertEquals(false, event.isInstructionNotFound());
-            assertEquals(false, event.isLineHasToFewArguments());
-            assertEquals(false, event.isMultipleInstructionsFound());
+            assertTrue(event.isValid());
+            assertFalse(event.isArgumentsAreIncompatible());
+            assertFalse(event.isInstructionNotFound());
+            assertFalse(event.isLineHasToFewArguments());
+            assertFalse(event.isMultipleInstructionsFound());
             assertEquals(0, event.getUserErrorFlags());
         }
 
@@ -281,11 +283,11 @@ public class LibraryUsingProcessorTest {
             ValidateInstructionLineEvent event = new ValidateInstructionLineEvent(NO_NAMESPACE_ONE_ARGUMENT_INSTRUCTION);
             feed.add(event);
             interpreter.execute(feed);
-            assertEquals(false, event.isValid());
-            assertEquals(false, event.isArgumentsAreIncompatible());
-            assertEquals(false, event.isInstructionNotFound());
-            assertEquals(true, event.isLineHasToFewArguments());
-            assertEquals(false, event.isMultipleInstructionsFound());
+            assertFalse(event.isValid());
+            assertFalse(event.isArgumentsAreIncompatible());
+            assertFalse(event.isInstructionNotFound());
+            assertTrue(event.isLineHasToFewArguments());
+            assertFalse(event.isMultipleInstructionsFound());
             assertEquals(0, event.getUserErrorFlags());
         }
 
@@ -301,11 +303,11 @@ public class LibraryUsingProcessorTest {
                                                                                   "bla");
             feed.add(event);
             interpreter.execute(feed);
-            assertEquals(false, event.isValid());
-            assertEquals(true, event.isArgumentsAreIncompatible());
-            assertEquals(false, event.isInstructionNotFound());
-            assertEquals(false, event.isLineHasToFewArguments());
-            assertEquals(false, event.isMultipleInstructionsFound());
+            assertFalse(event.isValid());
+            assertTrue(event.isArgumentsAreIncompatible());
+            assertFalse(event.isInstructionNotFound());
+            assertFalse(event.isLineHasToFewArguments());
+            assertFalse(event.isMultipleInstructionsFound());
             assertEquals(0, event.getUserErrorFlags());
         }
 
@@ -321,11 +323,11 @@ public class LibraryUsingProcessorTest {
                                                                                   1);
             feed.add(event);
             interpreter.execute(feed);
-            assertEquals(true, event.isValid());
-            assertEquals(false, event.isArgumentsAreIncompatible());
-            assertEquals(false, event.isInstructionNotFound());
-            assertEquals(false, event.isLineHasToFewArguments());
-            assertEquals(false, event.isMultipleInstructionsFound());
+            assertTrue(event.isValid());
+            assertFalse(event.isArgumentsAreIncompatible());
+            assertFalse(event.isInstructionNotFound());
+            assertFalse(event.isLineHasToFewArguments());
+            assertFalse(event.isMultipleInstructionsFound());
             assertEquals(0, event.getUserErrorFlags());
         }
 
@@ -342,11 +344,11 @@ public class LibraryUsingProcessorTest {
                                                                                   1);
             feed.add(event);
             interpreter.execute(feed);
-            assertEquals(true, event.isValid());
-            assertEquals(false, event.isArgumentsAreIncompatible());
-            assertEquals(false, event.isInstructionNotFound());
-            assertEquals(false, event.isLineHasToFewArguments());
-            assertEquals(false, event.isMultipleInstructionsFound());
+            assertTrue(event.isValid());
+            assertFalse(event.isArgumentsAreIncompatible());
+            assertFalse(event.isInstructionNotFound());
+            assertFalse(event.isLineHasToFewArguments());
+            assertFalse(event.isMultipleInstructionsFound());
             assertEquals(0, event.getUserErrorFlags());
         }
 
@@ -379,11 +381,11 @@ public class LibraryUsingProcessorTest {
                         NO_NAMESPACE_ONE_ARGUMENT_INSTRUCTION, 1);
                 feed.add(event);
                 interpreter.execute(feed);
-                assertEquals(false, event.isValid());
-                assertEquals(false, event.isArgumentsAreIncompatible());
-                assertEquals(false, event.isInstructionNotFound());
-                assertEquals(false, event.isLineHasToFewArguments());
-                assertEquals(true, event.isMultipleInstructionsFound());
+                assertFalse(event.isValid());
+                assertFalse(event.isArgumentsAreIncompatible());
+                assertFalse(event.isInstructionNotFound());
+                assertFalse(event.isLineHasToFewArguments());
+                assertTrue(event.isMultipleInstructionsFound());
                 assertEquals(0, event.getUserErrorFlags());
             }
 
@@ -399,11 +401,11 @@ public class LibraryUsingProcessorTest {
                         REGISTRED_NAMESPACE_ONE_ARGUMENT_INSTRUCTION, 1);
                 feed.add(event);
                 interpreter.execute(feed);
-                assertEquals(true, event.isValid());
-                assertEquals(false, event.isArgumentsAreIncompatible());
-                assertEquals(false, event.isInstructionNotFound());
-                assertEquals(false, event.isLineHasToFewArguments());
-                assertEquals(false, event.isMultipleInstructionsFound());
+                assertTrue(event.isValid());
+                assertFalse(event.isArgumentsAreIncompatible());
+                assertFalse(event.isInstructionNotFound());
+                assertFalse(event.isLineHasToFewArguments());
+                assertFalse(event.isMultipleInstructionsFound());
                 assertEquals(0, event.getUserErrorFlags());
             }
 
@@ -424,11 +426,11 @@ public class LibraryUsingProcessorTest {
                         NO_NAMESPACE_INVOKER_ONE_ARGUMENT_INSTRUCTION, 1);
                 feed.add(event);
                 interpreter.execute(feed);
-                assertEquals(false, event.isValid());
-                assertEquals(false, event.isArgumentsAreIncompatible());
-                assertEquals(false, event.isInstructionNotFound());
-                assertEquals(false, event.isLineHasToFewArguments());
-                assertEquals(true, event.isMultipleInstructionsFound());
+                assertFalse(event.isValid());
+                assertFalse(event.isArgumentsAreIncompatible());
+                assertFalse(event.isInstructionNotFound());
+                assertFalse(event.isLineHasToFewArguments());
+                assertTrue(event.isMultipleInstructionsFound());
                 assertEquals(0, event.getUserErrorFlags());
             }
 
@@ -444,11 +446,11 @@ public class LibraryUsingProcessorTest {
                         REGISTRED_NAMESPACE_INVOKER_ONE_ARGUMENT_INSTRUCTION, 1);
                 feed.add(event);
                 interpreter.execute(feed);
-                assertEquals(true, event.isValid());
-                assertEquals(false, event.isArgumentsAreIncompatible());
-                assertEquals(false, event.isInstructionNotFound());
-                assertEquals(false, event.isLineHasToFewArguments());
-                assertEquals(false, event.isMultipleInstructionsFound());
+                assertTrue(event.isValid());
+                assertFalse(event.isArgumentsAreIncompatible());
+                assertFalse(event.isInstructionNotFound());
+                assertFalse(event.isLineHasToFewArguments());
+                assertFalse(event.isMultipleInstructionsFound());
                 assertEquals(0, event.getUserErrorFlags());
             }
 

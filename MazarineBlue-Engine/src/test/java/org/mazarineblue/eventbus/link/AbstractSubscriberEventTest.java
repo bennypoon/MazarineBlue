@@ -19,6 +19,7 @@ package org.mazarineblue.eventbus.link;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventbus.Filter;
@@ -73,7 +74,7 @@ public class AbstractSubscriberEventTest {
     @Test
     public void equals_Null() {
         AbstractSubscriberEvent a = new SubscriberEventDummy(new SubscriberDummy<>());
-        assertNotEquals(a, null);
+        assertNotNull(a);
     }
 
     @Test

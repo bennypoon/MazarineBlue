@@ -15,21 +15,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.eventdriven;
+package org.mazarineblue.keyworddriven;
 
+import java.lang.reflect.Method;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import org.mazarineblue.eventdriven.events.ExceptionThrownEvent;
-import org.mazarineblue.eventdriven.util.FireEventStub;
+import org.mazarineblue.keyworddriven.exceptions.NoPublicMethodFoundException;
+import org.mazarineblue.keyworddriven.util.MethodsUtil;
 
-/**
- * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
- */
-public class EventDrivenCopyConstructorEventTest {
+public class MethodProfileTest {
+
+    @Test(expected = NullPointerException.class)
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
+    public void constructor_Null() {
+        new MethodProfile(null);
+    }
+
+    @Test(expected = NoPublicMethodFoundException.class)
+    public void getMethod_PrivateMethod() {
+        Method method = MethodsUtil.getPrivateMethod();
+        new MethodProfile(method).getMethod();
+    }
 
     @Test
-    public void subscribeEvent() {
-        ExceptionThrownEvent e = new ExceptionThrownEvent(new FireEventStub(), new RuntimeException());
-        assertEquals(e, new ExceptionThrownEvent(e));
+    public void getMethod_PublicMethod() {
+        Method method = MethodsUtil.getPublicMethod();
+        MethodProfile profile = new MethodProfile(method);
+        assertEquals(method.getName(), profile.getMethod().getName());
     }
 }

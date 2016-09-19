@@ -19,6 +19,7 @@ package org.mazarineblue.keyworddriven.events;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 /**
@@ -29,7 +30,7 @@ public class InstructionLineTest {
     @Test
     public void equals_Null() {
         InstructionLine a = new InstructionLine(new Path("foo"), "oof");
-        assertNotEquals(a, null);
+        assertNotNull(a);
     }
 
     @Test

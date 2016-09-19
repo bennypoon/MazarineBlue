@@ -15,33 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.eventdriven.util;
+package org.mazarineblue.function;
 
-import org.mazarineblue.eventbus.EventHandler;
-import org.mazarineblue.eventbus.events.AbstractEvent;
-import org.mazarineblue.eventdriven.Interpreter;
-import org.mazarineblue.eventdriven.Link;
+import java.io.Serializable;
 
 /**
- * This link consumes every abstract event.
+ * Represents a condition that accepts one argument and return true when met.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ * @param <T> the type of the input to the function
  */
-public class ConsumesEveryEventLink
-        extends Link {
-
-    public ConsumesEveryEventLink() {
-    }
+@FunctionalInterface
+public interface Condition<T>
+        extends Serializable {
 
     /**
-     * Event handlers are not meant to be called directly, instead publish an
-     * event to an {@link Interpreter}; please see the specified event for more
-     * information about this event handler.
+     * Applies this condition to the given argument.
      *
-     * @param event the event this {@code EventHandler} processes.
+     * @param t the condition argument
+     * @return {@code true} when the condition is met.
      */
-    @EventHandler
-    public void eventHandler(AbstractEvent event) {
-        event.setConsumed();
-    }
+    public boolean apply(T t);
 }

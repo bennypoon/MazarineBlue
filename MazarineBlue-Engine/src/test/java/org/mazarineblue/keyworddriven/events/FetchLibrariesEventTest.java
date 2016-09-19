@@ -17,12 +17,13 @@
  */
 package org.mazarineblue.keyworddriven.events;
 
-import java.util.function.Function;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
+import org.mazarineblue.function.Condition;
 import org.mazarineblue.keyworddriven.Library;
-import org.mazarineblue.keyworddriven.util.TestLibraryStub;
+import org.mazarineblue.keyworddriven.util.TestLibraryExternalCaller;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
@@ -31,7 +32,7 @@ public class FetchLibrariesEventTest {
 
     @Test
     public void message() {
-        Function<Library, Boolean> filter = lib -> true;
+        Condition<Library> filter = lib -> true;
         FetchLibrariesEvent e = new FetchLibrariesEvent(filter);
         assertEquals("matcher=" + filter, e.message());
     }
@@ -39,21 +40,21 @@ public class FetchLibrariesEventTest {
     @Test
     public void responce() {
         FetchLibrariesEvent e = new FetchLibrariesEvent();
-        e.addLibrary(new TestLibraryStub(""));
+        e.addLibrary(new TestLibraryExternalCaller(""));
         assertEquals("count=1", e.responce());
     }
 
     @Test
     public void equals_Null() {
         FetchLibrariesEvent a = new FetchLibrariesEvent();
-        a.addLibrary(new TestLibraryStub(""));
-        assertNotEquals(a, null);
+        a.addLibrary(new TestLibraryExternalCaller(""));
+        assertNotNull(a);
     }
 
     @Test
     public void equals_DifferentClasses() {
         FetchLibrariesEvent a = new FetchLibrariesEvent();
-        a.addLibrary(new TestLibraryStub(""));
+        a.addLibrary(new TestLibraryExternalCaller(""));
         assertNotEquals(a, "");
     }
 
@@ -61,9 +62,9 @@ public class FetchLibrariesEventTest {
     public void hashCode_DifferentLibraries() {
         FetchLibrariesEvent a = new FetchLibrariesEvent();
         FetchLibrariesEvent b = new FetchLibrariesEvent();
-        a.addLibrary(new TestLibraryStub(""));
-        b.addLibrary(new TestLibraryStub(""));
-        b.addLibrary(new TestLibraryStub("foo"));
+        a.addLibrary(new TestLibraryExternalCaller(""));
+        b.addLibrary(new TestLibraryExternalCaller(""));
+        b.addLibrary(new TestLibraryExternalCaller("foo"));
         assertNotEquals(a.hashCode(), b.hashCode());
     }
 
@@ -71,9 +72,9 @@ public class FetchLibrariesEventTest {
     public void equals_DifferentLibraries() {
         FetchLibrariesEvent a = new FetchLibrariesEvent();
         FetchLibrariesEvent b = new FetchLibrariesEvent();
-        a.addLibrary(new TestLibraryStub(""));
-        b.addLibrary(new TestLibraryStub(""));
-        b.addLibrary(new TestLibraryStub("foo"));
+        a.addLibrary(new TestLibraryExternalCaller(""));
+        b.addLibrary(new TestLibraryExternalCaller(""));
+        b.addLibrary(new TestLibraryExternalCaller("foo"));
         assertNotEquals(a, b);
     }
 
@@ -81,8 +82,8 @@ public class FetchLibrariesEventTest {
     public void hashCode_DifferentFilters() {
         FetchLibrariesEvent a = new FetchLibrariesEvent();
         FetchLibrariesEvent b = new FetchLibrariesEvent(x -> false);
-        a.addLibrary(new TestLibraryStub(""));
-        b.addLibrary(new TestLibraryStub(""));
+        a.addLibrary(new TestLibraryExternalCaller(""));
+        b.addLibrary(new TestLibraryExternalCaller(""));
         assertNotEquals(a.hashCode(), b.hashCode());
     }
 
@@ -90,8 +91,8 @@ public class FetchLibrariesEventTest {
     public void equals_DifferentFilters() {
         FetchLibrariesEvent a = new FetchLibrariesEvent();
         FetchLibrariesEvent b = new FetchLibrariesEvent(x -> false);
-        a.addLibrary(new TestLibraryStub(""));
-        b.addLibrary(new TestLibraryStub(""));
+        a.addLibrary(new TestLibraryExternalCaller(""));
+        b.addLibrary(new TestLibraryExternalCaller(""));
         assertNotEquals(a, b);
     }
 
@@ -99,17 +100,17 @@ public class FetchLibrariesEventTest {
     public void hashCode_IdenticalEvents() {
         FetchLibrariesEvent a = new FetchLibrariesEvent();
         FetchLibrariesEvent b = new FetchLibrariesEvent();
-        a.addLibrary(new TestLibraryStub(""));
-        b.addLibrary(new TestLibraryStub(""));
-        assertNotEquals(a.hashCode(), b.hashCode());
+        a.addLibrary(new TestLibraryExternalCaller(""));
+        b.addLibrary(new TestLibraryExternalCaller(""));
+        assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void equals_IdenticalEvents() {
         FetchLibrariesEvent a = new FetchLibrariesEvent();
         FetchLibrariesEvent b = new FetchLibrariesEvent();
-        a.addLibrary(new TestLibraryStub(""));
-        b.addLibrary(new TestLibraryStub(""));
-        assertNotEquals(a, b);
+        a.addLibrary(new TestLibraryExternalCaller(""));
+        b.addLibrary(new TestLibraryExternalCaller(""));
+        assertEquals(a, b);
     }
 }

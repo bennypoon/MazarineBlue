@@ -29,14 +29,7 @@ import org.mazarineblue.keyworddriven.Library;
 public class RemoveLibraryEvent
         extends LibraryEvent {
 
-    /**
-     * A copy constructor that copies all values from another event.
-     *
-     * @param e the event to copy all values from.
-     */
-    public RemoveLibraryEvent(RemoveLibraryEvent e) {
-        super(e.getLibrary());
-    }
+    private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a {@code RemoveLibraryEvent} with an specified

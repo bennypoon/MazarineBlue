@@ -27,14 +27,7 @@ package org.mazarineblue.keyworddriven.events;
 public class CommentInstructionLineEvent
         extends InstructionLineEvent {
 
-    /**
-     * A copy constructor that copies all values from another event.
-     *
-     * @param e the event to copy all values from.
-     */
-    public CommentInstructionLineEvent(CommentInstructionLineEvent e) {
-        super("", e.getArguments());
-    }
+    private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a {@code CommentInstructionLineEvent} with specified

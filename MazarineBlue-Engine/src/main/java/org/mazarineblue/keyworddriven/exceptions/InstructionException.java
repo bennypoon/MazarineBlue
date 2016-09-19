@@ -17,6 +17,8 @@
  */
 package org.mazarineblue.keyworddriven.exceptions;
 
+import org.mazarineblue.utililities.Immutable;
+
 /**
  * A {@code KeywordDrivenException} is the base class of all exceptions thrown
  * by the keyword driven component, that take a path (namespace and keyword) as
@@ -24,6 +26,7 @@ package org.mazarineblue.keyworddriven.exceptions;
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 class InstructionException
         extends KeywordDrivenException {
 

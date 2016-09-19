@@ -18,10 +18,14 @@
 package org.mazarineblue.eventdriven.util;
 
 import org.mazarineblue.eventdriven.Link;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class EmptyLinkStub
         extends Link {
+
+    private static final long serialVersionUID = 1L;
 }

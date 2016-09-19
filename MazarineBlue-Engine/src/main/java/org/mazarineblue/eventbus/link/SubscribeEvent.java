@@ -42,14 +42,7 @@ import org.mazarineblue.eventbus.Subscriber;
 public class SubscribeEvent
         extends AbstractSubscriberEvent {
 
-    /**
-     * A copy constructor that copies all values from another event.
-     *
-     * @param e the event to copy all values from.
-     */
-    public SubscribeEvent(SubscribeEvent e) {
-        super(e.getSubscriber());
-    }
+    private static final long serialVersionUID = 1L;
 
     /**
      * Constructs an {@code SubscribeEvent} to instruct the adding of the

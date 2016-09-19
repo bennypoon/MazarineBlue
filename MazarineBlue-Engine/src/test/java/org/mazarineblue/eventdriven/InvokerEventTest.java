@@ -19,16 +19,18 @@ package org.mazarineblue.eventdriven;
 
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.mazarineblue.eventbus.Event.Status;
 import org.mazarineblue.eventdriven.events.ExceptionThrownEvent;
 import org.mazarineblue.eventdriven.exceptions.EventNotConsumedException;
 import org.mazarineblue.eventdriven.feeds.MemoryFeed;
-import org.mazarineblue.eventdriven.links.UnconsumedExceptionThrowerLink;
-import org.mazarineblue.eventdriven.util.ConsumesEveryEventLink;
 import org.mazarineblue.eventdriven.util.TestExceptionThrownEventLinkSpy;
 import org.mazarineblue.eventdriven.util.TestInvokerEvent;
+import org.mazarineblue.links.ConsumeEventsLink;
+import org.mazarineblue.links.UnconsumedExceptionThrowerLink;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
@@ -50,7 +52,7 @@ public class InvokerEventTest {
     @Test
     public void event_Initial() {
         assertEquals(Status.OK, event.status());
-        assertEquals(false, event.hasException());
+        assertFalse(event.hasException());
         assertEquals(null, event.getException());
     }
 
@@ -59,18 +61,17 @@ public class InvokerEventTest {
         TestExceptionThrownEventLinkSpy spy = new TestExceptionThrownEventLinkSpy();
 
         ChainImpl chain = new ChainImpl();
-        chain.addLink(new ConsumesEveryEventLink());
+        chain.addLink(new ConsumeEventsLink());
         chain.addLink(new UnconsumedExceptionThrowerLink(ExceptionThrownEvent.class));
-        chain.addLink(spy);
         Interpreter interpreter = new Processor(chain);
+        interpreter.addLink(spy);
         interpreter.execute(new MemoryFeed(event));
 
         assertEquals(Status.ERROR, event.status());
-        assertEquals(true, event.hasException());
+        assertTrue(event.hasException());
         assertEquals(EventNotConsumedException.class, event.getException().getClass());
         assertEquals(EventNotConsumedException.class, spy.getException().getClass());
         assertEquals(event, spy.getOwner());
         assertEquals("event={consumed=false, date=null}", spy.message());
     }
-
 }

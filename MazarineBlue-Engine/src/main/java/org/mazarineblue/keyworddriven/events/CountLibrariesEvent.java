@@ -20,8 +20,10 @@ package org.mazarineblue.keyworddriven.events;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import org.mazarineblue.function.Condition;
 import org.mazarineblue.keyworddriven.Library;
 import org.mazarineblue.keyworddriven.LibraryRegistry;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * A {@code CountLibrariesEvent} is used to count all {@code Library Libraries}
@@ -33,18 +35,12 @@ import org.mazarineblue.keyworddriven.LibraryRegistry;
 public class CountLibrariesEvent
         extends KeywordDrivenEvent {
 
-    private int count;
-    private final Function<Library, Boolean> matcher;
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * A copy constructor that copies all values from another event.
-     *
-     * @param e the event to copy all values from.
-     */
-    public CountLibrariesEvent(CountLibrariesEvent e) {
-        count = e.count;
-        matcher = e.matcher;
-    }
+    private int count;
+
+    @Immutable
+    private Condition<Library> matcher;
 
     /**
      * Constructs a {@code CountLibrariesEvent} that counts all libraries.
@@ -59,7 +55,7 @@ public class CountLibrariesEvent
      *
      * @param matcher count the library if this method returns true.
      */
-    public CountLibrariesEvent(Function<Library, Boolean> matcher) {
+    public CountLibrariesEvent(Condition<Library> matcher) {
         count = 0;
         this.matcher = matcher;
     }
@@ -86,14 +82,14 @@ public class CountLibrariesEvent
      * @see #CountLibrariesEvent(Function)
      */
     public void addToCount(List<Library> libraries) {
-        for (Library lib : libraries)
-            if (matcher.apply(lib))
-                ++count;
+        libraries.stream()
+                .filter(matcher::apply)
+                .forEach(item -> ++count);
     }
 
     @Override
     public int hashCode() {
-        return 3703 + 23 * this.count + Objects.hashCode(this.matcher);
+        return 3703 + 23 * this.count + Objects.hashCode(matcher);
     }
 
     @Override

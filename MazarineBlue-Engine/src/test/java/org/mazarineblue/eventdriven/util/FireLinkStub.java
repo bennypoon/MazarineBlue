@@ -21,17 +21,21 @@ import org.mazarineblue.eventbus.EventHandler;
 import org.mazarineblue.eventbus.events.TestEvent;
 import org.mazarineblue.eventdriven.Invoker;
 import org.mazarineblue.eventdriven.Link;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class FireLinkStub
         extends Link {
+
+    private static final long serialVersionUID = 1L;
 
     @EventHandler
     public void fireEvent(FireEventStub event) {
         Invoker invoer = event.getInvoker();
         invoer.publish(new TestEvent());
-        event.setConsumed();
+        event.setConsumed(true);
     }
 }

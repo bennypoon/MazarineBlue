@@ -15,17 +15,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.eventdriven.exceptions;
+package org.mazarineblue.eventdriven;
 
-/**
- * A {@code NullEventException} is thrown by {@link Interpreter} and
- * {@link InterpreterFactory} when an {@link Event} is published containing a
- * {@code null} value.
- *
- * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
- */
-public class NullEventException
-        extends EventDrivenException {
+import org.mazarineblue.eventbus.Event;
+
+class InvokerImpl
+        implements Invoker {
 
     private static final long serialVersionUID = 1L;
+
+    private final Interpreter interpreter;
+    private final ChainImpl chain;
+
+    InvokerImpl(Interpreter interpreter, ChainImpl chain) {
+        this.interpreter = interpreter;
+        this.chain = chain;
+    }
+
+    @Override
+    public Interpreter interpreter() {
+        return interpreter;
+    }
+
+    @Override
+    public Chain chain() {
+        return chain;
+    }
+
+    @Override
+    public void publish(Event event) {
+        if (event instanceof InvokerEvent)
+            ((InvokerEvent) event).setInvoker(this);
+        chain.publish(event);
+    }
 }

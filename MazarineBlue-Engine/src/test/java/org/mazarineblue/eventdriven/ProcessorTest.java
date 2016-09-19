@@ -19,15 +19,16 @@ package org.mazarineblue.eventdriven;
 
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventbus.events.TestEvent;
 import org.mazarineblue.eventdriven.exceptions.EventNotConsumedException;
 import org.mazarineblue.eventdriven.feeds.MemoryFeed;
-import org.mazarineblue.eventdriven.links.UnconsumedExceptionThrowerLink;
-import org.mazarineblue.eventdriven.util.ConsumesEveryEventLink;
 import org.mazarineblue.eventdriven.util.LinkSpy;
+import org.mazarineblue.links.ConsumeEventsLink;
+import org.mazarineblue.links.UnconsumedExceptionThrowerLink;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
@@ -64,8 +65,8 @@ public class ProcessorTest {
     public void execute_UnconsumedExceptionThrowerLink_DoesNothing() {
         Event e = new TestEvent();
         interpretor.addLink(new UnconsumedExceptionThrowerLink());
-        interpretor.addLink(new ConsumesEveryEventLink());
+        interpretor.addLink(new ConsumeEventsLink());
         interpretor.execute(new MemoryFeed(e));
-        assertEquals(true, e.isConsumed());
+        assertTrue(e.isConsumed());
     }
 }

@@ -36,6 +36,8 @@ import org.mazarineblue.eventbus.events.AbstractEvent;
 abstract class AbstractSubscriberEvent
         extends AbstractEvent {
 
+    private static final long serialVersionUID = 1L;
+
     private Class<?> type = Event.class;
     private Filter<Event> filter = null;
     private final Subscriber<Event> subscriber;
@@ -78,19 +80,20 @@ abstract class AbstractSubscriberEvent
         this.filter = filter;
     }
 
-    public Subscriber getSubscriber() {
+    public Subscriber<Event> getSubscriber() {
         return subscriber;
     }
 
     @Override
     public int hashCode() {
         return 253265
-                + 1369 * Objects.hashCode(this.type)
-                + 37 * Objects.hashCode(this.filter)
-                + Objects.hashCode(this.subscriber);
+                + 1369 * Objects.hashCode(type)
+                + 37 * Objects.hashCode(filter)
+                + Objects.hashCode(subscriber);
     }
 
     @Override
+    @SuppressWarnings("AccessingNonPublicFieldOfAnotherObject")
     public boolean equals(Object obj) {
         return obj != null && getClass() == obj.getClass()
                 && Objects.equals(this.type, ((AbstractSubscriberEvent) obj).type)

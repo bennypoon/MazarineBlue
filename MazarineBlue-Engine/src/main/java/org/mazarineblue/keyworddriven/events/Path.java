@@ -17,6 +17,7 @@
  */
 package org.mazarineblue.keyworddriven.events;
 
+import java.io.Serializable;
 import java.util.Objects;
 import org.mazarineblue.keyworddriven.Library;
 import static org.mazarineblue.keyworddriven.util.GracefullConvertor.degraceKeyword;
@@ -29,10 +30,13 @@ import static org.mazarineblue.keyworddriven.util.GracefullConvertor.degraceName
  * @see Library#getNamespace()
  * @see Keyword
  */
-class Path {
+class Path
+        implements Serializable {
 
     private static final String DELIMITER = ".";
     private static final String NO_NAMESPACE = "";
+    private static final long serialVersionUID = 1L;
+
     private final String namespace;
     private final String keyword;
 
@@ -76,7 +80,7 @@ class Path {
 
     @Override
     public int hashCode() {
-        return 43687 + 79 * Objects.hashCode(this.namespace) + Objects.hashCode(this.keyword);
+        return 43687 + 79 * Objects.hashCode(namespace) + Objects.hashCode(keyword);
     }
 
     @Override

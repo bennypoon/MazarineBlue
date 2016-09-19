@@ -21,11 +21,13 @@ import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventbus.EventHandlerCaller;
 import org.mazarineblue.eventdriven.exceptions.FeedClassRequiresPublicDeclarationException;
 import org.mazarineblue.eventdriven.exceptions.FeedTargetException;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  * @see Interpreter
  */
+@Immutable
 public abstract class AbstractFeed
         implements Feed {
 
@@ -38,6 +40,8 @@ public abstract class AbstractFeed
 
     private static class ExceptionCreationCaller
             extends EventHandlerCaller<Event> {
+
+        private static final long serialVersionUID = 1L;
 
         ExceptionCreationCaller(Feed owner) {
             super(owner);

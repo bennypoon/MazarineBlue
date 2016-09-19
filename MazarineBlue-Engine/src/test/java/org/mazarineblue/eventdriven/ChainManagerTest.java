@@ -23,7 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mazarineblue.eventbus.events.TestEvent;
 import org.mazarineblue.eventdriven.exceptions.LinkNotInChainException;
-import org.mazarineblue.eventdriven.exceptions.NullEventException;
 import org.mazarineblue.eventdriven.exceptions.NullLinkException;
 import org.mazarineblue.eventdriven.util.LinkSpy;
 
@@ -149,7 +148,7 @@ public class ChainManagerTest {
         assertEquals(thirth, chain.removeLink());
     }
 
-    @Test(expected = NullEventException.class)
+    @Test(expected = NullPointerException.class)
     public void publish_Null_ThrowsException() {
         LinkSpy first = new LinkSpy();
         chain.addLink(first);

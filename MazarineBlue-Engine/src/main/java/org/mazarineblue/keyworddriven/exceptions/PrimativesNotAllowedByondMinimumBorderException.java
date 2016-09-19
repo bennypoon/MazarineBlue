@@ -20,6 +20,7 @@ package org.mazarineblue.keyworddriven.exceptions;
 import org.mazarineblue.keyworddriven.Keyword;
 import org.mazarineblue.keyworddriven.Library;
 import org.mazarineblue.keyworddriven.Parameters;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * A {@code PrimativesNotAllowedByondMinimumBorderException} is thrown by a
@@ -36,6 +37,7 @@ import org.mazarineblue.keyworddriven.Parameters;
  * @see Parameters
  * @see Library
  */
+@Immutable
 public class PrimativesNotAllowedByondMinimumBorderException
         extends InstructionException {
 

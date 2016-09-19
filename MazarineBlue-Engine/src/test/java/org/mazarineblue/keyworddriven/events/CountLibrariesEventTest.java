@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import org.mazarineblue.keyworddriven.Library;
 
@@ -42,7 +43,7 @@ public class CountLibrariesEventTest {
     @Test
     public void equals_Null() {
         CountLibrariesEvent a = new CountLibrariesEvent();
-        assertNotEquals(a, null);
+        assertNotNull(a);
     }
 
     @Test
@@ -110,6 +111,8 @@ public class CountLibrariesEventTest {
 
     private static class TestLibrary
             extends Library {
+
+        private static final long serialVersionUID = 1L;
 
         public TestLibrary(String namespace) {
             super(namespace);

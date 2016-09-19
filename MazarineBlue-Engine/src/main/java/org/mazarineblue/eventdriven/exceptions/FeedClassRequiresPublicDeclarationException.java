@@ -17,12 +17,15 @@
  */
 package org.mazarineblue.eventdriven.exceptions;
 
+import org.mazarineblue.utililities.Immutable;
+
 /**
  * An {@code FeedClassRequiresPublicDeclarationException} is thrown by
  * {@link AbstractFeed} when its implementor is not public.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class FeedClassRequiresPublicDeclarationException
         extends EventDrivenException {
 

@@ -11,9 +11,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventbus.EventHandler;
+import org.mazarineblue.eventbus.ReflectionSubscriber;
 import org.mazarineblue.eventdriven.Interpreter;
 import org.mazarineblue.keyworddriven.events.ExecuteInstructionLineEvent;
 import org.mazarineblue.keyworddriven.events.FetchLibrariesEvent;
@@ -42,9 +45,12 @@ import org.mazarineblue.keyworddriven.util.GracefullConvertor;
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  * @see Instruction
  */
-public abstract class Library {
+public abstract class Library
+        extends ReflectionSubscriber<Event> {
 
+    private static final long serialVersionUID = 1L;
     public static final String NO_NAMESPACE = "";
+
     private final String namespace;
     private final Map<String, Instruction> keywords = new HashMap<>(16);
 
@@ -145,6 +151,7 @@ public abstract class Library {
      * information about this event handler.
      *
      * @param event the event this {@code EventHandler} processes.
+     * @see FetchLibrariesEvent
      */
     @EventHandler
     public void fetchLibraries(FetchLibrariesEvent event) {
@@ -157,15 +164,11 @@ public abstract class Library {
 
     // <editor-fold defaultstate="collapsed" desc="Helper methods for fetchLibraries()">
     private boolean namespaceMatches(String namespace) {
-        return namespace == null
-                || namespace.isEmpty()
-                || this.namespace.equals(namespace);
+        return namespace.isEmpty() || this.namespace.equals(namespace);
     }
 
     private boolean libraryContainsInstruction(String keyword) {
-        return keyword != null
-                && !keyword.isEmpty()
-                && keywords.containsKey(keyword);
+        return keywords.containsKey(keyword);
     }
     // </editor-fold>
 
@@ -230,5 +233,28 @@ public abstract class Library {
      */
     protected void doAfterExecution(ExecuteInstructionLineEvent event) {
         // Do nothing by default.
+    }
+
+    /**
+     * Returns the base event, that is the event that all other events, that
+     * all other events, processed by this library, have as a parent, either
+     * directly or indirectly.
+     *
+     * @return the base event this library processes.
+     */
+    public Class<?> getBaseEvent() {
+        return Event.class;
+    }
+
+    @Override
+    public int hashCode() {
+        return 15463 + 47 * Objects.hashCode(namespace) + Objects.hashCode(keywords);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && getClass() == obj.getClass()
+                && Objects.equals(this.namespace, ((Library) obj).namespace)
+                && Objects.equals(this.keywords, ((Library) obj).keywords);
     }
 }

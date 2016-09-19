@@ -19,13 +19,19 @@ package org.mazarineblue.keyworddriven;
 
 import java.lang.reflect.Method;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import org.junit.Test;
 import org.mazarineblue.keyworddriven.events.ExecuteInstructionLineEvent;
 import org.mazarineblue.keyworddriven.events.FetchLibrariesEvent;
 import org.mazarineblue.keyworddriven.exceptions.DeclaringMethodClassNotEqualToCalleeException;
 import org.mazarineblue.keyworddriven.exceptions.InstructionInaccessibleException;
 import org.mazarineblue.keyworddriven.util.TestFilledLibrarySpy;
-import org.mazarineblue.keyworddriven.util.TestLibraryStub;
+import org.mazarineblue.keyworddriven.util.TestLibrary;
+import org.mazarineblue.keyworddriven.util.TestLibraryExternalCaller;
+import org.mazarineblue.utililities.ObjectsUtil;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
@@ -39,14 +45,14 @@ public class LibraryTest {
 
     @Test(expected = DeclaringMethodClassNotEqualToCalleeException.class)
     public void registerInstruction_CalleeInstructionMismatch_ThrowsInstructionNoMemberOfCalleeException() {
-        Library library = new TestLibraryStub(NAMESPACE);
+        Library library = new TestLibraryExternalCaller(NAMESPACE);
         library.registerInstruction(KEYWORD, getClass().getMethods()[0], 0);
     }
 
     @Test
     public void registerInstruction_CalleeInstructionMatch_Passes() {
         TestCallee callee = new TestCallee();
-        TestLibraryStub library = new TestLibraryStub(NAMESPACE, callee);
+        TestLibraryExternalCaller library = new TestLibraryExternalCaller(NAMESPACE, callee);
         library.registerInstruction(KEYWORD, callee.getThisMethod(), 0);
         LibraryRegistry registry = new LibraryRegistry(library);
         registry.executeInstruction(new ExecuteInstructionLineEvent(NAMESPACE_KEYWORD));
@@ -68,7 +74,7 @@ public class LibraryTest {
 
     @Test
     public void fetchLibraries_False_ReturnsNoLibraries() {
-        Library library = new TestLibraryStub(NAMESPACE);
+        Library library = new TestLibraryExternalCaller(NAMESPACE);
         FetchLibrariesEvent event = new FetchLibrariesEvent(lib -> false);
         library.fetchLibraries(event);
         assertEquals(0, event.getLibraries().size());
@@ -83,13 +89,87 @@ public class LibraryTest {
     }
 
     @Test(expected = InstructionInaccessibleException.class)
-    public void executeInstruction_CalleeInstructionMismatch_InstructionInaccessibleExceptionThrown() {
-        Library library = new TestLibraryStub(NAMESPACE, new Object()) {
+    public void executeInstruction_CallerInstructionMismatch_InstructionInaccessibleExceptionThrown() {
+        Library library = new TestLibraryExternalCaller(NAMESPACE, new Object()) {
+            private static final long serialVersionUID = 1L;
+
             @Keyword(KEYWORD)
             public void test() {
             }
         };
         LibraryRegistry registry = new LibraryRegistry(library);
         registry.executeInstruction(new ExecuteInstructionLineEvent(NAMESPACE_KEYWORD));
+    }
+
+    @Test
+    public void serialize_EmptyLibrary() {
+        Library library = new TestLibrary("foo");
+        Library clone = ObjectsUtil.clone(library);
+        assertEquals(library, clone);
+        assertSame(library, clone);
+    }
+
+    @Test
+    public void serialize() {
+        Library library = new TestFilledLibrarySpy("foo");
+        Library clone = ObjectsUtil.clone(library);
+        assertEquals(library, clone);
+        assertNotSame(library, clone);
+    }
+
+    @Test
+    @SuppressWarnings("ObjectEqualsNull")
+    public void equals_Null() {
+        Library a = new TestLibrary("foo");
+        assertFalse(a.equals(null));
+    }
+
+    @Test
+    @SuppressWarnings("IncompatibleEquals")
+    public void equals_DifferentClass() {
+        Library a = new TestLibrary("foo");
+        assertFalse(a.equals(""));
+    }
+
+    @Test
+    public void hashCode_DifferentNamespace() {
+        Library a = new TestLibrary("foo");
+        Library b = new TestLibrary("oof");
+        assertNotEquals(a.hashCode(), b.hashCode());
+    }
+
+    @Test
+    public void equals_DifferentNamespace() {
+        Library a = new TestLibrary("foo");
+        Library b = new TestLibrary("oof");
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    public void hashCode_DifferentKeywords() {
+        Library a = new TestLibrary("foo");
+        Library b = new TestFilledLibrarySpy("foo");
+        assertNotEquals(a.hashCode(), b.hashCode());
+    }
+
+    @Test
+    public void equals_DifferentKeywords() {
+        Library a = new TestLibrary("foo");
+        Library b = new TestFilledLibrarySpy("foo");
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    public void hashCode_IdenticalContent() {
+        Library a = new TestFilledLibrarySpy("foo");
+        Library b = new TestFilledLibrarySpy("foo");
+        assertEquals(a.hashCode(), b.hashCode());
+    }
+
+    @Test
+    public void equals_IdenticalContent() {
+        Library a = new TestFilledLibrarySpy("foo");
+        Library b = new TestFilledLibrarySpy("foo");
+        assertEquals(a, b);
     }
 }

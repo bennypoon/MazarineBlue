@@ -27,4 +27,6 @@ import org.mazarineblue.eventdriven.InvokerEvent;
  */
 public abstract class KeywordDrivenEvent
         extends InvokerEvent {
+
+    private static final long serialVersionUID = 1L;
 }

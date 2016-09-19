@@ -15,26 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.eventdriven.links;
+package org.mazarineblue.links;
 
 import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventdriven.Link;
-import org.mazarineblue.eventdriven.events.ExceptionThrownEvent;
 import org.mazarineblue.eventdriven.exceptions.EventNotConsumedException;
+import org.mazarineblue.utililities.Immutable;
 
 /**
- * This link will check if events are consumed and throws an
- * {link EventNotConsumedException} otherwise.
+ * A {@code UnconsumedExceptionThrowerLink} is a {@code TypeBasedLink} that
+ * will check if events are consumed and throws an
+ * {@link EventNotConsumedException} otherwise.
  *
  * @throws EventNotConsumedException when the passed event was not consumed,
  *                                   unless the event is on the ignore list.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class UnconsumedExceptionThrowerLink
-        extends Link {
+        extends TypeBasedLink {
 
-    private final Class<?>[] ignoreTypes;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Constructs an {@link Link} that will check {@link Event Events} that are
@@ -43,7 +45,7 @@ public class UnconsumedExceptionThrowerLink
      * @param ignoreTypes the types of events to ignore.
      */
     public UnconsumedExceptionThrowerLink(Class<?>... ignoreTypes) {
-        this.ignoreTypes = ignoreTypes;
+        super(ignoreTypes);
     }
 
     @Override
@@ -53,11 +55,9 @@ public class UnconsumedExceptionThrowerLink
     }
 
     private boolean shouldIgnore(Event event) {
-        for (Class<?> t : ignoreTypes)
+        for (Class<?> t : types)
             if (t.isAssignableFrom(event.getClass()))
                 return true;
-        if (event instanceof ExceptionThrownEvent)
-            return true;
         return false;
     }
 }

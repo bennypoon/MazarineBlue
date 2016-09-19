@@ -17,13 +17,16 @@
  */
 package org.mazarineblue.eventdriven;
 
+import java.io.Serializable;
+
 /**
  * A {@code Chain} is a set of {@link Link Links}.
  * A chain is able to process and consume events, using the links in the chain.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public interface Chain {
+public interface Chain
+        extends Serializable {
 
     /**
      * Counts the link in the chain.

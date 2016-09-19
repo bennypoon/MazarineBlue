@@ -15,26 +15,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.eventbus.link;
+package org.mazarineblue.links.util;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-import org.mazarineblue.eventbus.subscribers.SubscriberDummy;
+import org.mazarineblue.links.TypeBasedLink;
+import org.mazarineblue.utililities.Immutable;
 
-/**
- * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
- */
-public class EventBusLinkCopyConstructorEventTest {
+@Immutable
+public class TestTypeBasedLink
+        extends TypeBasedLink {
 
-    @Test
-    public void subscribeEvent() {
-        SubscribeEvent e = new SubscribeEvent(new SubscriberDummy<>());
-        assertEquals(e, new SubscribeEvent(e));
+    private static final long serialVersionUID = 1L;
+
+    public TestTypeBasedLink() {
     }
 
-    @Test
-    public void unsubscribeEvent() {
-        UnsubscribeEvent e = new UnsubscribeEvent(new SubscriberDummy<>());
-        assertEquals(e, new UnsubscribeEvent(e));
+    public TestTypeBasedLink(Class<?>... types) {
+        super(types);
     }
 }

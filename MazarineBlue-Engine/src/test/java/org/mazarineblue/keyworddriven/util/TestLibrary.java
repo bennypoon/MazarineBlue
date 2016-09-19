@@ -25,6 +25,8 @@ import org.mazarineblue.keyworddriven.Library;
 public class TestLibrary
         extends Library {
 
+    private static final long serialVersionUID = 1L;
+
     public TestLibrary(String namespace) {
         super(namespace);
     }

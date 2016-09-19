@@ -17,6 +17,8 @@
  */
 package org.mazarineblue.eventdriven.exceptions;
 
+import org.mazarineblue.utililities.Immutable;
+
 /**
  * A {@code LinkNotInChainException} is thrown by a {@link Interpreter} of
  * {@link InterpreterFactory} when manipulating the {@link Chain} and referring
@@ -24,6 +26,7 @@ package org.mazarineblue.eventdriven.exceptions;
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class LinkNotInChainException
         extends EventDrivenException {
 

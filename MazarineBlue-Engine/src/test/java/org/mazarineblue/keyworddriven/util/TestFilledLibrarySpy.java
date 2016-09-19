@@ -23,6 +23,7 @@ public class TestFilledLibrarySpy
     public static final String ZERO_ARGUMENTS_INSTRUCTION = "Zero";
     public static final String ONE_ARGUMENT_INSTRUCTION = "One";
     public static final String INVOKER_ONE_ARGUMENT_INSTRUCTION = "Invoker One";
+    private static final long serialVersionUID = 1L;
 
     private int count = 0;
 

@@ -21,6 +21,7 @@ import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +48,7 @@ public class ValidateInstructionLineEventTest {
     @Test
     public void equals_Null() {
         ValidateInstructionLineEvent a = new ValidateInstructionLineEvent("foo", "oof");
-        assertNotEquals(a, null);
+        assertNotNull(a);
     }
 
     @Test
@@ -153,7 +154,7 @@ public class ValidateInstructionLineEventTest {
         @Before
         public void setup() {
             e.setInstructionsNotFound();
-            e.setConsumed();
+            e.setConsumed(true);
         }
     }
 
@@ -167,7 +168,7 @@ public class ValidateInstructionLineEventTest {
         @Before
         public void setup() {
             e.setMultipleInstructionsFound();
-            e.setConsumed();
+            e.setConsumed(true);
         }
     }
 
@@ -181,7 +182,7 @@ public class ValidateInstructionLineEventTest {
         @Before
         public void setup() {
             e.setToFewArguments();
-            e.setConsumed();
+            e.setConsumed(true);
         }
     }
 
@@ -195,7 +196,7 @@ public class ValidateInstructionLineEventTest {
         @Before
         public void setup() {
             e.setArgumentsAreIncompatible();
-            e.setConsumed();
+            e.setConsumed(true);
         }
     }
 
@@ -209,7 +210,7 @@ public class ValidateInstructionLineEventTest {
         @Before
         public void setup() {
             e.setUserErrorFlags(1);
-            e.setConsumed();
+            e.setConsumed(true);
         }
     }
 
@@ -222,7 +223,7 @@ public class ValidateInstructionLineEventTest {
 
         @Before
         public void setup() {
-            e.setConsumed();
+            e.setConsumed(true);
         }
     }
 }

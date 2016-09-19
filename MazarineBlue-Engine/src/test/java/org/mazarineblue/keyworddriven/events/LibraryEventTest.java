@@ -19,11 +19,12 @@ package org.mazarineblue.keyworddriven.events;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.keyworddriven.Keyword;
 import org.mazarineblue.keyworddriven.util.TestLibrary;
-import org.mazarineblue.keyworddriven.util.TestLibraryStub;
+import org.mazarineblue.keyworddriven.util.TestLibraryExternalCaller;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
@@ -32,19 +33,21 @@ public class LibraryEventTest {
 
     @Test
     public void message_LibraryWithNoNamespace() {
-        Event e = new TestLibraryEventStub(new TestLibraryStub(""));
+        Event e = new TestLibraryEventStub(new TestLibraryExternalCaller(""));
         assertEquals("[]", e.message());
     }
 
     @Test
     public void message_LibraryWithNamespace() {
-        Event e = new TestLibraryEventStub(new TestLibraryStub("namespace"));
+        Event e = new TestLibraryEventStub(new TestLibraryExternalCaller("namespace"));
         assertEquals("namespace []", e.message());
     }
 
     @Test
     public void message_LibraryWithNamespaceAndMethods() {
-        Event e = new TestLibraryEventStub(new TestLibraryStub("namespace") {
+        Event e = new TestLibraryEventStub(new TestLibraryExternalCaller("namespace") {
+            private static final long serialVersionUID = 1L;
+
             @Keyword("a")
             public void testA() {
             }
@@ -63,7 +66,7 @@ public class LibraryEventTest {
     @Test
     public void equals_Null() {
         LibraryEvent a = new TestLibraryEventStub(new TestLibrary("foo"));
-        assertNotEquals(a, null);
+        assertNotNull(a);
     }
 
     @Test
@@ -89,14 +92,14 @@ public class LibraryEventTest {
     @Test
     public void hashCode_IdenticalEvents() {
         LibraryEvent a = new TestLibraryEventStub(new TestLibrary("foo"));
-        LibraryEvent b = new TestLibraryEventStub(new TestLibrary("oof"));
-        assertNotEquals(a.hashCode(), b.hashCode());
+        LibraryEvent b = new TestLibraryEventStub(new TestLibrary("foo"));
+        assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void equals_IdenticalEvents() {
         LibraryEvent a = new TestLibraryEventStub(new TestLibrary("foo"));
         LibraryEvent b = new TestLibraryEventStub(new TestLibrary("foo"));
-        assertNotEquals(a, b);
+        assertEquals(a, b);
     }
 }

@@ -18,6 +18,7 @@
 package org.mazarineblue.keyworddriven.events;
 
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 /**
@@ -28,7 +29,7 @@ public class PathTest {
     @Test
     public void equals_Null() {
         Path a = new Path("foo");
-        assertNotEquals(a, null);
+        assertNotNull(a);
     }
 
     @Test

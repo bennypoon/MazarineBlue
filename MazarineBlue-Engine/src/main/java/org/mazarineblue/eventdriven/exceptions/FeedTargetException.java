@@ -17,12 +17,15 @@
  */
 package org.mazarineblue.eventdriven.exceptions;
 
+import org.mazarineblue.utililities.Immutable;
+
 /**
  * A {@code FeedTargetException} is thrown by an {@link Interperter} when
  * publishing an {@link Event} and an {@link EventHandler} throws an exception.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class FeedTargetException
         extends EventDrivenException {
 

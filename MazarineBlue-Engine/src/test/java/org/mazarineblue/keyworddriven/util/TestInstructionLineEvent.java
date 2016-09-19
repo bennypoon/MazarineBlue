@@ -25,6 +25,8 @@ import org.mazarineblue.keyworddriven.events.InstructionLineEvent;
 public class TestInstructionLineEvent
         extends InstructionLineEvent {
 
+    private static final long serialVersionUID = 1L;
+
     public TestInstructionLineEvent(String path, Object... arguments) {
         super(path, arguments);
     }

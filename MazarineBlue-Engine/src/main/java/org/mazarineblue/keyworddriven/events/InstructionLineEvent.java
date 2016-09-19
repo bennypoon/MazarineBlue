@@ -36,6 +36,7 @@ public abstract class InstructionLineEvent
         extends KeywordDrivenEvent {
 
     private static final TypeConvertor TYPE_CONVERTOR = new TypeConvertor();
+    private static final long serialVersionUID = 1L;
     private final InstructionLine line;
 
     protected InstructionLineEvent(String path, Object... arguments) {
@@ -44,7 +45,7 @@ public abstract class InstructionLineEvent
 
     @Override
     public String toString() {
-        return "line=" + line.toString();
+        return "line={" + line.toString() + '}';
     }
 
     @Override
@@ -104,7 +105,7 @@ public abstract class InstructionLineEvent
 
     @Override
     public int hashCode() {
-        return 85 + Objects.hashCode(this.line);
+        return 85 + Objects.hashCode(line);
     }
 
     @Override

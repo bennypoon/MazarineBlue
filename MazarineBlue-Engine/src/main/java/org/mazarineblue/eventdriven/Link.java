@@ -17,8 +17,10 @@
  */
 package org.mazarineblue.eventdriven;
 
+import java.io.Serializable;
 import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventbus.ReflectionSubscriber;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * An {@code link} is an element in {@link Chain Chains} used by
@@ -29,6 +31,10 @@ import org.mazarineblue.eventbus.ReflectionSubscriber;
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public abstract class Link
-        extends ReflectionSubscriber<Event> {
+        extends ReflectionSubscriber<Event>
+        implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 }

@@ -17,6 +17,8 @@
  */
 package org.mazarineblue.eventdriven;
 
+import org.mazarineblue.eventbus.Event;
+import org.mazarineblue.eventbus.Subscriber;
 import org.mazarineblue.eventbus.events.AbstractEvent;
 
 /**
@@ -30,6 +32,8 @@ import org.mazarineblue.eventbus.events.AbstractEvent;
 public abstract class InvokerEvent
         extends AbstractEvent {
 
+    private static final long serialVersionUID = 1L;
+
     private Invoker invoker;
     private RuntimeException exception;
 
@@ -39,6 +43,10 @@ public abstract class InvokerEvent
 
     void setInvoker(Invoker invoker) {
         this.invoker = invoker;
+    }
+
+    public Interpreter getInterpreter() {
+        return invoker.interpreter();
     }
 
     @Override

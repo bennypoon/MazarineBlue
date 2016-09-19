@@ -21,14 +21,16 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventdriven.exceptions.LinkNotInChainException;
-import org.mazarineblue.eventdriven.exceptions.NullEventException;
 import org.mazarineblue.eventdriven.exceptions.NullLinkException;
+import org.mazarineblue.utililities.ObjectsUtil;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
 class ChainImpl
-        implements Chain, Invoker {
+        implements Chain {
+
+    private static final long serialVersionUID = 1L;
 
     private final Deque<Link> stack;
 
@@ -37,7 +39,8 @@ class ChainImpl
     }
 
     ChainImpl(ChainImpl chain) {
-        stack = new ArrayDeque<>(chain.stack);
+        stack = new ArrayDeque<>(chain.stack.size());
+        chain.stack.stream().forEach(link -> stack.add(ObjectsUtil.clone(link)));
     }
 
     @Override
@@ -101,27 +104,16 @@ class ChainImpl
         return stack.removeLast();
     }
 
-    @Override
+    /**
+     * Publish a new event on the bus.
+     *
+     * @param event the event to publish.
+     */
     public void publish(Event event) {
-        if (event == null)
-            throw new NullEventException();
-        if (event instanceof InvokerEvent)
-            convertToInvoker(event).setInvoker(this);
-        processEvent(event);
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="Helper method for publish(E)">
-    @SuppressWarnings("unchecked")
-    private InvokerEvent convertToInvoker(Event event) {
-        return (InvokerEvent) event;
-    }
-
-    private void processEvent(Event event) {
         for (Link link : stack) {
             link.eventHandler(event);
             if (event.isConsumed())
                 break;
         }
     }
-    // </editor-fold>
 }

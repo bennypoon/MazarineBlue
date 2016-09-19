@@ -20,6 +20,7 @@ package org.mazarineblue.keyworddriven.events;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,6 +38,8 @@ public class ExecuteInstructionLineEventTest {
 
     private class TestExecuteInstructionLineEvent
             extends ExecuteInstructionLineEvent {
+
+        private static final long serialVersionUID = 1L;
 
         TestExecuteInstructionLineEvent(String path) {
             super(path);
@@ -73,7 +76,7 @@ public class ExecuteInstructionLineEventTest {
     @Test
     public void equals_Null() {
         ExecuteInstructionLineEvent a = new ExecuteInstructionLineEvent("foo", "oof");
-        assertNotEquals(a, null);
+        assertNotNull(a);
     }
 
     @Test

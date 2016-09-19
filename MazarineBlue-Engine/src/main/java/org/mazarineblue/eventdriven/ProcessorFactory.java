@@ -29,6 +29,8 @@ public class ProcessorFactory
         extends ChainManager
         implements InterpreterFactory {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public Interpreter create() {
         return new Processor(getChain());

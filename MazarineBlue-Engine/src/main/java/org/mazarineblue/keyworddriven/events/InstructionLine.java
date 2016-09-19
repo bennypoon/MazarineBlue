@@ -19,8 +19,9 @@
  */
 package org.mazarineblue.keyworddriven.events;
 
-import java.util.Arrays;
+import java.io.Serializable;
 import java.util.Objects;
+import org.mazarineblue.utililities.ArgumentList;
 
 /**
  * An {@code InstructionLine} is a container for a {@link Path} and arguments.
@@ -28,22 +29,22 @@ import java.util.Objects;
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  * @see Path
  */
-class InstructionLine {
+class InstructionLine
+        implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final Path path;
-    private final Object[] parameters;
+    private final ArgumentList parameters;
 
     InstructionLine(Path path, Object... parameters) {
         this.path = path;
-        this.parameters = Arrays.copyOf(parameters, parameters.length);
+        this.parameters = new ArgumentList(parameters);
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(path.toString());
-        for (int i = 0; i < parameters.length; ++i)
-            builder.append(", ").append(parameters[i]);
-        return builder.toString();
+        return path + ", " + parameters;
     }
 
     String getPath() {
@@ -59,18 +60,18 @@ class InstructionLine {
     }
 
     Object[] getArguments() {
-        return Arrays.copyOf(parameters, parameters.length);
+        return parameters.getArguments();
     }
 
     @Override
     public int hashCode() {
-        return 48223 + 83 * Objects.hashCode(this.path) + Arrays.deepHashCode(this.parameters);
+        return 48223 + 83 * Objects.hashCode(path) + Objects.hashCode(parameters);
     }
 
     @Override
     public boolean equals(Object obj) {
         return obj != null && getClass() == obj.getClass()
                 && Objects.equals(this.path, ((InstructionLine) obj).path)
-                && Arrays.deepEquals(this.parameters, ((InstructionLine) obj).parameters);
+                && Objects.equals(this.parameters, ((InstructionLine) obj).parameters);
     }
 }

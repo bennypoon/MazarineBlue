@@ -25,6 +25,8 @@ import org.mazarineblue.keyworddriven.Library;
 public class TestLibraryEventStub
         extends LibraryEvent {
 
+    private static final long serialVersionUID = 1L;
+
     public TestLibraryEventStub(TestLibraryEventStub e) {
         super(e.getLibrary());
     }

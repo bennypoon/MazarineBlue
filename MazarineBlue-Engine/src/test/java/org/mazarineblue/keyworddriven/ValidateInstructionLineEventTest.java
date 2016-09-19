@@ -7,6 +7,7 @@ package org.mazarineblue.keyworddriven;
 
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.Test;
 import org.mazarineblue.keyworddriven.events.ValidateInstructionLineEvent;
@@ -31,7 +32,7 @@ public class ValidateInstructionLineEventTest {
     @Test
     public void setCustomFlags_One_ReturnsInvalidAndOne() {
         event.setUserErrorFlags(1);
-        assertEquals(false, event.isValid());
+        assertFalse(event.isValid());
         assertEquals(1, event.getUserErrorFlags());
     }
 
@@ -39,7 +40,7 @@ public class ValidateInstructionLineEventTest {
     public void setCustomFlags_OneAndTwo_ReturnsInvalidAndThree() {
         event.setUserErrorFlags(1);
         event.setUserErrorFlags(2);
-        assertEquals(false, event.isValid());
+        assertFalse(event.isValid());
         assertEquals(3, event.getUserErrorFlags());
     }
 
@@ -47,7 +48,7 @@ public class ValidateInstructionLineEventTest {
     public void setCustomFlags_ThreeAndTwelve_ReturnsInvalidAndAndFifteen() {
         event.setUserErrorFlags(3);
         event.setUserErrorFlags(12);
-        assertEquals(false, event.isValid());
+        assertFalse(event.isValid());
         assertEquals(15, event.getUserErrorFlags());
     }
 }
