@@ -27,7 +27,9 @@ package org.mazarineblue.parser;
 
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.mazarineblue.parser.tokens.Token;
@@ -74,28 +76,28 @@ abstract class AbstractTest {
 
     @Test
     public void equals_Orig_Orig_True() {
-        assertEquals(true, loremIpsum.equals(loremIpsumDeepCopy));
+        assertTrue(loremIpsum.equals(loremIpsumDeepCopy));
     }
 
     @Test
     @SuppressWarnings("ObjectEqualsNull")
     public void equals_Orig_Null_False() {
-        assertEquals(false, loremIpsum.equals(null));
+        assertFalse(loremIpsum.equals(null));
     }
 
     @Test
     @SuppressWarnings("IncompatibleEquals")
     public void equals_Orig_String_False() {
-        assertEquals(false, loremIpsum.equals(""));
+        assertFalse(loremIpsum.equals(""));
     }
 
     @Test
     public void equals_Orig_Empty_False() {
-        assertEquals(false, loremIpsum.equals(empty));
+        assertFalse(loremIpsum.equals(empty));
     }
 
     @Test
     public void equals_Orig_Copy_True() {
-        assertEquals(true, loremIpsum.equals(loremIpsum));
+        assertTrue(loremIpsum.equals(loremIpsum));
     }
 }

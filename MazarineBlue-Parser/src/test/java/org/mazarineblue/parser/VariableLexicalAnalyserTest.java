@@ -132,7 +132,7 @@ public class VariableLexicalAnalyserTest {
         assertBreakdown("$foo${foo}", Tokens.createVariableToken("foo", 0), Tokens.createVariableToken("foo", 4));
     }
 
-    private void assertBreakdown(String input, Token... tokens) {
+    private void assertBreakdown(String input, Token<?>... tokens) {
         assertEquals(analyser.breakdown(input), asList(tokens));
     }
 }

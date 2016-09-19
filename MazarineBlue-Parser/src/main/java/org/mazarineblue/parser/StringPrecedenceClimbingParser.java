@@ -27,6 +27,7 @@ package org.mazarineblue.parser;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import jdk.nashorn.internal.ir.annotations.Immutable;
 import org.mazarineblue.parser.analyser.lexical.StringLexicalAnalyser;
 import org.mazarineblue.parser.analyser.lexical.matchers.StringMatcher;
 import org.mazarineblue.parser.analyser.semantic.TreeEvaluatorAnalyser;
@@ -62,6 +63,7 @@ import org.mazarineblue.parser.analyser.syntax.precedenceclimbing.storage.UnaryO
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class StringPrecedenceClimbingParser
         implements Parser<String, Object> {
 

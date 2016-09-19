@@ -27,6 +27,7 @@ package org.mazarineblue.parser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import org.mazarineblue.parser.tokens.Token;
 import org.mazarineblue.parser.tokens.Tokens;
@@ -39,7 +40,7 @@ public class AbstractTokenTest {
     @Test
     public void equals_OneTokenAndNull() {
         Token<String> a = Tokens.createLiteralToken("foo", 0);
-        assertNotEquals(a, null);
+        assertNotNull(a);
     }
 
     @Test
