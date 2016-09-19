@@ -18,7 +18,8 @@
 package org.mazarineblue.pictures;
 
 import org.junit.After;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.mazarineblue.pictures.compounders.PixelComperator;
@@ -45,34 +46,34 @@ public class FullPixelComperatorTest {
     public void isPixelEqual_DifferentAlphaValues_ReturnsFalse() {
         int left = PixelUtil.pixel(1, 2, 3, 4);
         int right = PixelUtil.pixel(2, 2, 3, 4);
-        assertEquals(false, comperator.isPixelEqual(left, right));
+        assertFalse(comperator.isPixelEqual(left, right));
     }
 
     @Test
     public void isPixelEqual_DifferentRedValues_ReturnsFalse() {
         int left = PixelUtil.pixel(1, 2, 3, 4);
         int right = PixelUtil.pixel(1, 3, 3, 4);
-        assertEquals(false, comperator.isPixelEqual(left, right));
+        assertFalse(comperator.isPixelEqual(left, right));
     }
 
     @Test
     public void isPixelEqual_DifferentGreenValues_ReturnsTFalse() {
         int left = PixelUtil.pixel(1, 2, 3, 4);
         int right = PixelUtil.pixel(1, 2, 4, 4);
-        assertEquals(false, comperator.isPixelEqual(left, right));
+        assertFalse(comperator.isPixelEqual(left, right));
     }
 
     @Test
     public void isPixelEqual_DifferentBlueValues_ReturnsFalse() {
         int left = PixelUtil.pixel(1, 2, 3, 4);
         int right = PixelUtil.pixel(1, 2, 3, 5);
-        assertEquals(false, comperator.isPixelEqual(left, right));
+        assertFalse(comperator.isPixelEqual(left, right));
     }
 
     @Test
     public void isPixelEqual_IdenticalValues_ReturnsTrue() {
         int left = PixelUtil.pixel(1, 2, 3, 4);
         int right = PixelUtil.pixel(1, 2, 3, 4);
-        assertEquals(true, comperator.isPixelEqual(left, right));
+        assertTrue(comperator.isPixelEqual(left, right));
     }
 }

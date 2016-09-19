@@ -33,6 +33,8 @@ import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -358,34 +360,34 @@ public class PictureTest {
 
     @Test
     public void equals_TwoIdenticalPictures_PictureAre() {
-        assertEquals(true, image4x4.equals(image4x4b));
-        assertEquals(true, image4x4.equals(image4x4c));
+        assertTrue(image4x4.equals(image4x4b));
+        assertTrue(image4x4.equals(image4x4c));
     }
 
     @Test
     public void equals_TwoDifferentPicturesDueToWidth_PictureAreNot() {
-        assertEquals(false, image4x4.equals(image5x4));
+        assertFalse(image4x4.equals(image5x4));
     }
 
     @Test
     public void equals_TwoDifferentPicturesDueToHeight_PictureAreNot() {
-        assertEquals(false, image4x4.equals(image4x5));
+        assertFalse(image4x4.equals(image4x5));
     }
 
     @Test
     public void equals_TwoDifferentPicturesDueWithAndHeight_PictureAreNot() {
-        assertEquals(false, image4x4.equals(image3x3));
+        assertFalse(image4x4.equals(image3x3));
     }
 
     @Test
     @SuppressWarnings("ObjectEqualsNull")
     public void equals_Null_ReturnsFalse() {
-        assertEquals(false, image4x4.equals(null));
+        assertFalse(image4x4.equals(null));
     }
 
     @Test
     public void equals_Object_ReturnsFalse() {
-        assertEquals(false, image4x4.equals(new Object()));
+        assertFalse(image4x4.equals(new Object()));
     }
 
     @Test
@@ -402,18 +404,18 @@ public class PictureTest {
 
     @Test
     public void getData_UnequalPictures_EqualsNot() {
-        assertEquals(false, Arrays.equals(image4x4.getData(), image4x5.getData()));
+        assertFalse(Arrays.equals(image4x4.getData(), image4x5.getData()));
     }
 
     @Test
     public void getImage_EqualPictures_Equals() {
-        assertEquals(true, compareImages(image4x4, image4x4b));
-        assertEquals(true, compareImages(image4x4, image4x4c));
+        assertTrue(compareImages(image4x4, image4x4b));
+        assertTrue(compareImages(image4x4, image4x4c));
     }
 
     @Test
     public void getImage_UnequalPictures_EqualsNot() {
-        assertEquals(false, compareImages(image4x4, image4x5));
+        assertFalse(compareImages(image4x4, image4x5));
     }
 
     // <editor-fold defaultstate="collapsed" desc="Helper methods for getImage tests">
@@ -432,7 +434,7 @@ public class PictureTest {
     @Test
     public void clip_SameSizeImage_ReturnsTheSamePicture()
             throws IOException {
-        assertEquals(true, image4x4 == image4x4.clip(dimension4x4.width, dimension4x4.height));
+        assertTrue(image4x4 == image4x4.clip(dimension4x4.width, dimension4x4.height));
     }
 
     @Test
