@@ -47,12 +47,12 @@ public class TestOwner {
     @EventHandler
     public void firstHandler(AbstractEvent e) {
         ++count;
-        e.setConsumed();
+        e.setConsumed(true);
     }
 
     @EventHandler
     public void secondHandler(AbstractEvent e) {
         ++count;
-        e.setConsumed();
+        e.setConsumed(true);
     }
 }

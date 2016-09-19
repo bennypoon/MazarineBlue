@@ -26,6 +26,7 @@
 package org.mazarineblue.eventbus;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 import org.mazarineblue.eventbus.events.TestEvent;
 import org.mazarineblue.eventbus.exceptions.EventHandlerRequiresOneParameterException;
@@ -48,6 +49,7 @@ public class ReflectionSubscriberTest {
     @Test(expected = EventHandlerRequiresOneParameterException.class)
     public void eventHandler_ReflectionWithTwoParameters_ThrowsException() {
         Subscriber<Event> subscriber = new ReflectionSubscriber<Event>() {
+            private static final long serialVersionUID = 1L;
 
             @EventHandler
             public void eventHandler(Event event, Event other) {
@@ -60,6 +62,7 @@ public class ReflectionSubscriberTest {
     @Test
     public void eventHandler_ReflectionWithStringParameter_DoesNothing() {
         Subscriber<Event> subscriber = new ReflectionSubscriber<Event>() {
+            private static final long serialVersionUID = 1L;
 
             @EventHandler
             public void eventHandler(String other) {
@@ -77,6 +80,7 @@ public class ReflectionSubscriberTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void eventHandler_ThrowExceptionSubscriber_ExceptionThrown() {
         Subscriber<Event> subscriber = new ReflectionSubscriber<Event>() {
+            private static final long serialVersionUID = 1L;
 
             @EventHandler
             public void eventHandler(TestEvent event) {
@@ -84,5 +88,33 @@ public class ReflectionSubscriberTest {
             }
         };
         subscriber.eventHandler(new TestEvent());
+    }
+
+    @Test
+    @SuppressWarnings("ObjectEqualsNull")
+    public void equals_Null() {
+        ReflectionSubscriber<Event> a = new ReflectionSubscriberSpy();
+        assertFalse(a.equals(null));
+    }
+
+    @Test
+    @SuppressWarnings("IncompatibleEquals")
+    public void equals_DifferentClasses() {
+        ReflectionSubscriber<Event> a = new ReflectionSubscriberSpy();
+        assertFalse(a.equals(""));
+    }
+
+    @Test
+    public void hashCode_EqualClasses() {
+        ReflectionSubscriber<Event> a = new ReflectionSubscriberSpy();
+        ReflectionSubscriber<Event> b = new ReflectionSubscriberSpy();
+        assertEquals(a.hashCode(), b.hashCode());
+    }
+
+    @Test
+    public void equals_EqualClasses() {
+        ReflectionSubscriber<Event> a = new ReflectionSubscriberSpy();
+        ReflectionSubscriber<Event> b = new ReflectionSubscriberSpy();
+        assertEquals(a, b);
     }
 }

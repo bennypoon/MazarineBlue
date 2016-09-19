@@ -31,6 +31,7 @@ import org.mazarineblue.eventbus.Subscriber;
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@SuppressWarnings("serial")
 public class SubscriberSpy<E extends Event>
         implements Subscriber<E> {
 
@@ -43,5 +44,15 @@ public class SubscriberSpy<E extends Event>
 
     public int receivedEvents() {
         return received;
+    }
+
+    @Override
+    public int hashCode() {
+        return 3;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && getClass() == obj.getClass();
     }
 }

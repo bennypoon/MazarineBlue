@@ -32,8 +32,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mazarineblue.eventbus.events.AbstractEvent;
+import org.mazarineblue.eventbus.events.EventSpy;
 import org.mazarineblue.eventbus.events.TestEvent;
-import org.mazarineblue.eventbus.events.UnassignableEventDummy;
 import org.mazarineblue.eventbus.util.PrivateOwnerMediator;
 import org.mazarineblue.eventbus.util.TestOwner;
 
@@ -52,6 +52,7 @@ public class EventHandlerCallerTest {
         owner = null;
     }
 
+    @SuppressWarnings("PublicInnerClass")
     public class CallerStopsOnConsumption {
 
         @Before
@@ -68,11 +69,12 @@ public class EventHandlerCallerTest {
 
         @Test
         public void publish_uncatchable() {
-            caller.publish(new UnassignableEventDummy(), Event::isConsumed);
+            caller.publish(new EventSpy(), Event::isConsumed);
             assertEquals(1, caller.uncatched());
         }
     }
 
+    @SuppressWarnings("PublicInnerClass")
     public class CallerContinuesOnConsumptions {
 
         @Before
@@ -83,17 +85,18 @@ public class EventHandlerCallerTest {
 
         @Test
         public void publish() {
-            caller.publish(new TestEvent(), (e) -> false);
+            caller.publish(new TestEvent(), e -> false);
             assertEquals(2, ((TestOwner) owner).getCallCount());
         }
 
         @Test
         public void publish_uncatchable() {
-            caller.publish(new UnassignableEventDummy(), (e) -> false);
+            caller.publish(new EventSpy(), (e) -> false);
             assertEquals(1, caller.uncatched());
         }
     }
 
+    @SuppressWarnings("PublicInnerClass")
     public class OwnerIsPrivate {
 
         @Before
@@ -108,6 +111,7 @@ public class EventHandlerCallerTest {
         }
     }
 
+    @SuppressWarnings("PublicInnerClass")
     public class OwnerThrowsException {
 
         @Before
@@ -130,8 +134,11 @@ public class EventHandlerCallerTest {
     private class TestCaller
             extends EventHandlerCaller<Event> {
 
+        private static final long serialVersionUID = 1L;
+
         private int uncatched;
 
+        @SuppressWarnings("PublicConstructorInNonPublicClass")
         public TestCaller(Object owner) {
             super(owner);
         }

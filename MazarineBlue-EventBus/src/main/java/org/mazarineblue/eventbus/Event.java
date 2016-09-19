@@ -24,18 +24,17 @@
  */
 package org.mazarineblue.eventbus;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * An event is an message that something has happened or a request for
  * something to happen.
- * <p>
- * A copy constructor can be required, unless the event only has a default
- * constructor and the state of the event is not modified before publishing.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public interface Event {
+public interface Event
+        extends Serializable {
 
     /**
      * Returns the {@link State status} of the {@code Event}.
@@ -81,8 +80,10 @@ public interface Event {
 
     /**
      * Changes the state of the event to consumed.
+     *
+     * @param consumed {@code true} if the events was consumed.
      */
-    public void setConsumed();
+    public void setConsumed(boolean consumed);
 
     /**
      * Status indicates the result of an {@link EventHandler}.

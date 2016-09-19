@@ -34,6 +34,8 @@ import org.mazarineblue.eventbus.Subscriber;
 public class SubscriberDummy<E extends Event>
         implements Subscriber<E> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public String toString() {
         return "SubscriberDummy{output}";
@@ -50,6 +52,6 @@ public class SubscriberDummy<E extends Event>
 
     @Override
     public boolean equals(Object obj) {
-        return getClass() == obj.getClass();
+        return obj != null && getClass() == obj.getClass();
     }
 }

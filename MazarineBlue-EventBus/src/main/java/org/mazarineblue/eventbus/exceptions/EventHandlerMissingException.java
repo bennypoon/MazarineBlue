@@ -26,6 +26,7 @@ package org.mazarineblue.eventbus.exceptions;
 
 import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventbus.Subscriber;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * An {@code EventHandlerMissingException} is an {@code EventServiceException}
@@ -34,6 +35,7 @@ import org.mazarineblue.eventbus.Subscriber;
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class EventHandlerMissingException
         extends EventServiceException {
 

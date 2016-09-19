@@ -25,15 +25,21 @@
 package org.mazarineblue.eventbus;
 
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
+import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mazarineblue.eventbus.events.AbstractEvent;
 import org.mazarineblue.eventbus.events.ConsumableEventStub;
+import org.mazarineblue.eventbus.events.EventSpy;
 import org.mazarineblue.eventbus.events.TestEvent;
-import org.mazarineblue.eventbus.events.UnassignableEventDummy;
 import org.mazarineblue.eventbus.exceptions.EventHandlerMissingException;
 import org.mazarineblue.eventbus.exceptions.EventHandlerRequiresOneParameterException;
 import org.mazarineblue.eventbus.exceptions.IllegalEventHandlerException;
@@ -43,6 +49,7 @@ import org.mazarineblue.eventbus.filters.BlockingFilterStub;
 import org.mazarineblue.eventbus.subscribers.ReflectionSubscriberSpy;
 import org.mazarineblue.eventbus.subscribers.SubscriberDummy;
 import org.mazarineblue.eventbus.subscribers.SubscriberSpy;
+import org.mazarineblue.utililities.ObjectsUtil;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
@@ -69,6 +76,11 @@ public class SimpleEventServiceTest {
         service = new SimpleEventService<>();
     }
 
+    @After
+    public void teardown() {
+        service = null;
+    }
+
     @Test(expected = IllegalEventTypeException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void constructor_WrongType_ThrowsIllegalEventTypeException() {
@@ -93,6 +105,7 @@ public class SimpleEventServiceTest {
     @Test(expected = EventHandlerMissingException.class)
     public void subscribe_EmptyReflectionSubscriber_ThrowsEventHandlerMissingException() {
         ReflectionSubscriber<Event> emptySubscriber = new ReflectionSubscriber<Event>() {
+            private static final long serialVersionUID = 1L;
         };
         service.subscribe(null, null, emptySubscriber);
     }
@@ -100,6 +113,8 @@ public class SimpleEventServiceTest {
     @Test(expected = EventHandlerRequiresOneParameterException.class)
     public void subscribe_ToFewParametersInEventHandlerReflectionSubscriber_ThrowsEventHandlerMissingException() {
         new ReflectionSubscriber<Event>() {
+            private static final long serialVersionUID = 1L;
+
             @EventHandler
             public void handler() {
             }
@@ -109,6 +124,8 @@ public class SimpleEventServiceTest {
     @Test(expected = EventHandlerRequiresOneParameterException.class)
     public void subscribe_ToMannyParametersInReflectionSubscriber_ThrowsEventHandlerMissingException() {
         new ReflectionSubscriber<Event>() {
+            private static final long serialVersionUID = 1L;
+
             @EventHandler
             public void handler(Event a, Event b) {
             }
@@ -118,6 +135,8 @@ public class SimpleEventServiceTest {
     @Test(expected = IllegalEventHandlerException.class)
     public void subscribe_InvalidReflectionSubscriber_ThrowsEventHandlerMissingException() {
         ReflectionSubscriber<Event> wrongType = new ReflectionSubscriber<Event>() {
+            private static final long serialVersionUID = 1L;
+
             @EventHandler
             public void handler(Object o) {
             }
@@ -137,8 +156,8 @@ public class SimpleEventServiceTest {
 
         @Test
         public void subscribe_TestSubscriberDouble_AddsOnlyOne() {
-            assertEquals(true, service.subscribe(null, null, subscriber));
-            assertEquals(false, service.subscribe(null, null, subscriber));
+            assertTrue(service.subscribe(null, null, subscriber));
+            assertFalse(service.subscribe(null, null, subscriber));
         }
 
         @Test
@@ -170,7 +189,7 @@ public class SimpleEventServiceTest {
         @Test
         public void publish_UnassinableEvent_receivedNot() {
             service.subscribe(TestEvent.class, null, subscriber);
-            service.publish(new UnassignableEventDummy());
+            service.publish(new EventSpy());
 
             assertEquals(0, subscriber.receivedEvents());
         }
@@ -203,25 +222,46 @@ public class SimpleEventServiceTest {
             service.publish(event);
 
             assertEquals(1, subscriber.receivedEvents());
-            assertEquals(false, result);
+            assertFalse(result);
         }
     }
 
-    /*
     @Test
-    public void test() {
-        Interpreter interpreter = new ProcessorFactory().create();
-        interpreter.addLink(new PrivateLink());
-        interpreter.execute(new InMemoryFeed(new TestEvent()));
-        // createPulicClassDeclarationRequiredException        
+    public void serialization() {
+        assertNotNull(null, ObjectsUtil.clone(service));
     }
 
-    private class PrivateLink
-            extends Link {
-
-        @EventHandler
-        public void eventHandler(TestEvent event) {
-        }
+    @Test
+    @SuppressWarnings("ObjectEqualsNull")
+    public void equals_Null() {
+        assertFalse(service.equals(null));
     }
-    */
+
+    @Test
+    @SuppressWarnings("IncompatibleEquals")
+    public void equals_DifferentClass() {
+        assertFalse(service.equals(""));
+    }
+
+    @Test
+    @SuppressWarnings("IncompatibleEquals")
+    public void equals_DifferentBaseEvent() {
+        SimpleEventService<Event> other = new SimpleEventService<>(AbstractEvent.class);
+        assertNotEquals(service, other);
+    }
+
+    @Test
+    @SuppressWarnings("IncompatibleEquals")
+    public void equals_DifferentContent() {
+        SimpleEventService<Event> other = new SimpleEventService<>();
+        other.subscribe(null, null, new SubscriberDummy<>());
+        assertNotEquals(service, other);
+    }
+
+    @Test
+    @SuppressWarnings("IncompatibleEquals")
+    public void equals_IdenticalContent() {
+        SimpleEventService<Event> other = new SimpleEventService<>();
+        assertEquals(service, other);
+    }
 }

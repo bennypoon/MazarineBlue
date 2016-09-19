@@ -24,6 +24,8 @@
  */
 package org.mazarineblue.eventbus;
 
+import java.io.Serializable;
+
 /**
  * An {@code Subscriber} listens to events though event handlers.
  *
@@ -31,7 +33,8 @@ package org.mazarineblue.eventbus;
  * @param <E> the type of event to work on.
  */
 @FunctionalInterface
-public interface Subscriber<E extends Event> {
+public interface Subscriber<E extends Event>
+        extends Serializable {
 
     /**
      * Process an {@link Event}.

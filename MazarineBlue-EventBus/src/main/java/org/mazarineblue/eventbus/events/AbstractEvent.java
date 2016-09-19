@@ -33,6 +33,8 @@ import org.mazarineblue.eventbus.Event;
 public abstract class AbstractEvent
         implements Event {
 
+    private static final long serialVersionUID = 1L;
+
     private Date dateConsumed;
 
     @Override
@@ -61,8 +63,10 @@ public abstract class AbstractEvent
     }
 
     @Override
-    public void setConsumed() {
-        if (dateConsumed == null)
+    public void setConsumed(boolean consumed) {
+        if (!consumed)
+            dateConsumed = null;
+        else if (dateConsumed == null)
             dateConsumed = new Date();
     }
 

@@ -35,6 +35,6 @@ class PrivateOwner {
 
     @EventHandler
     public void eventHandler(AbstractEvent e) {
-        e.setConsumed();
+        e.setConsumed(true);
     }
 }

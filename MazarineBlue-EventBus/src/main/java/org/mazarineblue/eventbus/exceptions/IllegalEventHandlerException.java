@@ -26,6 +26,7 @@ package org.mazarineblue.eventbus.exceptions;
 
 import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventbus.Subscriber;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * The exception is thrown by {@link SimpleEventService} when it is asked to
@@ -34,6 +35,7 @@ import org.mazarineblue.eventbus.Subscriber;
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class IllegalEventHandlerException
         extends EventServiceException {
 

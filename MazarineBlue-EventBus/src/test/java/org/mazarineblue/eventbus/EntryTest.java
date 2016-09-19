@@ -26,11 +26,12 @@
 package org.mazarineblue.eventbus;
 
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mazarineblue.eventbus.events.EventSpy;
 import org.mazarineblue.eventbus.events.TestEvent;
-import org.mazarineblue.eventbus.events.UnassignableEventDummy;
 import org.mazarineblue.eventbus.filters.BlockingFilterStub;
 import org.mazarineblue.eventbus.filters.PassingFilterStub;
 import org.mazarineblue.eventbus.subscribers.SubscriberDummy;
@@ -63,42 +64,42 @@ public class EntryTest {
 
     @Test
     public void equals_SameObject_ReturnsTrue() {
-        assertEquals(true, expected.equals(expected));
+        assertTrue(expected.equals(expected));
     }
 
     @Test
     @SuppressWarnings("ObjectEqualsNull")
     public void equals_Null_ReturnsFalse() {
-        assertEquals(false, expected.equals(null));
+        assertFalse(expected.equals(null));
     }
 
     @Test
     @SuppressWarnings("IncompatibleEquals")
     public void equals_Boolean_ReturnsFalse() {
-        assertEquals(false, expected.equals(true));
+        assertFalse(expected.equals(true));
     }
 
     @Test
     public void equals_NullEvent_ReturnFalse() {
         Entry<Event> actual = new Entry<>(null, filter, subscriber);
-        assertEquals(false, expected.equals(actual));
+        assertFalse(expected.equals(actual));
     }
 
     @Test
     public void equals_UnassinableEvent_ReturnFalse() {
-        Entry<Event> actual = new Entry<>(UnassignableEventDummy.class, filter, subscriber);
-        assertEquals(false, expected.equals(actual));
+        Entry<Event> actual = new Entry<>(EventSpy.class, filter, subscriber);
+        assertFalse(expected.equals(actual));
     }
 
     @Test
     public void equals_NullFilter_ReturnFalse() {
         Entry<Event> actual = new Entry<>(TestEvent.class, null, subscriber);
-        assertEquals(false, expected.equals(actual));
+        assertFalse(expected.equals(actual));
     }
 
     @Test
     public void equals_xNullFilter_ReturnFalse() {
         Entry<Event> actual = new Entry<>(TestEvent.class, new BlockingFilterStub<>(), subscriber);
-        assertEquals(false, expected.equals(actual));
+        assertFalse(expected.equals(actual));
     }
 }

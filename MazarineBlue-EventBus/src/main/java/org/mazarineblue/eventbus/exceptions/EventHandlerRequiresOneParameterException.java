@@ -26,6 +26,7 @@
 package org.mazarineblue.eventbus.exceptions;
 
 import java.lang.reflect.Method;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * The exception is thrown by {@link SimpleEventService} when a class that uses
@@ -35,6 +36,7 @@ import java.lang.reflect.Method;
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public class EventHandlerRequiresOneParameterException
         extends EventServiceException {
 

@@ -25,6 +25,7 @@
  */
 package org.mazarineblue.eventbus;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -32,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import org.mazarineblue.eventbus.exceptions.EventHandlerRequiresOneParameterException;
+import org.mazarineblue.utililities.Immutable;
+import org.mazarineblue.utililities.SerializableObjectWrapper;
 import org.mazarineblue.utililities.exceptions.NeverThrownException;
 
 /**
@@ -43,10 +46,14 @@ import org.mazarineblue.utililities.exceptions.NeverThrownException;
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  * @param <E> the type of event to work on.
  */
-public abstract class EventHandlerCaller<E extends Event> {
+@Immutable
+public abstract class EventHandlerCaller<E extends Event>
+        implements Serializable {
 
-    private final Object owner;
-    private final List<Method> eventHandlers;
+    private static final long serialVersionUID = 1L;
+
+    private final SerializableObjectWrapper owner;
+    private final transient List<Method> eventHandlers;
 
     /**
      * Looks up all {@link EventHandler EventHandlers} belonging to the owner
@@ -55,7 +62,7 @@ public abstract class EventHandlerCaller<E extends Event> {
      * @param owner the owner of the {@code EventHandlers}.
      */
     public EventHandlerCaller(Object owner) {
-        this.owner = owner;
+        this.owner = new SerializableObjectWrapper(owner);
         eventHandlers = createEventHandlerList();
     }
 
@@ -75,7 +82,7 @@ public abstract class EventHandlerCaller<E extends Event> {
     }
 
     private void fillListWithEventHandlers(List<Method> list) {
-        for (Method method : owner.getClass().getMethods())
+        for (Method method : owner.getWrappedClass().getMethods())
             if (isMethodEventHandler(method))
                 list.add(method);
     }
@@ -132,7 +139,7 @@ public abstract class EventHandlerCaller<E extends Event> {
 
     private void callEventHandler(E event, Method method) {
         try {
-            method.invoke(owner, event);
+            method.invoke(owner.getObject(), event);
         } catch (IllegalAccessException ex) {
             if (!classIsDeclaredPublic(method.getDeclaringClass()))
                 throw createPublicClassDeclarationRequiredException();
@@ -156,6 +163,6 @@ public abstract class EventHandlerCaller<E extends Event> {
     protected abstract RuntimeException createTargetException(Throwable cause);
 
     public Object getOwner() {
-        return owner;
+        return owner.getObject();
     }
 }

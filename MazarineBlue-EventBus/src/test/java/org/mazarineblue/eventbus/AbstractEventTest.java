@@ -27,8 +27,9 @@ package org.mazarineblue.eventbus;
 
 import java.util.Date;
 import org.junit.After;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.mazarineblue.eventbus.Event.Status;
@@ -43,7 +44,7 @@ public class AbstractEventTest {
 
     @Before
     public void setup() {
-        event = new TestAbstractEvent();
+        event = new DummyEvent();
     }
 
     @After
@@ -73,12 +74,48 @@ public class AbstractEventTest {
 
     @Test
     public void dateConsumed_Consumed_ReturnsADate() {
-        event.setConsumed();
-        Assert.assertNotEquals(null, event.dateConsumed());
-        Assert.assertTrue("Expected a Date but got something else", event.dateConsumed() instanceof Date);
+        Date start = new Date();
+        event.setConsumed(true);
+        assertDateEquals(event.dateConsumed(), start, new Date());
     }
 
-    public class TestAbstractEvent
+    private void assertDateEquals(Date date, Date start, Date end) {
+        assertTrue(date.after(start) || date.equals(start));
+        assertTrue(date.before(end) || date.equals(end));
+    }
+
+    @Test
+    public void dateConsumed_Reset_ReturnsNull() {
+        event.setConsumed(true);
+        event.setConsumed(false);
+        assertEquals(null, event.dateConsumed());
+    }
+
+    @Test
+    @SuppressWarnings("ObjectEqualsNull")
+    public void equals_Null() {
+        assertFalse(event.equals(null));
+    }
+
+    @Test
+    @SuppressWarnings("IncompatibleEquals")
+    public void equals_DifferentClass() {
+        assertFalse(event.equals(""));
+    }
+
+    @Test
+    public void hashCode_SameClass() {
+        assertEquals(event.hashCode(), new DummyEvent().hashCode());
+    }
+
+    @Test
+    public void equals_SameClass() {
+        assertTrue(event.equals(new DummyEvent()));
+    }
+
+    public class DummyEvent
             extends AbstractEvent {
+
+        private static final long serialVersionUID = 1L;
     }
 }

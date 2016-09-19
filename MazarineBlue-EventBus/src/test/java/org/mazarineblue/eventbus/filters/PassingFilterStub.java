@@ -34,6 +34,8 @@ import org.mazarineblue.eventbus.Filter;
 public class PassingFilterStub<E extends Event>
         implements Filter<E> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public boolean apply(E event) {
         return true;

@@ -36,6 +36,8 @@ import org.mazarineblue.eventbus.events.TestEvent;
 class ProtectedSubscriberDummy<E extends Event>
         extends ReflectionSubscriber<E> {
 
+    private static final long serialVersionUID = 1L;
+
     @EventHandler
     public void eventHandler(TestEvent event) {
     }

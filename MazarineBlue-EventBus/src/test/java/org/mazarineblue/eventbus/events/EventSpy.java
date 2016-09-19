@@ -31,36 +31,49 @@ import org.mazarineblue.eventbus.Event;
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-public class UnassignableEventDummy
+public class EventSpy
         implements Event {
+
+    private static final long serialVersionUID = 1L;
+
+    private int count;
+
+    public int getCount() {
+        return count;
+    }
 
     @Override
     public boolean isConsumed() {
+        ++count;
         return false;
     }
 
     @Override
     public String message() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ++count;
+        return "";
     }
 
     @Override
     public String responce() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ++count;
+        return "";
     }
 
     @Override
     public Status status() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ++count;
+        return Status.OK;
     }
 
     @Override
     public Date dateConsumed() {
+        ++count;
         return null;
     }
 
     @Override
-    public void setConsumed() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void setConsumed(boolean consumed) {
+        ++count;
     }
 }

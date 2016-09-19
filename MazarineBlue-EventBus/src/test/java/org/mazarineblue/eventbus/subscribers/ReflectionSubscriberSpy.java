@@ -37,12 +37,14 @@ import org.mazarineblue.eventbus.events.TestEvent;
 public class ReflectionSubscriberSpy
         extends ReflectionSubscriber<Event> {
 
+    private static final long serialVersionUID = 1L;
+
     private int received = 0;
 
     @EventHandler
     public void handler(ConsumableEventStub event) {
         ++received;
-        event.setConsumed();
+        event.setConsumed(true);
     }
 
     @EventHandler

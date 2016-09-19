@@ -34,16 +34,9 @@ import org.mazarineblue.utililities.ID;
 public class TestEvent
         extends AbstractEvent {
 
-    private ID id;
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * A copy constructor that copies all values from another event.
-     *
-     * @param e the event to copy all values from.
-     */
-    public TestEvent(TestEvent e) {
-        this.id = e.id;
-    }
+    private final ID id;
 
     public TestEvent() {
         id = new ID();

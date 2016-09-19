@@ -27,6 +27,7 @@ package org.mazarineblue.eventbus.exceptions;
 import org.mazarineblue.eventbus.Filter;
 import org.mazarineblue.eventbus.SimpleEventService;
 import org.mazarineblue.eventbus.Subscriber;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * The exception is thrown by {@link SimpleEventService} when the user tries to
@@ -36,6 +37,7 @@ import org.mazarineblue.eventbus.Subscriber;
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  * @see SimpleEventService#subscribe(Class, Filter, Subscriber)
  */
+@Immutable
 public class MissingSubscriberExcpetion
         extends EventServiceException {
 

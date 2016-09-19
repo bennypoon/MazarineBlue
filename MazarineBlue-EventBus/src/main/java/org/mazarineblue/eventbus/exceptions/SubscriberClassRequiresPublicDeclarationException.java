@@ -27,6 +27,7 @@ package org.mazarineblue.eventbus.exceptions;
 
 import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.eventbus.Subscriber;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * The exception is thrown by {@link ReflectionSubscriber} when its implementor
@@ -35,8 +36,11 @@ import org.mazarineblue.eventbus.Subscriber;
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  * @see ReflectionSubscriber
  */
+@Immutable
 public class SubscriberClassRequiresPublicDeclarationException
         extends EventServiceException {
+
+    private static final long serialVersionUID = 1L;
 
     public SubscriberClassRequiresPublicDeclarationException(Subscriber<? extends Event> subscriber) {
         super("Subscriber should be declared public : " + subscriber);

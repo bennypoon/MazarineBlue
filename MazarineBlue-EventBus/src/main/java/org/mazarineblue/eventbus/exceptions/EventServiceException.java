@@ -24,12 +24,15 @@
  */
 package org.mazarineblue.eventbus.exceptions;
 
+import org.mazarineblue.utililities.Immutable;
+
 /**
  * A {@code EventServiceException} is the base class of all exceptions thrown
  * by {@link SimpleEventService}.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
+@Immutable
 public abstract class EventServiceException
         extends RuntimeException {
 

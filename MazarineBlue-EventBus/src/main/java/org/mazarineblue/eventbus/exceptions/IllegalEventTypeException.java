@@ -27,6 +27,7 @@ package org.mazarineblue.eventbus.exceptions;
 import org.mazarineblue.eventbus.Filter;
 import org.mazarineblue.eventbus.SimpleEventService;
 import org.mazarineblue.eventbus.Subscriber;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * The exception is thrown by {@link SimpleEventService} when an type is passed
@@ -37,11 +38,12 @@ import org.mazarineblue.eventbus.Subscriber;
  * @see SimpleEventService#SimpleEventService(Class)
  * @see SimpleEventService#subscribe(Class, Filter, Subscriber)
  */
+@Immutable
 public class IllegalEventTypeException
         extends EventServiceException {
 
-    private static final String FORMAT = "Expected instance of %s but found %s";
     private static final long serialVersionUID = 1L;
+    private static final String FORMAT = "Expected instance of %s but found %s";
 
     public IllegalEventTypeException(Class<?> expected, Class<?> actual) {
         super(String.format(FORMAT, expected, actual));

@@ -24,12 +24,17 @@
  */
 package org.mazarineblue.eventbus;
 
+import java.io.Serializable;
+import static java.lang.String.format;
 import java.util.Objects;
 
 /**
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  */
-final class Entry<E extends Event> {
+final class Entry<E extends Event>
+        implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @SuppressWarnings("PackageVisibleField")
     Class<?> eventType;
@@ -49,7 +54,8 @@ final class Entry<E extends Event> {
 
     @Override
     public String toString() {
-        return "eventType=" + eventType.getSimpleName() + ", filter={" + filter + "} , subscriber={" + subscriber + '}';
+        return eventType == null ? "null"
+                : format("eventType=%s, filter={%s} , subscriber={%s}", eventType.getSimpleName(), filter, subscriber);
     }
 
     void reset() {
@@ -64,13 +70,14 @@ final class Entry<E extends Event> {
 
     @Override
     public int hashCode() {
-        return 19663 + 53 * Objects.hashCode(this.eventType) + Objects.hashCode(this.filter);
+        return 1042139 + 2809 * Objects.hashCode(eventType)
+                + 53 * Objects.hashCode(filter)
+                + Objects.hashCode(subscriber);
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null
-                && getClass() == obj.getClass()
+        return obj != null && getClass() == obj.getClass()
                 && Objects.equals(this.eventType, ((Entry<?>) obj).eventType)
                 && Objects.equals(this.filter, ((Entry<?>) obj).filter)
                 && Objects.equals(this.subscriber, ((Entry<?>) obj).subscriber);

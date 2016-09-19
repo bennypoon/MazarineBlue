@@ -24,13 +24,18 @@
  */
 package org.mazarineblue.eventbus;
 
+import java.io.Serializable;
+
 /**
  * A {@code Filter) test if an {@code Event} should be filtered or not.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ *
+ * @param <E> the type of events the {@code EventService} publishes.
  */
 @FunctionalInterface
-public interface Filter<E extends Event> {
+public interface Filter<E extends Event>
+        extends Serializable {
 
     /**
      * Test the {@link Event}

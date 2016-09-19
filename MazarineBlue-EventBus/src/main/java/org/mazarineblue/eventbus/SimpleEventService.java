@@ -26,6 +26,7 @@ package org.mazarineblue.eventbus;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import org.mazarineblue.eventbus.exceptions.EventHandlerMissingException;
 import org.mazarineblue.eventbus.exceptions.IllegalEventHandlerException;
@@ -41,6 +42,8 @@ import org.mazarineblue.eventbus.exceptions.MissingSubscriberExcpetion;
  */
 public class SimpleEventService<E extends Event>
         implements EventService<E> {
+
+    private static final long serialVersionUID = 1L;
 
     private final Class<?> eventType;
     private final Set<Entry<E>> subscriptions;
@@ -166,5 +169,17 @@ public class SimpleEventService<E extends Event>
         boolean result = subscriptions.remove(tmp);
         tmp.reset();
         return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return 1805 + 19 * Objects.hashCode(this.eventType) + Objects.hashCode(this.subscriptions);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && getClass() == obj.getClass()
+                && Objects.equals(this.eventType, ((SimpleEventService<?>) obj).eventType)
+                && Objects.equals(this.subscriptions, ((SimpleEventService<?>) obj).subscriptions);
     }
 }

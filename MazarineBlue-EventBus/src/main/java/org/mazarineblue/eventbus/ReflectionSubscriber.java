@@ -25,6 +25,7 @@
 package org.mazarineblue.eventbus;
 
 import org.mazarineblue.eventbus.exceptions.SubscriberClassRequiresPublicDeclarationException;
+import org.mazarineblue.utililities.Immutable;
 
 /**
  * An {@code ReflectionSubsciber} allows to use event handlers with concrete
@@ -35,10 +36,16 @@ import org.mazarineblue.eventbus.exceptions.SubscriberClassRequiresPublicDeclara
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
  * @param <E> the type of base events this subscriber listens to.
  */
+@Immutable
 public abstract class ReflectionSubscriber<E extends Event>
         implements Subscriber<E> {
 
-    private final EventHandlerCaller<E> caller = new EventHandlerCallerImpl(this);
+    private static final long serialVersionUID = 1L;
+
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
+    protected ReflectionSubscriber() {
+        new EventHandlerCallerImpl(this);
+    }
 
     /**
      * Calls eventHandlers (methods) of the concrete class.
@@ -54,7 +61,7 @@ public abstract class ReflectionSubscriber<E extends Event>
      */
     @Override
     public void eventHandler(E event) {
-        caller.publish(event, E::isConsumed);
+        new EventHandlerCallerImpl(this).publish(event, E::isConsumed);
     }
 
     @SuppressWarnings("NoopMethodInAbstractClass")
@@ -65,11 +72,14 @@ public abstract class ReflectionSubscriber<E extends Event>
     private class EventHandlerCallerImpl
             extends EventHandlerCaller<E> {
 
+        private static final long serialVersionUID = 1L;
+
         private EventHandlerCallerImpl(ReflectionSubscriber<E> owner) {
             super(owner);
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         protected void unpublished(E event) {
             ReflectionSubscriber.class.cast(getOwner()).uncatchedEventHandler(event);
         }
@@ -86,5 +96,15 @@ public abstract class ReflectionSubscriber<E extends Event>
                     ? (RuntimeException) cause
                     : new RuntimeException(cause.getMessage(), cause);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj.getClass().equals(getClass());
     }
 }

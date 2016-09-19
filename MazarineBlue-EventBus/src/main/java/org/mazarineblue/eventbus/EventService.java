@@ -24,15 +24,18 @@
  */
 package org.mazarineblue.eventbus;
 
+import java.io.Serializable;
+
 /**
  * An {@code EventService} is publisher of {@code Events} to to its
  * {@link Subscriber Subscribers}.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
- * @param <E> the type of events this service publish.
+ * @param <E> the type of events this service publishes.
  * @see SimpleEventService
  */
-public interface EventService<E extends Event> {
+public interface EventService<E extends Event>
+        extends Serializable {
 
     /**
      * Publish the specified event to the registered subscribers.
