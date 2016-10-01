@@ -21,7 +21,7 @@ import org.mazarineblue.eventbus.Event;
 import org.mazarineblue.utililities.Immutable;
 
 /**
- * An {@code EventNotConsumedException} thrown by
+ * An {@code EventNotConsumedException} is thrown by
  * {@link UnconsumedExceptionThrowerLink} when an {@link Event} is published to
  * it that was not consumed.
  *

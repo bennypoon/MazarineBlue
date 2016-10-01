@@ -41,16 +41,37 @@ public class SwingUtil {
             }
         throw new TimeoutException();
     }
+    
+    public static void waitUntilFalse(Supplier<Boolean> s, int timeout)
+            throws TimeoutException {
+        waitUntilTrue(() -> !s.get(), timeout);
+    }
 
+    public static void waitUntilTrue(Supplier<Boolean> s, int timeout)
+            throws TimeoutException {
+        long end = System.currentTimeMillis() + timeout;
+        while (System.currentTimeMillis() < end)
+            try {
+                Thread.sleep(100);
+                Boolean flag = s.get();
+                if (flag != null && flag)
+                    return;
+            } catch (ChildNotFoundException | InterruptedException ex) {
+            }
+        throw new TimeoutException();
+    }
+    
     public static <T extends Window> T fetchWindowTitled(Window parent, String title, Class<T> type) {
-        T found = searchChilderen(parent, new WindowFetcher<>(), new TitleMatcher<>(title, type));
+        Searcher<T> searcher = new Searcher<>(new WindowFetcher<>(), new TitleMatcher<>(title, type));
+        T found = searcher.searchChilderen(parent);
         if (found == null)
             throw new ChildNotFoundException(title);
         return found;
     }
 
     public static <T extends Component> T fetchWindowIndexed(Window parent, int index, Class<T> type) {
-        T found = searchChilderen(parent, new WindowFetcher<>(), new IndexMatcher<>(index, type));
+        Searcher<T> searcher = new Searcher<>(new WindowFetcher<>(), new IndexMatcher<>(index, type));
+        T found = searcher.searchChilderen(parent);
         if (found == null)
             throw new ChildNotFoundException(index);
         return found;
@@ -61,29 +82,47 @@ public class SwingUtil {
     }
 
     public static <T extends Component> T fetchChildNamed(Component parent, String name, Class<T> type) {
-        T found = searchChilderen(parent, new DefaultChilderenFetcher<>(), new NameMatcher<>(name, type));
+        Searcher<T> searcher = new Searcher<>(new DefaultChilderenFetcher<>(), new NameMatcher<>(name, type));
+        T found = searcher.searchChilderen(parent);
         if (found == null)
             throw new ChildNotFoundException(name);
         return found;
     }
 
     public static <T extends Component> T fetchChildIndexed(Component parent, int index, Class<T> type) {
-        T found = searchChilderen(parent, new DefaultChilderenFetcher<>(), new IndexMatcher<>(index, type));
+        Searcher<T> searcher = new Searcher<>(new DefaultChilderenFetcher<>(), new IndexMatcher<>(index, type));
+        T found = searcher.searchChilderen(parent);
         if (found == null)
             throw new ChildNotFoundException(index);
         return found;
     }
 
-    @SuppressWarnings("unchecked")
-    private static <T extends Component> T searchChilderen(Component parent, Fetcher<T> fetcher, Matcher<T> matcher) {
-        for (Component c : fetcher.getChilderen(parent)) {
-            if (matcher.childMatches(c))
-                return (T) c;
-            T found = searchChilderen(c, fetcher, matcher);
-            if (found != null)
-                return found;
+    private static class Searcher<T extends Component> {
+
+        private final Fetcher<T> fetcher;
+        private final Matcher<T> matcher;
+
+        private Searcher(Fetcher<T> fetcher, Matcher<T> matcher) {
+            this.fetcher = fetcher;
+            this.matcher = matcher;
         }
-        return null;
+
+        @SuppressWarnings("unchecked")
+        private T searchChilderen(Component parent) {
+            for (Component child : fetcher.getChilderen(parent)) {
+                T found = searchChild(child);
+                if (found != null)
+                    return found;
+            }
+            return null;
+        }
+
+        @SuppressWarnings("unchecked")
+        private T searchChild(Component child) {
+            return child instanceof Window && !child.isDisplayable() ? null
+                    : matcher.childMatches(child) ? (T) child
+                    : searchChilderen(child);
+        }
     }
 
     @SuppressWarnings("PublicInnerClass")

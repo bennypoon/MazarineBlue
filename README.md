@@ -2,6 +2,8 @@
 [ ![Build Status] [travis-image] ] [travis]
 [ ![Release] [release-image] ] [release]
 [ ![License] [license-image] ] [AGPL3 license]
+[ ![Tech Debt] [sonarqube-tech-debt-image] ] [sonarqube]
+[ ![Coverage] [sonarqube-converabe-image] ] [sonarqube]
 
 <img src="https://github.com/MazarineBlue/MazarineBlue/wiki/images/MazarineBlue-logo.png" align="right" width="50%"/>
 
@@ -226,3 +228,7 @@ the [BSD 2-Clause License] [BSD 2-clause license].
 [license-image]: http://img.shields.io/:license-agpl3-blue.svg
 [AGPL3 license]: www.gnu.org/licenses/agpl-3.0.html
 [BSD 2-clause license]: http://opensource.org/licenses/BSD-2-Clause
+
+[sonarqube]: https://sonarqube.com/overview?id=org.mazarineblue%3AMazarineBlue
+[sonarqube-tech-debt-image]: https://img.shields.io/sonar/http/nemo.sonarqube.org/org.mazarineblue:MazarineBlue/tech_debt.svg
+[sonarqube-converabe-image]: https://img.shields.io/sonar/http/nemo.sonarqube.org/org.mazarineblue:MazarineBlue/coverage.svg

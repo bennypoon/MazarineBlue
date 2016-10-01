@@ -22,6 +22,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * An {@code ArgumentList} is an {@link Serializable serializable} container of
@@ -45,6 +46,16 @@ public class ArgumentList
      */
     public ArgumentList(Object... arguments) {
         this.arguments = Arrays.copyOf(arguments, arguments.length);
+    }
+
+    /**
+     * Constructs an {@code ArgumentList} using the specified arguments.
+     *
+     * @param arguments the argument to use to construct this
+     *                  {@code ArgumentList}.
+     */
+    public <T> ArgumentList(Collection<T> arguments) {
+        this.arguments = arguments.toArray(new Object[arguments.size()]);
     }
 
     @Override

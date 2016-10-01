@@ -46,9 +46,18 @@
     <modules>
         <module>MazarineBlue-Engine</module>
         <module>MazarineBlue-EventBus</module>
+        <module>MazarineBlue-Excel</module>
+        <module>MazarineBlue-FileSystem</module>
+        <module>MazarineBlue-Fitnesse</module>
+        <module>MazarineBlue-Links</module>
         <module>MazarineBlue-Parser</module>
         <module>MazarineBlue-Pictures</module>
+        <module>MazarineBlue-Standalone</module>
+        <module>MazarineBlue-Undecided</module>
         <module>MazarineBlue-Utilities</module>
+        <module>MazarineBlue-VariableStore</module>
+        <module>MazarineBlue-PluginLibrary</module>
+        <module>MazarineBlue-MBT-GUI</module>
     </modules>
 
     <scm>
@@ -62,11 +71,19 @@
     </issueManagement>
 
     <properties>
+        <project.build.timestamp>${maven.build.timestamp}</project.build.timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <netbeans.hint.jdkPlatform>JDK_1.8</netbeans.hint.jdkPlatform>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+        <sonar.sources>src/main</sonar.sources>
+        <sonar.tests>src/test</sonar.tests>
+        <sonar.junit.reportsPath>target/surefire-reports</sonar.junit.reportsPath>
+        <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>
+        <indentSize>4</indentSize>
+        <lineLength>120</lineLength>
     </properties>
 
     <dependencyManagement>
@@ -89,22 +106,23 @@
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.4</version>
+                <version>2.5</version>
             </dependency>
             <dependency>
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>
-                <version>1.4.1</version>
+                <version>1.5.1</version>
             </dependency>
             <dependency>
-                <groupId>de.bechte.junit</groupId>
-                <artifactId>junit-hierarchicalcontextrunner</artifactId>
-                <version>4.12.1</version>
+                <groupId>org.fitnesse</groupId>
+                <artifactId>fitnesse</artifactId>
+                <version>20151230</version>
+                <classifier>standalone</classifier>
             </dependency>
             <dependency>
                 <groupId>javax.mail</groupId>
                 <artifactId>javax.mail-api</artifactId>
-                <version>1.5.4</version>
+                <version>1.5.5</version>
             </dependency>
             <dependency>
                 <groupId>javassist</groupId>
@@ -114,12 +132,12 @@
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi</artifactId>
-                <version>3.12</version>
+                <version>3.14</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
-                <version>3.12</version>
+                <version>3.14</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>xml-apis</artifactId>
@@ -130,7 +148,7 @@
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
-                <version>2.47.1</version>
+                <version>2.53.1</version>
             </dependency>
             <dependency>
                 <groupId>org.swinglabs</groupId>
@@ -144,6 +162,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.bechte.junit</groupId>
+            <artifactId>junit-hierarchicalcontextrunner</artifactId>
+            <version>4.12.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -180,6 +204,14 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>2.6</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>test-jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
