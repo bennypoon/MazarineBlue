@@ -17,18 +17,14 @@
  */
 package org.mazarineblue.mbt.gui;
 
-import static java.awt.EventQueue.invokeLater;
 import java.awt.Frame;
-import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.Collection;
 import java.util.function.BiConsumer;
-import static java.util.logging.Logger.getLogger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.InputVerifier;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import static org.mazarineblue.mbt.gui.StringConstants.AFTER_STATE_DOESNT_SHARE_VIEW;
 import static org.mazarineblue.mbt.gui.StringConstants.BEFORE_STATE_DOESNT_SHARE_VIEW;
 import static org.mazarineblue.mbt.gui.StringConstants.CANT_BE_BLANK;
@@ -52,8 +48,6 @@ public class TransitionDialog
         extends JDialog {
 
     private static final long serialVersionUID = 1L;
-    public static final int BUSINESS_VALUE_MIN = 0;
-    public static final int BUSINESS_VALUE_MAX = 100;
 
     private final DefaultComboBoxModel<State> beforeStateModel = new DefaultComboBoxModel<>();
     private final DefaultComboBoxModel<State> afterStateModel = new DefaultComboBoxModel<>();
@@ -70,48 +64,6 @@ public class TransitionDialog
     private javax.swing.JTextField nameTextField;
     private javax.swing.JLabel nameValidationLabel;
     // End of variables declaration//GEN-END:variables
-
-    public static void main(String[] args) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-        } catch (ClassNotFoundException ex) {
-            getLogger(TransitionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            getLogger(TransitionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            getLogger(TransitionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            getLogger(TransitionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        Collection<State> states = new ArrayList<>(4);
-        states.add(new State("State A").addViews("View 1", "View 2"));
-        states.add(new State("State B").addViews("View 1"));
-        states.add(new State("State C").addViews("View 2"));
-        states.add(new State("State D").addViews("View 3"));
-        states.add(new State("State E"));
-
-        /* Create and display the dialog */
-        TransitionDialog dialog = new TransitionDialog(new JFrame(), "Test Transtion Dialog");
-        dialog.setOptions(states);
-        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                System.exit(0);
-            }
-        });
-        invokeLater(() -> dialog.setVisible(true));
-    }
 
     public TransitionDialog(Frame parent, String title) {
         super(parent, title, true);
@@ -154,8 +106,8 @@ public class TransitionDialog
 
     private SerializableInputVerifier beforeStateContainsUniqueItemsInputVerifier() {
         return new CollectionInputVerifier<>(beforeStateListPanel::getAllItems,
-                                            new UniqueCollectionObjectMatcher<>(
-                                                    new ValidationLabelSwitcher(beforeStateListPanel, IS_ALREADY_ADDED)));
+                                             new UniqueCollectionObjectMatcher<>(
+                                                     new ValidationLabelSwitcher(beforeStateListPanel, IS_ALREADY_ADDED)));
     }
 
     private SerializableInputVerifier beforeStatesViewMatchesAfterStatesView() {

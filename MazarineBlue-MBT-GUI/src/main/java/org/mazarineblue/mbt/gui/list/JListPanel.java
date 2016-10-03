@@ -46,7 +46,7 @@ public class JListPanel<T extends Serializable>
 
     private transient JPanel contentPanel;
     private DefaultComboBoxModel<T> model;
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private transient javax.swing.JComboBox<T> optionsComboBox;
     private transient javax.swing.JLabel validationLabel;
@@ -105,7 +105,8 @@ public class JListPanel<T extends Serializable>
      * @param type  the type of component
      * @return the n<sup>th</sup> component in this container
      *
-     * @exception ArrayIndexOutOfBoundsException if the n<sup>th</sup> value does not exist.
+     * @exception ArrayIndexOutOfBoundsException if the n<sup>th</sup> value
+     *                                           does not exist.
      * @see Component#getTreeLock()
      */
     public <T extends Component> T getContentComponent(int index, Class<T> type) {
@@ -238,7 +239,7 @@ public class JListPanel<T extends Serializable>
     private void validateContent(Collection<T> collection) {
         collection.stream().forEach(this::validateItem);
     }
-    
+
     private void validateItem(T item) {
         if (verifyInput(item))
             return;

@@ -21,6 +21,7 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import static org.mazarineblue.mbt.gui.StringConstants.INVALID_CHARACTERS_USED;
+import org.mazarineblue.mbt.gui.util.TransitonDialogTestHelper;
 import static org.mazarineblue.swing.SwingUtil.waitUntilFalse;
 import static org.mazarineblue.swing.SwingUtil.waitUntilTrue;
 
@@ -32,33 +33,33 @@ public class TransitonDialogIT
             throws TimeoutException {
         CharSequence invalid = INVALID_CHARACTERS_REGULAR;
         for (int i = 0; i < invalid.length(); ++i) {
-            nameValidationLabel.setVisible(false);
-            waitUntilFalse(nameValidationLabel::isVisible, 500);
+            transitionPage.nameValidationLabel.setVisible(false);
+            waitUntilFalse(transitionPage.nameValidationLabel::isVisible, 500);
 
-            nameTextField.requestFocus();
-            nameTextField.setText(Character.toString(invalid.charAt(i)));
-            actionTextArea.requestFocus();
+            transitionPage.nameTextField.requestFocus();
+            transitionPage.nameTextField.setText(Character.toString(invalid.charAt(i)));
+            transitionPage.actionTextArea.requestFocus();
 
-            waitUntilTrue(nameValidationLabel::isVisible, 500);
-            assertEquals(INVALID_CHARACTERS_USED, nameValidationLabel.getText());
+            waitUntilTrue(transitionPage.nameValidationLabel::isVisible, 500);
+            assertEquals(INVALID_CHARACTERS_USED, transitionPage.nameValidationLabel.getText());
         }
     }
 
     @Test
     public void guard_Invalid()
             throws TimeoutException {
-        nameTextField.setText("Test Name");
+        transitionPage.nameTextField.setText("Test Name");
         CharSequence invalid = INVALID_CHARACTERS_VARIABLE;
         for (int i = 0; i < invalid.length(); ++i) {
-            guardValidationLabel.setVisible(false);
-            waitUntilFalse(guardValidationLabel::isVisible, 500);
+            transitionPage.guardValidationLabel.setVisible(false);
+            waitUntilFalse(transitionPage.guardValidationLabel::isVisible, 500);
 
-            guardTextField.requestFocus();
-            guardTextField.setText(Character.toString(invalid.charAt(i)));
-            actionTextArea.requestFocus();
+            transitionPage.guardTextField.requestFocus();
+            transitionPage.guardTextField.setText(Character.toString(invalid.charAt(i)));
+            transitionPage.actionTextArea.requestFocus();
 
-            waitUntilTrue(guardValidationLabel::isVisible, 500);
-            assertEquals(INVALID_CHARACTERS_USED, guardValidationLabel.getText());
+            waitUntilTrue(transitionPage.guardValidationLabel::isVisible, 500);
+            assertEquals(INVALID_CHARACTERS_USED, transitionPage.guardValidationLabel.getText());
         }
     }
 }

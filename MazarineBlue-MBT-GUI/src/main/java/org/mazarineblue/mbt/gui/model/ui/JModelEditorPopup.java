@@ -30,7 +30,7 @@ public final class JModelEditorPopup
 
     private static final long serialVersionUID = 1L;
 
-    private Collection<JModelMenuItem> collection = new ArrayList<>();
+    private final Collection<JModelMenuItem> collection = new ArrayList<>(3);
 
     @SuppressWarnings("LeakingThisInConstructor")
     public JModelEditorPopup(JFrame owner, JTable table, TableModelConvertor convertor) {

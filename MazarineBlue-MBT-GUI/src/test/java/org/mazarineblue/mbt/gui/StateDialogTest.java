@@ -31,6 +31,7 @@ import static org.mazarineblue.mbt.gui.StringConstants.CANT_BE_BLANK;
 import static org.mazarineblue.mbt.gui.StringConstants.INVALID_CHARACTERS_USED;
 import static org.mazarineblue.mbt.gui.StringConstants.IS_ALREADY_ADDED;
 import org.mazarineblue.mbt.gui.model.State;
+import org.mazarineblue.mbt.gui.util.StateDialogTestHelper;
 import static org.mazarineblue.swing.SwingUtil.fetchChildNamed;
 import static org.mazarineblue.swing.SwingUtil.waitFor;
 import static org.mazarineblue.swing.SwingUtil.waitUntilFalse;
@@ -41,129 +42,129 @@ public class StateDialogTest
 
     @Test
     public void initialDialog() {
-        assertTrue(nameTextField.getText().isEmpty());
-        assertFalse(nameValidationLabel.isVisible());
-        assertTrue(viewComboBox.isEditable());
-        assertEquals(-1, viewComboBox.getSelectedIndex());
-        assertFalse(viewValidationLabel.isVisible());
-        assertEquals(0, viewPanel.getContentCount());
-        assertTrue(actionTextArea.getText().isEmpty());
+        assertTrue(statePage.nameTextField.getText().isEmpty());
+        assertFalse(statePage.nameValidationLabel.isVisible());
+        assertTrue(statePage.viewComboBox.isEditable());
+        assertEquals(-1, statePage.viewComboBox.getSelectedIndex());
+        assertFalse(statePage.viewValidationLabel.isVisible());
+        assertEquals(0, statePage.viewPanel.getContentCount());
+        assertTrue(statePage.actionTextArea.getText().isEmpty());
     }
 
     @Test
     public void name_EmptyInput()
             throws TimeoutException {
-        actionTextArea.requestFocus();
-        waitUntilTrue(nameValidationLabel::isVisible, 500);
-        assertTrue(nameTextField.getText().isEmpty());
-        assertEquals(CANT_BE_BLANK, nameValidationLabel.getText());
+        statePage.actionTextArea.requestFocus();
+        waitUntilTrue(statePage.nameValidationLabel::isVisible, 500);
+        assertTrue(statePage.nameTextField.getText().isEmpty());
+        assertEquals(CANT_BE_BLANK, statePage.nameValidationLabel.getText());
     }
 
     @Test
     public void name_InvalidInput()
             throws TimeoutException {
-        nameValidationLabel.setVisible(false);
-        waitUntilFalse(nameValidationLabel::isVisible, 500);
+        statePage.nameValidationLabel.setVisible(false);
+        waitUntilFalse(statePage.nameValidationLabel::isVisible, 500);
 
-        nameTextField.requestFocus();
-        nameTextField.setText(INVALID_CHARACTERS);
-        actionTextArea.requestFocus();
+        statePage.nameTextField.requestFocus();
+        statePage.nameTextField.setText(INVALID_CHARACTERS);
+        statePage.actionTextArea.requestFocus();
 
-        waitUntilTrue(nameValidationLabel::isVisible, 500);
-        assertEquals(INVALID_CHARACTERS_USED, nameValidationLabel.getText());
+        waitUntilTrue(statePage.nameValidationLabel::isVisible, 500);
+        assertEquals(INVALID_CHARACTERS_USED, statePage.nameValidationLabel.getText());
     }
 
     @Test
     public void name_ValidInput() {
-        nameTextField.requestFocus();
-        nameTextField.setText("_State 1-2");
-        actionTextArea.requestFocus();
-        assertFalse(nameValidationLabel.isVisible());
+        statePage.nameTextField.requestFocus();
+        statePage.nameTextField.setText("_State 1-2");
+        statePage.actionTextArea.requestFocus();
+        assertFalse(statePage.nameValidationLabel.isVisible());
     }
 
     @Test
     public void views_EmptyInput() {
-        viewComboBox.setSelectedItem("");
-        addViewButton.doClick();
+        statePage.viewComboBox.setSelectedItem("");
+        statePage.addViewButton.doClick();
 
-        assertEquals(0, viewComboBox.getItemCount());
-        assertEquals(0, viewPanel.getContentCount());
-        assertTrue(viewValidationLabel.isVisible());
-        assertEquals(CANT_BE_BLANK, viewValidationLabel.getText());
+        assertEquals(0, statePage.viewComboBox.getItemCount());
+        assertEquals(0, statePage.viewPanel.getContentCount());
+        assertTrue(statePage.viewValidationLabel.isVisible());
+        assertEquals(CANT_BE_BLANK, statePage.viewValidationLabel.getText());
     }
 
     @Test
     public void views_InvalidInput()
             throws TimeoutException {
-        viewValidationLabel.setVisible(false);
-        waitUntilFalse(viewValidationLabel::isVisible, 500);
+        statePage.viewValidationLabel.setVisible(false);
+        waitUntilFalse(statePage.viewValidationLabel::isVisible, 500);
 
-        viewComboBox.requestFocus();
-        viewComboBox.setSelectedItem(INVALID_CHARACTERS);
-        addViewButton.doClick();
-        waitUntilTrue(viewValidationLabel::isVisible, 500);
+        statePage.viewComboBox.requestFocus();
+        statePage.viewComboBox.setSelectedItem(INVALID_CHARACTERS);
+        statePage.addViewButton.doClick();
+        waitUntilTrue(statePage.viewValidationLabel::isVisible, 500);
 
-        assertEquals(0, viewComboBox.getItemCount());
-        assertEquals(0, viewPanel.getContentCount());
-        assertEquals(INVALID_CHARACTERS_USED, viewValidationLabel.getText());
+        assertEquals(0, statePage.viewComboBox.getItemCount());
+        assertEquals(0, statePage.viewPanel.getContentCount());
+        assertEquals(INVALID_CHARACTERS_USED, statePage.viewValidationLabel.getText());
     }
 
     @Test
     public void views_AddOnce() {
-        viewComboBox.setSelectedItem("Test view");
-        addViewButton.doClick();
+        statePage.viewComboBox.setSelectedItem("Test view");
+        statePage.addViewButton.doClick();
 
         @SuppressWarnings("unchecked")
-        JPanel panel = viewPanel.getContentComponent(0, JPanel.class);
+        JPanel panel = statePage.viewPanel.getContentComponent(0, JPanel.class);
         JLabel label = fetchChildNamed(panel, "itemLabel", JLabel.class);
-        assertEquals(1, viewComboBox.getItemCount());
-        assertEquals(1, viewPanel.getContentCount());
-        assertEquals("Test view", viewComboBox.getItemAt(0));
+        assertEquals(1, statePage.viewComboBox.getItemCount());
+        assertEquals(1, statePage.viewPanel.getContentCount());
+        assertEquals("Test view", statePage.viewComboBox.getItemAt(0));
         assertEquals("Test view", label.getText());
-        assertFalse(viewValidationLabel.isVisible());
+        assertFalse(statePage.viewValidationLabel.isVisible());
     }
 
     @Test
     public void views_AddTwice()
             throws TimeoutException {
-        viewComboBox.setSelectedItem("Test view");
-        addViewButton.doClick();
-        addViewButton.doClick();
+        statePage.viewComboBox.setSelectedItem("Test view");
+        statePage.addViewButton.doClick();
+        statePage.addViewButton.doClick();
 
-        waitUntilTrue(viewValidationLabel::isVisible, 500);
+        waitUntilTrue(statePage.viewValidationLabel::isVisible, 500);
         @SuppressWarnings("unchecked")
-        JPanel panel = viewPanel.getContentComponent(0, JPanel.class);
+        JPanel panel = statePage.viewPanel.getContentComponent(0, JPanel.class);
         JLabel label = fetchChildNamed(panel, "itemLabel", JLabel.class);
-        assertEquals(1, viewComboBox.getItemCount());
-        assertEquals(1, viewPanel.getContentCount());
-        assertEquals("Test view", viewComboBox.getItemAt(0));
+        assertEquals(1, statePage.viewComboBox.getItemCount());
+        assertEquals(1, statePage.viewPanel.getContentCount());
+        assertEquals("Test view", statePage.viewComboBox.getItemAt(0));
         assertEquals("Test view", label.getText());
-        assertEquals(IS_ALREADY_ADDED, viewValidationLabel.getText());
+        assertEquals(IS_ALREADY_ADDED, statePage.viewValidationLabel.getText());
     }
 
     @Test
     public void accept_WrongInput()
             throws TimeoutException {
-        nameTextField.setText(INVALID_CHARACTERS);
-        viewComboBox.setSelectedItem("Test View");
-        addViewButton.doClick();
-        actionTextArea.setText("Test Actions");
-        waitFor(() -> fetchChildNamed(dialog, "itemLabel", JLabel.class), 500);
-        acceptButton.doClick();
+        statePage.nameTextField.setText(INVALID_CHARACTERS);
+        statePage.viewComboBox.setSelectedItem("Test View");
+        statePage.addViewButton.doClick();
+        statePage.actionTextArea.setText("Test Actions");
+        waitFor(() -> fetchChildNamed(statePage.dialog, "itemLabel", JLabel.class), 500);
+        statePage.acceptButton.doClick();
 
-        waitUntilTrue(nameValidationLabel::isVisible, 500);
-        assertEquals(INVALID_CHARACTERS_USED, nameValidationLabel.getText());
+        waitUntilTrue(statePage.nameValidationLabel::isVisible, 500);
+        assertEquals(INVALID_CHARACTERS_USED, statePage.nameValidationLabel.getText());
     }
 
     @Test
     public void accept()
             throws TimeoutException {
-        nameTextField.setText("Test State");
-        viewComboBox.setSelectedItem("Test View");
-        addViewButton.doClick();
-        actionTextArea.setText("Test Action");
-        waitFor(() -> fetchChildNamed(dialog, "itemLabel", JLabel.class), 500);
-        acceptButton.doClick();
+        statePage.nameTextField.setText("Test State");
+        statePage.viewComboBox.setSelectedItem("Test View");
+        statePage.addViewButton.doClick();
+        statePage.actionTextArea.setText("Test Action");
+        waitFor(() -> fetchChildNamed(statePage.dialog, "itemLabel", JLabel.class), 500);
+        statePage.acceptButton.doClick();
 
         State newState = okSpy.getNewState();
         Collection<String> views = newState.getViews();
@@ -176,30 +177,30 @@ public class StateDialogTest
 
     @Test
     public void setOld() {
-        dialog.setOld(new State("Name").addViews("View 1", "View 2").setAction("Action"));
-        assertEquals("Name", nameTextField.getText());
-        assertFalse(nameValidationLabel.isVisible());
-        assertFalse(viewValidationLabel.isVisible());
-        assertEquals(-1, viewComboBox.getSelectedIndex());
-        assertEquals(null, viewComboBox.getSelectedItem());
-        assertEquals(2, viewComboBox.getItemCount());
-        assertEquals("View 1", viewComboBox.getItemAt(0));
-        assertEquals("View 2", viewComboBox.getItemAt(1));
-        assertEquals(2, viewPanel.getContentCount());
-        assertEquals("View 1", viewPanel.getItem(0));
-        assertEquals("View 2", viewPanel.getItem(1));
-        assertEquals("Action", actionTextArea.getText());
+        statePage.dialog.setOld(new State("Name").addViews("View 1", "View 2").setAction("Action"));
+        assertEquals("Name", statePage.nameTextField.getText());
+        assertFalse(statePage.nameValidationLabel.isVisible());
+        assertFalse(statePage.viewValidationLabel.isVisible());
+        assertEquals(-1, statePage.viewComboBox.getSelectedIndex());
+        assertEquals(null, statePage.viewComboBox.getSelectedItem());
+        assertEquals(2, statePage.viewComboBox.getItemCount());
+        assertEquals("View 1", statePage.viewComboBox.getItemAt(0));
+        assertEquals("View 2", statePage.viewComboBox.getItemAt(1));
+        assertEquals(2, statePage.viewPanel.getContentCount());
+        assertEquals("View 1", statePage.viewPanel.getItem(0));
+        assertEquals("View 2", statePage.viewPanel.getItem(1));
+        assertEquals("Action", statePage.actionTextArea.getText());
     }
 
     @Test
     public void setOptions() {
-        dialog.setOptions(asList("View 1", "View 2"));
-        assertEquals(0, viewPanel.getContentCount());
-        assertEquals(-1, viewComboBox.getSelectedIndex());
-        assertEquals(null, viewComboBox.getSelectedItem());
-        assertEquals(2, viewComboBox.getItemCount());
-        assertEquals("View 1", viewComboBox.getItemAt(0));
-        assertEquals("View 2", viewComboBox.getItemAt(1));
-        assertEquals(0, viewPanel.getContentCount());
+        statePage.dialog.setOptions(asList("View 1", "View 2"));
+        assertEquals(0, statePage.viewPanel.getContentCount());
+        assertEquals(-1, statePage.viewComboBox.getSelectedIndex());
+        assertEquals(null, statePage.viewComboBox.getSelectedItem());
+        assertEquals(2, statePage.viewComboBox.getItemCount());
+        assertEquals("View 1", statePage.viewComboBox.getItemAt(0));
+        assertEquals("View 2", statePage.viewComboBox.getItemAt(1));
+        assertEquals(0, statePage.viewPanel.getContentCount());
     }
 }

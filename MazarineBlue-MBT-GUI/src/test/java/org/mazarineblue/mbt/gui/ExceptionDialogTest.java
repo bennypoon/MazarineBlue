@@ -26,7 +26,7 @@ import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
-import org.mazarineblue.swing.SwingUtil;
+import static org.mazarineblue.swing.SwingUtil.fetchChildNamed;
 
 public class ExceptionDialogTest {
 
@@ -46,10 +46,10 @@ public class ExceptionDialogTest {
         } catch (UnsupportedOperationException ex) {
             this.ex = ex;
             dialog = new ExceptionDialog(new JFrame(), ex);
-            iconLabel = SwingUtil.fetchChildNamed(dialog, "iconLabel", JLabel.class);
-            messageLabel = SwingUtil.fetchChildNamed(dialog, "messageLabel", JLabel.class);
-            exceptionTextArea = SwingUtil.fetchChildNamed(dialog, "exceptionTextArea", JTextArea.class);
-            closeButton = SwingUtil.fetchChildNamed(dialog, "closeButton", JButton.class);
+            iconLabel = fetchChildNamed(dialog, "iconLabel", JLabel.class);
+            messageLabel = fetchChildNamed(dialog, "messageLabel", JLabel.class);
+            exceptionTextArea = fetchChildNamed(dialog, "exceptionTextArea", JTextArea.class);
+            closeButton = fetchChildNamed(dialog, "closeButton", JButton.class);
         }
     }
 

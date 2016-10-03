@@ -26,7 +26,7 @@ class JModelMenuItem
 
     private static final long serialVersionUID = 1L;
 
-    private BiFunction<Integer, Integer, Boolean> isVisible;
+    private final BiFunction<Integer, Integer, Boolean> isVisible;
 
     JModelMenuItem(BiFunction<Integer, Integer, Boolean> isVisible, TableManipulationAction action) {
         super(action);

@@ -19,6 +19,8 @@ package org.mazarineblue.mbt.gui;
 
 public class StringConstants {
 
+    static final String NEW_STATE = "New State";
+    static final String NEW_TRANSITION = "New Transition";
     static final String CANT_BE_BLANK = "can't be blank";
     static final String INVALID_CHARACTERS_USED = "invalid characters used";
     static final String IS_ALREADY_ADDED = "is already added";
@@ -27,6 +29,8 @@ public class StringConstants {
     static final String FILLED_REGEX = "^.+$";
     static final String VALID_CHARACTERS_REGEX = "^[\\s\\w-]*$";
     static final String VALID_VARIABLE_CHARACTERS_REGEX = "^[\\s\\w$\\{\\}\\(\\)<>=-]*$";
+    public static final int BUSINESS_VALUE_MIN = 0;
+    public static final int BUSINESS_VALUE_MAX = 100;
 
     private StringConstants() {
     }

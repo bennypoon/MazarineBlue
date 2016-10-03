@@ -15,54 +15,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.mbt.gui;
+package org.mazarineblue.mbt.gui.pages;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import org.junit.After;
-import org.junit.Before;
+import org.mazarineblue.mbt.gui.StateDialog;
 import org.mazarineblue.mbt.gui.list.JListPanel;
-import org.mazarineblue.mbt.gui.model.State;
-import org.mazarineblue.mbt.gui.util.FormActionSpy;
 import static org.mazarineblue.swing.SwingUtil.fetchChildNamed;
 
-public abstract class StateDialogTestHelper {
+public class StatePage
+        implements AutoCloseable {
 
-    protected static final String INVALID_CHARACTERS = "~!@#$%^&";
+    public final StateDialog dialog;
+    public final JTextField nameTextField;
+    public final JLabel nameValidationLabel;
+    public final JListPanel<String> viewPanel;
+    public final JComboBox<?> viewComboBox;
+    public final JButton addViewButton;
+    public final JLabel viewValidationLabel;
+    public final JTextArea actionTextArea;
+    public final JButton acceptButton;
+    public final JButton rejectButton;
 
-    @SuppressWarnings("ProtectedField")
-    protected FormActionSpy<State> okSpy;
-    @SuppressWarnings("ProtectedField")
-    protected StateDialog dialog;
-    @SuppressWarnings("ProtectedField")
-    protected JTextField nameTextField;
-    @SuppressWarnings("ProtectedField")
-    protected JLabel nameValidationLabel;
-    @SuppressWarnings("ProtectedField")
-    protected JListPanel<String> viewPanel;
-    @SuppressWarnings("ProtectedField")
-    protected JComboBox<?> viewComboBox;
-    @SuppressWarnings("ProtectedField")
-    protected JButton addViewButton;
-    @SuppressWarnings("ProtectedField")
-    protected JLabel viewValidationLabel;
-    @SuppressWarnings("ProtectedField")
-    protected JTextArea actionTextArea;
-    @SuppressWarnings("ProtectedField")
-    protected JButton acceptButton;
-    @SuppressWarnings("ProtectedField")
-    protected JButton rejectButton;
-
-    @Before
-    @SuppressWarnings("unchecked")
-    public void setup() {
-        okSpy = new FormActionSpy<>();
-        dialog = new StateDialog(new JFrame(), "Test State Dialog");
-        dialog.setAcceptAction(okSpy);
+    public StatePage(StateDialog dialog) {
+        this.dialog = dialog;
         nameTextField = fetchChildNamed(dialog, "nameTextField", JTextField.class);
         nameValidationLabel = fetchChildNamed(dialog, "nameValidationLabel", JLabel.class);
 
@@ -77,15 +56,9 @@ public abstract class StateDialogTestHelper {
         nameTextField.requestFocus();
     }
 
-    @After
-    public void teardown() {
+    @Override
+    public void close()
+            throws Exception {
         dialog.dispose();
-        dialog = null;
-        nameTextField = null;
-        nameValidationLabel = null;
-        viewComboBox = null;
-        viewValidationLabel = null;
-        viewPanel = null;
-        actionTextArea = null;
     }
 }

@@ -30,7 +30,6 @@ import javax.swing.text.JTextComponent;
  * that it retrieves though a {@code Supplier}.
  *
  * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
- * @param <T> 
  */
 public class CollectionInputVerifier<T extends Serializable>
         extends SerializableInputVerifier {

@@ -21,6 +21,7 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import static org.mazarineblue.mbt.gui.StringConstants.INVALID_CHARACTERS_USED;
+import org.mazarineblue.mbt.gui.util.StateDialogTestHelper;
 import static org.mazarineblue.swing.SwingUtil.waitUntilFalse;
 import static org.mazarineblue.swing.SwingUtil.waitUntilTrue;
 
@@ -32,15 +33,15 @@ public class StateDialogIT
             throws TimeoutException {
         CharSequence invalid = INVALID_CHARACTERS;
         for (int i = 0; i < invalid.length(); ++i) {
-            nameValidationLabel.setVisible(false);
-            waitUntilFalse(nameValidationLabel::isVisible, 500);
+            statePage.nameValidationLabel.setVisible(false);
+            waitUntilFalse(statePage.nameValidationLabel::isVisible, 500);
 
-            nameTextField.requestFocus();
-            nameTextField.setText(Character.toString(invalid.charAt(i)));
-            actionTextArea.requestFocus();
+            statePage.nameTextField.requestFocus();
+            statePage.nameTextField.setText(Character.toString(invalid.charAt(i)));
+            statePage.actionTextArea.requestFocus();
 
-            waitUntilTrue(nameValidationLabel::isVisible, 500);
-            assertEquals(INVALID_CHARACTERS_USED, nameValidationLabel.getText());
+            waitUntilTrue(statePage.nameValidationLabel::isVisible, 500);
+            assertEquals(INVALID_CHARACTERS_USED, statePage.nameValidationLabel.getText());
         }
     }
 
@@ -49,17 +50,17 @@ public class StateDialogIT
             throws TimeoutException {
         CharSequence invalid = INVALID_CHARACTERS;
         for (int i = 0; i < invalid.length(); ++i) {
-            viewValidationLabel.setVisible(false);
-            waitUntilFalse(viewValidationLabel::isVisible, 500);
+            statePage.viewValidationLabel.setVisible(false);
+            waitUntilFalse(statePage.viewValidationLabel::isVisible, 500);
 
-            viewComboBox.requestFocus();
-            viewComboBox.setSelectedItem(Character.toString(invalid.charAt(i)));
-            addViewButton.doClick();
-            waitUntilTrue(viewValidationLabel::isVisible, 500);
+            statePage.viewComboBox.requestFocus();
+            statePage.viewComboBox.setSelectedItem(Character.toString(invalid.charAt(i)));
+            statePage.addViewButton.doClick();
+            waitUntilTrue(statePage.viewValidationLabel::isVisible, 500);
 
-            assertEquals(0, viewComboBox.getItemCount());
-            assertEquals(0, viewPanel.getContentCount());
-            assertEquals(INVALID_CHARACTERS_USED, viewValidationLabel.getText());
+            assertEquals(0, statePage.viewComboBox.getItemCount());
+            assertEquals(0, statePage.viewPanel.getContentCount());
+            assertEquals(INVALID_CHARACTERS_USED, statePage.viewValidationLabel.getText());
         }
     }
 }

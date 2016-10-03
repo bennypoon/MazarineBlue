@@ -58,7 +58,6 @@ public class ValidationLabelSwitcher
     /**
      * Hides the controlled label, if true, or shows the preset message though
      * the controlled label, if false.
-     *
      */
     void setSucces(boolean flag) {
         if (flag)

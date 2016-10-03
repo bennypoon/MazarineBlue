@@ -27,7 +27,7 @@ import org.mazarineblue.mbt.gui.model.Transition;
 class RemoveAction
         extends AbstractAction {
 
-    private JFrame owner;
+    private final JFrame owner;
 
     RemoveAction(JFrame owner, TablePopupMenuListener position, TableModelConvertor convertor) {
         super("Remove", position, convertor);

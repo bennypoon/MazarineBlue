@@ -17,14 +17,11 @@
  */
 package org.mazarineblue.mbt.gui;
 
-import static java.awt.EventQueue.invokeLater;
 import java.awt.Frame;
 import java.util.Collection;
 import java.util.function.BiConsumer;
-import static java.util.logging.Logger.getLogger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import static org.mazarineblue.mbt.gui.StringConstants.CANT_BE_BLANK;
 import static org.mazarineblue.mbt.gui.StringConstants.FILLED_REGEX;
 import static org.mazarineblue.mbt.gui.StringConstants.INVALID_CHARACTERS_USED;
@@ -53,40 +50,6 @@ public class StateDialog
     private javax.swing.JLabel nameValidationLabel;
     private org.mazarineblue.mbt.gui.list.JListPanel<String> viewListPanel;
     // End of variables declaration//GEN-END:variables
-
-    public static void main(String[] args) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-        } catch (ClassNotFoundException ex) {
-            getLogger(StateDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            getLogger(StateDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            getLogger(StateDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            getLogger(StateDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        // </editor-fold>
-
-        /* Create and display the dialog */
-        StateDialog dialog = new StateDialog(new JFrame(), "Test State Dialog");
-        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                System.exit(0);
-            }
-        });
-        invokeLater(() -> dialog.setVisible(true));
-    }
 
     public StateDialog(Frame parent, String title) {
         super(parent, title, true);

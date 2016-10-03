@@ -17,23 +17,45 @@
  */
 package org.mazarineblue.mbt.gui;
 
-import javax.swing.JComboBox;
+import de.bechte.junit.runners.context.HierarchicalContextRunner;
+import static java.awt.EventQueue.invokeLater;
+import java.awt.Point;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import static javax.swing.SwingUtilities.convertPointFromScreen;
+import static javax.swing.SwingUtilities.convertPointToScreen;
+import javax.swing.table.TableColumnModel;
+import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import static org.mazarineblue.mbt.gui.StringConstants.BUSINESS_VALUE_MAX;
 import org.mazarineblue.mbt.gui.model.GraphModel;
 import org.mazarineblue.mbt.gui.model.State;
 import org.mazarineblue.mbt.gui.model.Transition;
-import org.mazarineblue.mbt.gui.util.TestModelHelper;
-import static org.mazarineblue.swing.SwingUtil.fetchChildNamed;
+import org.mazarineblue.mbt.gui.pages.ModelEditorPage;
+import org.mazarineblue.mbt.gui.pages.StatePage;
+import org.mazarineblue.mbt.gui.pages.TransitionPage;
 
-// http://thebadprogrammer.com/swing-uimanager-keys/
-// http://stackoverflow.com/questions/1951558/list-of-java-swing-ui-properties/25740576#25740576
-//@RunWith(HierarchicalContextRunner.class)
+@RunWith(HierarchicalContextRunner.class)
 public class ModelEditorTest {
 
     private static final String FIRST_HEADER = "Transitions";
     private static final String NA = "N/A";
+
+    private static final String VIEW1 = "Test View1";
+    private static final String VIEW2 = "Test View2";
+    private static final String NAME_STATE_A = "State A";
+    private static final String NAME_STATE_B = "State B";
+    private static final String NAME_STATE_C = "State C";
+    private static final String NAME_TRANSITION1 = "Transition 1";
+    private static final String NAME_TRANSITION2 = "Transition 2";
+
+    private GraphModel model;
+    private ModelEditorFrame frame;
+    private ModelEditorPage mainPage;
 
     private static void assertTable(JTable table, Object[][] expected) {
         assertEquals(expected.length - 1, table.getRowCount());
@@ -42,125 +64,183 @@ public class ModelEditorTest {
             for (int column = 0; column < expected[row].length; ++column)
                 assertEquals(expected[row][column], getValue(table, row, column));
     }
-
+    
     private static Object getValue(JTable table, int row, int column) {
         if (row == 0)
             return table.getColumn(table.getColumnName(column)).getHeaderValue();
         return table.getValueAt(row - 1, column).toString();
     }
 
+    @Before
+    public void setup() {
+        model = GraphModel.createDefault();
+        frame = new ModelEditorFrame(model);
+        mainPage = new ModelEditorPage(frame);
+    }
+
+    @After
+    public void teardown() {
+        frame.dispose();
+        frame = null;
+        model = null;
+        mainPage = null;
+    }
+
+    @SuppressWarnings("PublicInnerClass")
+    public class EmptyModel {
+
+        @Test
+        public void emptyModel() {
+            assertEquals(0, mainPage.viewComboBox.getItemCount());
+            assertEquals(-1, mainPage.viewComboBox.getSelectedIndex());
+            assertEquals(null, mainPage.viewComboBox.getSelectedItem());
+            assertTable(mainPage.table, new Object[][]{{FIRST_HEADER}});
+        }
+
+        @Test
+        public void addNewState() {
+            addNewState(NAME_STATE_A, VIEW1);
+
+            assertEquals(VIEW1, mainPage.viewComboBox.getSelectedItem());
+            assertTable(mainPage.table, new Object[][]{{FIRST_HEADER, NAME_STATE_A}});
+        }
+
+        @Test
+        public void addNewTransition() {
+            addNewState(NAME_STATE_A, VIEW1);
+            addNewState(NAME_STATE_B, VIEW1);
+            addNewTransition(NAME_TRANSITION1, NAME_STATE_A, NAME_STATE_B);
+
+            assertEquals(VIEW1, mainPage.viewComboBox.getSelectedItem());
+            assertTable(mainPage.table, new Object[][]{
+                {FIRST_HEADER, NAME_STATE_A, NAME_STATE_B},
+                {NAME_TRANSITION1, NAME_STATE_B, NA}
+            });
+        }
+
+        private void addNewState(String nameStateA, String view) {
+            StatePage stateA = mainPage.addState();
+            stateA.nameTextField.setText(nameStateA);
+            stateA.viewComboBox.setSelectedItem(view);
+            stateA.addViewButton.doClick();
+            stateA.actionTextArea.setText("Test Action");
+            stateA.acceptButton.doClick();
+        }
+
+        private void addNewTransition(String nameTransition, String source, String destination) {
+            TransitionPage transitionPage = mainPage.addTransition();
+            transitionPage.nameTextField.setText(nameTransition);
+            transitionPage.businessValueSlider.setValue(BUSINESS_VALUE_MAX);
+            transitionPage.beforeStateComboBox.setSelectedItem(model.getStatesByName(source).get(0));
+            transitionPage.beforeStateAddButton.doClick();
+            transitionPage.afterStateComboBox.setSelectedItem(model.getStatesByName(destination).get(0));
+            transitionPage.acceptButton.doClick();
+        }
+    }
+
     @SuppressWarnings("PublicInnerClass")
     public class View {
 
         @Test
-        public void emptyModel() {
-            GraphModel model = GraphModel.createDefault();
-            ModelEditorFrame frame = new ModelEditorFrame(model);
-
-            JComboBox<?> viewComboBox = fetchChildNamed(frame, "viewComboBox", JComboBox.class);
-            assertEquals(0, viewComboBox.getItemCount());
-            assertEquals(-1, viewComboBox.getSelectedIndex());
-            assertEquals(null, viewComboBox.getSelectedItem());
-
-            JTable table = fetchChildNamed(frame, "stateTransactionTable", JTable.class);
-            assertTable(table, new Object[][]{{FIRST_HEADER}});
-        }
-
-        @Test
         public void modelWithState() {
-            GraphModel model = GraphModel.createDefault();
-            model.addState(new State("state").addViews("view"));
-            ModelEditorFrame frame = new ModelEditorFrame(model);
+            model.addState(new State(NAME_STATE_A).addViews(VIEW1));
 
-            JComboBox<?> viewComboBox = fetchChildNamed(frame, "viewComboBox", JComboBox.class);
-            assertEquals(1, viewComboBox.getItemCount());
-            assertEquals(0, viewComboBox.getSelectedIndex());
-            assertEquals("view", viewComboBox.getSelectedItem());
-
-            JTable table = fetchChildNamed(frame, "stateTransactionTable", JTable.class);
-            assertTable(table, new Object[][]{{FIRST_HEADER, "state"}});
+            assertEquals(1, mainPage.viewComboBox.getItemCount());
+            assertEquals(0, mainPage.viewComboBox.getSelectedIndex());
+            assertEquals(VIEW1, mainPage.viewComboBox.getSelectedItem());
+            assertTable(mainPage.table, new Object[][]{{FIRST_HEADER, NAME_STATE_A}});
         }
 
         @Test
         public void modelWithStateAndTransitions_WithIdenticalViews() {
-            GraphModel model = GraphModel.createDefault();
-            State from1 = new State("from 1").addViews("view");
-            State from2 = new State("from 2").addViews("view");
-            State to = new State("to").addViews("view");
-            model.addState(from1, from2, to);
-            model.addTransition(new Transition("transition").setSources(from1, from2).setDestination(to));
-            ModelEditorFrame frame = new ModelEditorFrame(model);
+            State stateA = new State(NAME_STATE_A).addViews(VIEW1);
+            State stateB = new State(NAME_STATE_B).addViews(VIEW1);
+            State stateC = new State(NAME_STATE_C).addViews(VIEW1);
+            model.addState(stateA, stateB, stateC);
+            model.addTransition(new Transition(NAME_TRANSITION1).setSources(stateA, stateB).setDestination(stateC));
 
-            JComboBox<?> viewComboBox = fetchChildNamed(frame, "viewComboBox", JComboBox.class);
-            assertEquals(1, viewComboBox.getItemCount());
-            assertEquals(0, viewComboBox.getSelectedIndex());
-            assertEquals("view", viewComboBox.getSelectedItem());
-
-            JTable table = fetchChildNamed(frame, "stateTransactionTable", JTable.class);
-            assertTable(table, new Object[][]{
-                {FIRST_HEADER, "from 1", "from 2", "to"},
-                {"transition", "to", "to", NA}
+            assertEquals(1, mainPage.viewComboBox.getItemCount());
+            assertEquals(0, mainPage.viewComboBox.getSelectedIndex());
+            assertEquals(VIEW1, mainPage.viewComboBox.getSelectedItem());
+            assertTable(mainPage.table, new Object[][]{
+                {FIRST_HEADER, NAME_STATE_A, NAME_STATE_B, NAME_STATE_C},
+                {NAME_TRANSITION1, NAME_STATE_C, NAME_STATE_C, NA}
             });
         }
 
         @Test
         public void modelWithTwoViews_AndSwitchToDifferentView() {
-            GraphModel model = GraphModel.createDefault();
-            State a = new State("a").addViews("view 1");
-            State b = new State("b").addViews("view 1").addViews("view 2");
-            State c = new State("c").addViews("view 2");
-            model.addState(a, b, c);
-            model.addTransition(new Transition("transition 1").setSources(a).setDestination(b));
-            model.addTransition(new Transition("transition 2").setSources(b).setDestination(c));
-            ModelEditorFrame frame = new ModelEditorFrame(model);
+            State stateA = new State(NAME_STATE_A).addViews(VIEW1);
+            State stateB = new State(NAME_STATE_B).addViews(VIEW1).addViews(VIEW2);
+            State stateC = new State(NAME_STATE_C).addViews(VIEW2);
+            model.addState(stateA, stateB, stateC);
+            model.addTransition(new Transition(NAME_TRANSITION1).setSources(stateA).setDestination(stateB));
+            model.addTransition(new Transition(NAME_TRANSITION2).setSources(stateB).setDestination(stateC));
+            mainPage.viewComboBox.setSelectedItem(VIEW2);
 
-            JComboBox<?> viewComboBox = fetchChildNamed(frame, "viewComboBox", JComboBox.class);
-            viewComboBox.setSelectedItem("view 2");
-
-            assertEquals(2, viewComboBox.getItemCount());
-            assertEquals(1, viewComboBox.getSelectedIndex());
-            assertEquals("view 2", viewComboBox.getSelectedItem());
-
-            JTable table = fetchChildNamed(frame, "stateTransactionTable", JTable.class);
-            assertTable(table, new Object[][]{
-                {FIRST_HEADER, "b", "c"},
-                {"transition 2", "c", NA}
+            assertEquals(2, mainPage.viewComboBox.getItemCount());
+            assertEquals(1, mainPage.viewComboBox.getSelectedIndex());
+            assertEquals(VIEW2, mainPage.viewComboBox.getSelectedItem());
+            assertTable(mainPage.table, new Object[][]{
+                {FIRST_HEADER, NAME_STATE_B, NAME_STATE_C},
+                {NAME_TRANSITION2, NAME_STATE_C, NA}
             });
         }
     }
 
-    @Test
-    public void addNewState() {
-        GraphModel model = GraphModel.createDefault();
-        TestModelHelper helper = new TestModelHelper(model);
-        ModelEditorFrame frame = new ModelEditorFrame(model);
+    @SuppressWarnings("PublicInnerClass")
+    public class InitializedModel {
 
-        helper.addState(frame, "Test State", "Test View");
+        @Before
+        public void setup() {
+            State stateA = new State(NAME_STATE_A).addViews(VIEW1);
+            State stateB = new State(NAME_STATE_B).addViews(VIEW1);
+            State stateC = new State(NAME_STATE_C).addViews(VIEW1);
+            Transition t = new Transition("Transition 1").setSources(stateA).setDestination(stateB);
+            model.addState(stateA, stateB, stateC);
+            model.addTransition(t);
+        }
 
-        @SuppressWarnings("unchecked")
-        JComboBox<String> viewComboBox = fetchChildNamed(frame, "viewComboBox", JComboBox.class);
-        JTable table = fetchChildNamed(frame, "stateTransactionTable", JTable.class);
-        assertEquals("Test View", viewComboBox.getSelectedItem());
-        assertTable(table, new Object[][]{{FIRST_HEADER, "Test State"}});
-    }
+        @Test
+        public void addTransition() {
+            invokeLater(() -> frame.setVisible(true));
+            
+            JPopupMenu popupMenu = mainPage.table.getComponentPopupMenu();
+            popupMenu.setLocation(convertTableCoordinates(mainPage.table, 0, 0));
+            Point location = popupMenu.getLocation();
+            popupMenu.setVisible(true);
+            
+            Point p1 = convertTableCoordinates(mainPage.table, -1, 0); // Transitions
+            Point p2 = convertTableCoordinates(mainPage.table, -1, 1); // StateA
+            Point p3 = convertTableCoordinates(mainPage.table, -1, 2); // StateB
+            Point p4 = convertTableCoordinates(mainPage.table, -1, 3); // StateC
+            Point p5 = convertTableCoordinates(mainPage.table, 0, 0); // Transition 1
+            Point p6 = convertTableCoordinates(mainPage.table, 0, 1); // StateB
+            Point p7 = convertTableCoordinates(mainPage.table, 0, 2); // N/A
+            Point p8 = convertTableCoordinates(mainPage.table, 0, 3); // N/A
+            fail();
+        }
+        
+        @Test
+        public void editTransition() {
+            invokeLater(() -> frame.setVisible(true));
+        }
+        
+        @Test
+        public void removeTransition() {
+            invokeLater(() -> frame.setVisible(true));
+        }
 
-    @Test
-    public void addNewTransition() {
-        GraphModel model = GraphModel.createDefault();
-        TestModelHelper helper = new TestModelHelper(model);
-        ModelEditorFrame frame = new ModelEditorFrame(model);
-
-        helper.addState(frame, "a", "Test View");
-        helper.addState(frame, "b", "Test View");
-        helper.addTransition(frame, "Test Transition", "a", "b");
-
-        @SuppressWarnings("unchecked")
-        JComboBox<String> viewComboBox = fetchChildNamed(frame, "viewComboBox", JComboBox.class);
-        JTable table = fetchChildNamed(frame, "stateTransactionTable", JTable.class);
-        assertEquals("Test View", viewComboBox.getSelectedItem());
-        assertTable(table, new Object[][]{
-            {FIRST_HEADER, "a", "b"},
-            {"Test Transition", "b", NA}
-        });
+        private Point convertTableCoordinates(JTable table, int row, int column) {
+            int x = 0;
+            int y = row * table.getRowHeight();
+            TableColumnModel columnModel = table.getColumnModel();
+            for (int i = 0; i < column; ++i)
+                x += columnModel.getColumn(i).getWidth();
+            Point p = new Point(x + 5, y + 5);
+            convertPointToScreen(p, table);
+            convertPointFromScreen(p, mainPage.table.getComponentPopupMenu());
+            return p;
+        }
     }
 }

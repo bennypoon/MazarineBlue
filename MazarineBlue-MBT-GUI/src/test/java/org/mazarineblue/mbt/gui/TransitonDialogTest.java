@@ -29,12 +29,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import static org.mazarineblue.mbt.gui.StringConstants.AFTER_STATE_DOESNT_SHARE_VIEW;
 import static org.mazarineblue.mbt.gui.StringConstants.BEFORE_STATE_DOESNT_SHARE_VIEW;
+import static org.mazarineblue.mbt.gui.StringConstants.BUSINESS_VALUE_MAX;
 import static org.mazarineblue.mbt.gui.StringConstants.CANT_BE_BLANK;
 import static org.mazarineblue.mbt.gui.StringConstants.INVALID_CHARACTERS_USED;
 import static org.mazarineblue.mbt.gui.StringConstants.IS_ALREADY_ADDED;
-import static org.mazarineblue.mbt.gui.TransitionDialog.BUSINESS_VALUE_MAX;
 import org.mazarineblue.mbt.gui.model.State;
 import org.mazarineblue.mbt.gui.model.Transition;
+import org.mazarineblue.mbt.gui.util.TransitonDialogTestHelper;
 import static org.mazarineblue.swing.SwingUtil.fetchChildNamed;
 import static org.mazarineblue.swing.SwingUtil.waitFor;
 import static org.mazarineblue.swing.SwingUtil.waitUntilFalse;
@@ -44,165 +45,165 @@ public class TransitonDialogTest
         extends TransitonDialogTestHelper {
 
     private void addBeforeState(int index) {
-        beforeStateComboBox.setSelectedIndex(index);
-        addBeforeStateButton.doClick();
+        transitionPage.beforeStateComboBox.setSelectedIndex(index);
+        transitionPage.beforeStateAddButton.doClick();
     }
 
     private void assertItem(String expected, int index) {
         @SuppressWarnings("unchecked")
-        JPanel panel = beforeStatesPanel.getContentComponent(index, JPanel.class);
+        JPanel panel = transitionPage.beforeStatesPanel.getContentComponent(index, JPanel.class);
         JLabel label = fetchChildNamed(panel, "itemLabel", JLabel.class);
         assertEquals(expected, label.getText());
     }
 
     @Test
     public void initialDialog() {
-        assertTrue(nameTextField.getText().isEmpty());
-        assertFalse(nameValidationLabel.isVisible());
-        assertFalse(beforeStateComboBox.isEditable());
-        assertEquals(-1, beforeStateComboBox.getSelectedIndex());
-        assertFalse(beforeStateValidationLabel.isVisible());
-        assertEquals(0, beforeStatesPanel.getContentCount());
-        assertFalse(afterStateComboBox.isEditable());
-        assertEquals(-1, afterStateComboBox.getSelectedIndex());
-        assertFalse(afterStateValidationLabel.isVisible());
-        assertTrue(actionTextArea.getText().isEmpty());
+        assertTrue(transitionPage.nameTextField.getText().isEmpty());
+        assertFalse(transitionPage.nameValidationLabel.isVisible());
+        assertFalse(transitionPage.beforeStateComboBox.isEditable());
+        assertEquals(-1, transitionPage.beforeStateComboBox.getSelectedIndex());
+        assertFalse(transitionPage.beforeStateValidationLabel.isVisible());
+        assertEquals(0, transitionPage.beforeStatesPanel.getContentCount());
+        assertFalse(transitionPage.afterStateComboBox.isEditable());
+        assertEquals(-1, transitionPage.afterStateComboBox.getSelectedIndex());
+        assertFalse(transitionPage.afterStateValidationLabel.isVisible());
+        assertTrue(transitionPage.actionTextArea.getText().isEmpty());
     }
 
     @Test
     public void name_EmptyInput()
             throws TimeoutException {
-        actionTextArea.requestFocus();
-        waitUntilTrue(nameValidationLabel::isVisible, 500);
-        assertTrue(nameTextField.getText().isEmpty());
-        assertEquals(CANT_BE_BLANK, nameValidationLabel.getText());
+        transitionPage.actionTextArea.requestFocus();
+        waitUntilTrue(transitionPage.nameValidationLabel::isVisible, 500);
+        assertTrue(transitionPage.nameTextField.getText().isEmpty());
+        assertEquals(CANT_BE_BLANK, transitionPage.nameValidationLabel.getText());
     }
 
     @Test
     public void name_InvalidInput()
             throws TimeoutException {
-        nameValidationLabel.setVisible(false);
-        waitUntilFalse(nameValidationLabel::isVisible, 500);
+        transitionPage.nameValidationLabel.setVisible(false);
+        waitUntilFalse(transitionPage.nameValidationLabel::isVisible, 500);
 
-        nameTextField.requestFocus();
-        nameTextField.setText(INVALID_CHARACTERS_REGULAR);
-        actionTextArea.requestFocus();
+        transitionPage.nameTextField.requestFocus();
+        transitionPage.nameTextField.setText(INVALID_CHARACTERS_REGULAR);
+        transitionPage.actionTextArea.requestFocus();
 
-        waitUntilTrue(nameValidationLabel::isVisible, 500);
-        assertEquals(INVALID_CHARACTERS_USED, nameValidationLabel.getText());
+        waitUntilTrue(transitionPage.nameValidationLabel::isVisible, 500);
+        assertEquals(INVALID_CHARACTERS_USED, transitionPage.nameValidationLabel.getText());
     }
 
     @Test
     public void name_ValidInput() {
-        nameTextField.requestFocus();
-        nameTextField.setText("_State 1-2");
-        actionTextArea.requestFocus();
-        assertFalse(nameValidationLabel.isVisible());
+        transitionPage.nameTextField.requestFocus();
+        transitionPage.nameTextField.setText("_State 1-2");
+        transitionPage.actionTextArea.requestFocus();
+        assertFalse(transitionPage.nameValidationLabel.isVisible());
     }
 
     @Test
     public void guard_Invalid()
             throws TimeoutException {
-        nameTextField.setText("Test Name");
-        guardValidationLabel.setVisible(false);
-        waitUntilFalse(guardValidationLabel::isVisible, 500);
+        transitionPage.nameTextField.setText("Test Name");
+        transitionPage.guardValidationLabel.setVisible(false);
+        waitUntilFalse(transitionPage.guardValidationLabel::isVisible, 500);
 
-        guardTextField.requestFocus();
-        guardTextField.setText(INVALID_CHARACTERS_VARIABLE);
-        actionTextArea.requestFocus();
+        transitionPage.guardTextField.requestFocus();
+        transitionPage.guardTextField.setText(INVALID_CHARACTERS_VARIABLE);
+        transitionPage.actionTextArea.requestFocus();
 
-        waitUntilTrue(guardValidationLabel::isVisible, 500);
-        assertEquals(INVALID_CHARACTERS_USED, guardValidationLabel.getText());
+        waitUntilTrue(transitionPage.guardValidationLabel::isVisible, 500);
+        assertEquals(INVALID_CHARACTERS_USED, transitionPage.guardValidationLabel.getText());
     }
 
     @Test
     public void guard_Valid() {
-        guardTextField.requestFocus();
-        guardTextField.setText(VALID_CHARACTERS_VARIABLE);
-        actionTextArea.requestFocus();
-        assertFalse(guardValidationLabel.isVisible());
+        transitionPage.guardTextField.requestFocus();
+        transitionPage.guardTextField.setText(VALID_CHARACTERS_VARIABLE);
+        transitionPage.actionTextArea.requestFocus();
+        assertFalse(transitionPage.guardValidationLabel.isVisible());
     }
 
     @Test
     public void beforeState_AddOnce() {
         addBeforeState(STATE_D_INDEX);
-        assertEquals(1, beforeStatesPanel.getContentCount());
+        assertEquals(1, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_D, 0);
-        assertFalse(beforeStateValidationLabel.isVisible());
+        assertFalse(transitionPage.beforeStateValidationLabel.isVisible());
     }
 
     @Test
     public void beforeState_AddTwice()
             throws TimeoutException {
         addBeforeState(STATE_D_INDEX);
-        addBeforeStateButton.doClick();
+        transitionPage.beforeStateAddButton.doClick();
 
-        waitUntilTrue(beforeStateValidationLabel::isVisible, 500);
-        assertEquals(1, beforeStatesPanel.getContentCount());
+        waitUntilTrue(transitionPage.beforeStateValidationLabel::isVisible, 500);
+        assertEquals(1, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_D, 0);
-        assertEquals(IS_ALREADY_ADDED, beforeStateValidationLabel.getText());
+        assertEquals(IS_ALREADY_ADDED, transitionPage.beforeStateValidationLabel.getText());
     }
 
     @Test
     public void beforeState_StateB_StateA_Happy() {
-        afterStateComboBox.setSelectedIndex(STATE_A_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_A_INDEX);
         addBeforeState(STATE_B_INDEX);
 
-        assertEquals(1, beforeStatesPanel.getContentCount());
+        assertEquals(1, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_B, 0);
-        assertFalse(beforeStateValidationLabel.isVisible());
+        assertFalse(transitionPage.beforeStateValidationLabel.isVisible());
     }
 
     @Test
     public void beforeState_StateB_StateB_Happy() {
-        afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
         addBeforeState(STATE_B_INDEX);
 
-        assertEquals(1, beforeStatesPanel.getContentCount());
+        assertEquals(1, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_B, 0);
-        assertFalse(beforeStateValidationLabel.isVisible());
+        assertFalse(transitionPage.beforeStateValidationLabel.isVisible());
     }
 
     @Test
     public void beforeState_StateC_StateB_Rainy()
             throws TimeoutException {
-        afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
         addBeforeState(STATE_E_INDEX);
 
-        waitUntilTrue(beforeStateValidationLabel::isVisible, 500);
-        assertEquals(0, beforeStatesPanel.getContentCount());
-        assertEquals(BEFORE_STATE_DOESNT_SHARE_VIEW, beforeStateValidationLabel.getText());
+        waitUntilTrue(transitionPage.beforeStateValidationLabel::isVisible, 500);
+        assertEquals(0, transitionPage.beforeStatesPanel.getContentCount());
+        assertEquals(BEFORE_STATE_DOESNT_SHARE_VIEW, transitionPage.beforeStateValidationLabel.getText());
     }
 
     @Test
     public void beforeState_StateE_StateB_Rainy()
             throws TimeoutException {
-        afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
         addBeforeState(STATE_E_INDEX);
 
-        waitUntilTrue(beforeStateValidationLabel::isVisible, 500);
-        assertEquals(0, beforeStatesPanel.getContentCount());
-        assertEquals(BEFORE_STATE_DOESNT_SHARE_VIEW, beforeStateValidationLabel.getText());
+        waitUntilTrue(transitionPage.beforeStateValidationLabel::isVisible, 500);
+        assertEquals(0, transitionPage.beforeStatesPanel.getContentCount());
+        assertEquals(BEFORE_STATE_DOESNT_SHARE_VIEW, transitionPage.beforeStateValidationLabel.getText());
     }
 
     @Test
     public void beforeState_StateE_StateE_Happy() {
-        afterStateComboBox.setSelectedIndex(STATE_E_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_E_INDEX);
         addBeforeState(STATE_E_INDEX);
 
-        assertEquals(1, beforeStatesPanel.getContentCount());
+        assertEquals(1, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_E, 0);
-        assertFalse(beforeStateValidationLabel.isVisible());
+        assertFalse(transitionPage.beforeStateValidationLabel.isVisible());
     }
 
     @Test
     public void afterState_StateA_StateA_Happy() {
         addBeforeState(STATE_A_INDEX);
-        afterStateComboBox.setSelectedIndex(STATE_A_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_A_INDEX);
 
-        assertEquals(1, beforeStatesPanel.getContentCount());
+        assertEquals(1, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_A, 0);
-        assertFalse(afterStateValidationLabel.isVisible());
+        assertFalse(transitionPage.afterStateValidationLabel.isVisible());
     }
 
     @Test
@@ -210,25 +211,25 @@ public class TransitonDialogTest
         addBeforeState(STATE_A_INDEX);
         addBeforeState(STATE_B_INDEX);
         addBeforeState(STATE_C_INDEX);
-        afterStateComboBox.setSelectedIndex(STATE_A_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_A_INDEX);
 
-        assertEquals(3, beforeStatesPanel.getContentCount());
+        assertEquals(3, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_A, 0);
         assertItem(STATE_B, 1);
         assertItem(STATE_C, 2);
-        assertFalse(afterStateValidationLabel.isVisible());
+        assertFalse(transitionPage.afterStateValidationLabel.isVisible());
     }
 
     @Test
     public void afterState_StateBC_StateA_Happy() {
         addBeforeState(STATE_B_INDEX);
         addBeforeState(STATE_C_INDEX);
-        afterStateComboBox.setSelectedIndex(STATE_A_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_A_INDEX);
 
-        assertEquals(2, beforeStatesPanel.getContentCount());
+        assertEquals(2, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_B, 0);
         assertItem(STATE_C, 1);
-        assertFalse(afterStateValidationLabel.isVisible());
+        assertFalse(transitionPage.afterStateValidationLabel.isVisible());
     }
 
     @Test
@@ -237,14 +238,14 @@ public class TransitonDialogTest
         addBeforeState(STATE_A_INDEX);
         addBeforeState(STATE_B_INDEX);
         addBeforeState(STATE_C_INDEX);
-        afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
 
-        waitUntilTrue(afterStateValidationLabel::isVisible, 500);
-        assertEquals(3, beforeStatesPanel.getContentCount());
+        waitUntilTrue(transitionPage.afterStateValidationLabel::isVisible, 500);
+        assertEquals(3, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_A, 0);
         assertItem(STATE_B, 1);
         assertItem(STATE_C, 2);
-        assertEquals(AFTER_STATE_DOESNT_SHARE_VIEW, afterStateValidationLabel.getText());
+        assertEquals(AFTER_STATE_DOESNT_SHARE_VIEW, transitionPage.afterStateValidationLabel.getText());
     }
 
     @Test
@@ -252,100 +253,100 @@ public class TransitonDialogTest
             throws TimeoutException {
         addBeforeState(STATE_B_INDEX);
         addBeforeState(STATE_C_INDEX);
-        afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
 
-        waitUntilTrue(afterStateValidationLabel::isVisible, 500);
-        assertEquals(2, beforeStatesPanel.getContentCount());
+        waitUntilTrue(transitionPage.afterStateValidationLabel::isVisible, 500);
+        assertEquals(2, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_B, 0);
         assertItem(STATE_C, 1);
-        assertEquals(AFTER_STATE_DOESNT_SHARE_VIEW, afterStateValidationLabel.getText());
+        assertEquals(AFTER_STATE_DOESNT_SHARE_VIEW, transitionPage.afterStateValidationLabel.getText());
     }
 
     @Test
     public void afterState_StateC_StateB_Rainy()
             throws TimeoutException {
         addBeforeState(STATE_C_INDEX);
-        afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
 
-        waitUntilTrue(afterStateValidationLabel::isVisible, 500);
-        assertEquals(1, beforeStatesPanel.getContentCount());
+        waitUntilTrue(transitionPage.afterStateValidationLabel::isVisible, 500);
+        assertEquals(1, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_C, 0);
-        assertEquals(AFTER_STATE_DOESNT_SHARE_VIEW, afterStateValidationLabel.getText());
+        assertEquals(AFTER_STATE_DOESNT_SHARE_VIEW, transitionPage.afterStateValidationLabel.getText());
     }
 
     @Test
     public void afterState_StateE_StateE_Happy() {
         addBeforeState(STATE_E_INDEX);
-        afterStateComboBox.setSelectedIndex(STATE_E_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_E_INDEX);
 
-        assertEquals(1, beforeStatesPanel.getContentCount());
+        assertEquals(1, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_E, 0);
-        assertFalse(afterStateValidationLabel.isVisible());
+        assertFalse(transitionPage.afterStateValidationLabel.isVisible());
     }
 
     @Test
     public void afterState_StateE_StateB_Rainy()
             throws TimeoutException {
         addBeforeState(STATE_E_INDEX);
-        afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
 
-        waitUntilTrue(afterStateValidationLabel::isVisible, 500);
-        assertEquals(1, beforeStatesPanel.getContentCount());
+        waitUntilTrue(transitionPage.afterStateValidationLabel::isVisible, 500);
+        assertEquals(1, transitionPage.beforeStatesPanel.getContentCount());
         assertItem(STATE_E, 0);
-        assertEquals(AFTER_STATE_DOESNT_SHARE_VIEW, afterStateValidationLabel.getText());
+        assertEquals(AFTER_STATE_DOESNT_SHARE_VIEW, transitionPage.afterStateValidationLabel.getText());
     }
 
     @Test
     public void accept_WrongInput1()
             throws TimeoutException {
-        nameTextField.setText(INVALID_CHARACTERS_REGULAR);
-        guardTextField.setText(INVALID_CHARACTERS_VARIABLE);
-        afterStateComboBox.setSelectedIndex(STATE_D_INDEX);
+        transitionPage.nameTextField.setText(INVALID_CHARACTERS_REGULAR);
+        transitionPage.guardTextField.setText(INVALID_CHARACTERS_VARIABLE);
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_D_INDEX);
         addBeforeState(STATE_A_INDEX);
-        actionTextArea.setText("Test Actions");
-        acceptButton.doClick();
+        transitionPage.actionTextArea.setText("Test Actions");
+        transitionPage.acceptButton.doClick();
 
-        waitUntilTrue(nameValidationLabel::isVisible, 500);
-        waitUntilTrue(guardValidationLabel::isVisible, 500);
-        waitUntilTrue(beforeStateValidationLabel::isVisible, 500);
-        assertFalse(afterStateValidationLabel.isVisible());
-        assertEquals(INVALID_CHARACTERS_USED, nameValidationLabel.getText());
-        assertEquals(INVALID_CHARACTERS_USED, guardValidationLabel.getText());
-        assertEquals(BEFORE_STATE_DOESNT_SHARE_VIEW, beforeStateValidationLabel.getText());
+        waitUntilTrue(transitionPage.nameValidationLabel::isVisible, 500);
+        waitUntilTrue(transitionPage.guardValidationLabel::isVisible, 500);
+        waitUntilTrue(transitionPage.beforeStateValidationLabel::isVisible, 500);
+        assertFalse(transitionPage.afterStateValidationLabel.isVisible());
+        assertEquals(INVALID_CHARACTERS_USED, transitionPage.nameValidationLabel.getText());
+        assertEquals(INVALID_CHARACTERS_USED, transitionPage.guardValidationLabel.getText());
+        assertEquals(BEFORE_STATE_DOESNT_SHARE_VIEW, transitionPage.beforeStateValidationLabel.getText());
     }
 
     @Test
     public void accept_WrongInput2()
             throws TimeoutException {
-        nameTextField.setText(INVALID_CHARACTERS_REGULAR);
-        guardTextField.setText(INVALID_CHARACTERS_VARIABLE);
+        transitionPage.nameTextField.setText(INVALID_CHARACTERS_REGULAR);
+        transitionPage.guardTextField.setText(INVALID_CHARACTERS_VARIABLE);
         addBeforeState(STATE_A_INDEX);
-        afterStateComboBox.setSelectedIndex(STATE_D_INDEX);
-        actionTextArea.setText("Test Actions");
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_D_INDEX);
+        transitionPage.actionTextArea.setText("Test Actions");
         waitFor(() -> fetchChildNamed(dialog, "itemLabel", JLabel.class), 500);
-        acceptButton.doClick();
+        transitionPage.acceptButton.doClick();
 
-        waitUntilTrue(nameValidationLabel::isVisible, 500);
-        waitUntilTrue(guardValidationLabel::isVisible, 500);
-        waitUntilTrue(afterStateValidationLabel::isVisible, 500);
-        assertFalse(beforeStateValidationLabel.isVisible());
-        assertEquals(INVALID_CHARACTERS_USED, nameValidationLabel.getText());
-        assertEquals(INVALID_CHARACTERS_USED, guardValidationLabel.getText());
-        assertEquals(AFTER_STATE_DOESNT_SHARE_VIEW, afterStateValidationLabel.getText());
+        waitUntilTrue(transitionPage.nameValidationLabel::isVisible, 500);
+        waitUntilTrue(transitionPage.guardValidationLabel::isVisible, 500);
+        waitUntilTrue(transitionPage.afterStateValidationLabel::isVisible, 500);
+        assertFalse(transitionPage.beforeStateValidationLabel.isVisible());
+        assertEquals(INVALID_CHARACTERS_USED, transitionPage.nameValidationLabel.getText());
+        assertEquals(INVALID_CHARACTERS_USED, transitionPage.guardValidationLabel.getText());
+        assertEquals(AFTER_STATE_DOESNT_SHARE_VIEW, transitionPage.afterStateValidationLabel.getText());
     }
 
     @Test
     public void accept()
             throws TimeoutException {
-        nameTextField.setText("Test Transition");
-        guardTextField.setText(VALID_CHARACTERS_VARIABLE);
-        businessValueSlider.setValue(BUSINESS_VALUE_MAX);
+        transitionPage.nameTextField.setText("Test Transition");
+        transitionPage.guardTextField.setText(VALID_CHARACTERS_VARIABLE);
+        transitionPage.businessValueSlider.setValue(BUSINESS_VALUE_MAX);
         addBeforeState(STATE_A_INDEX);
-        afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
-        addBeforeStateButton.doClick();
-        actionTextArea.setText("Test Action");
+        transitionPage.afterStateComboBox.setSelectedIndex(STATE_B_INDEX);
+        transitionPage.beforeStateAddButton.doClick();
+        transitionPage.actionTextArea.setText("Test Action");
         waitFor(() -> fetchChildNamed(dialog, "itemLabel", JLabel.class), 500);
-        acceptButton.doClick();
+        transitionPage.acceptButton.doClick();
 
         Transition newTransition = okSpy.getNewState();
         List<State> sources = newTransition.getSources();
@@ -361,10 +362,10 @@ public class TransitonDialogTest
 
     @Test
     public void setOld() {
-        nameValidationLabel.setVisible(true);
-        guardValidationLabel.setVisible(true);
-        beforeStateValidationLabel.setVisible(true);
-        afterStateValidationLabel.setVisible(true);
+        transitionPage.nameValidationLabel.setVisible(true);
+        transitionPage.guardValidationLabel.setVisible(true);
+        transitionPage.beforeStateValidationLabel.setVisible(true);
+        transitionPage.afterStateValidationLabel.setVisible(true);
 
         State stateA = new State("State A").addViews("View 1", "View 2").setAction("State Action");
         State stateB = new State("State B").addViews("View 1", "View 2").setAction("State Action");
@@ -373,21 +374,21 @@ public class TransitonDialogTest
         dialog.setOptions(asList(stateA, stateB));
         dialog.setOld(transition);
 
-        assertFalse(nameValidationLabel.isVisible());
-        assertFalse(guardValidationLabel.isVisible());
-        assertFalse(beforeStateValidationLabel.isVisible());
-        assertFalse(afterStateValidationLabel.isVisible());
-        assertEquals("Name", nameTextField.getText());
-        assertEquals("Guard", guardTextField.getText());
-        assertEquals(BUSINESS_VALUE_MAX, businessValueSlider.getValue());
-        assertEquals(2, beforeStateComboBox.getItemCount());
-        assertEquals(stateA, beforeStateComboBox.getItemAt(0));
-        assertEquals(stateB, beforeStateComboBox.getItemAt(1));
-        assertEquals(2, beforeStatesPanel.getContentCount());
-        assertEquals(stateA, beforeStatesPanel.getItem(0));
-        assertEquals(stateB, beforeStatesPanel.getItem(1));
-        assertEquals(stateA, afterStateComboBox.getSelectedItem());
-        assertEquals("Transition Action", actionTextArea.getText());
+        assertFalse(transitionPage.nameValidationLabel.isVisible());
+        assertFalse(transitionPage.guardValidationLabel.isVisible());
+        assertFalse(transitionPage.beforeStateValidationLabel.isVisible());
+        assertFalse(transitionPage.afterStateValidationLabel.isVisible());
+        assertEquals("Name", transitionPage.nameTextField.getText());
+        assertEquals("Guard", transitionPage.guardTextField.getText());
+        assertEquals(BUSINESS_VALUE_MAX, transitionPage.businessValueSlider.getValue());
+        assertEquals(2, transitionPage.beforeStateComboBox.getItemCount());
+        assertEquals(stateA, transitionPage.beforeStateComboBox.getItemAt(0));
+        assertEquals(stateB, transitionPage.beforeStateComboBox.getItemAt(1));
+        assertEquals(2, transitionPage.beforeStatesPanel.getContentCount());
+        assertEquals(stateA, transitionPage.beforeStatesPanel.getItem(0));
+        assertEquals(stateB, transitionPage.beforeStatesPanel.getItem(1));
+        assertEquals(stateA, transitionPage.afterStateComboBox.getSelectedItem());
+        assertEquals("Transition Action", transitionPage.actionTextArea.getText());
     }
 
     @Test
@@ -396,9 +397,9 @@ public class TransitonDialogTest
         State stateB = new State("State B").addViews("View 1", "View 2").setAction("State Action");
         dialog.setOptions(asList(stateA, stateB));
 
-        assertEquals(2, beforeStateComboBox.getItemCount());
-        assertEquals(stateA, beforeStateComboBox.getItemAt(0));
-        assertEquals(stateB, beforeStateComboBox.getItemAt(1));
-        assertEquals(0, beforeStatesPanel.getContentCount());
+        assertEquals(2, transitionPage.beforeStateComboBox.getItemCount());
+        assertEquals(stateA, transitionPage.beforeStateComboBox.getItemAt(0));
+        assertEquals(stateB, transitionPage.beforeStateComboBox.getItemAt(1));
+        assertEquals(0, transitionPage.beforeStatesPanel.getContentCount());
     }
 }

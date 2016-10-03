@@ -61,10 +61,10 @@ public class ControlPanel<T>
 
     public void setAccept(JDialog owner, String actionText) {
         acceptButton.setAction(new ConsumerAction(owner, actionText, t -> {
-            T next = supplier.get();
-            if (next != null)
-                acceptAction.accept(old, next);
-        }));
+                                              T next = supplier.get();
+                                              if (next != null)
+                                                  acceptAction.accept(old, next);
+                                          }));
     }
 
     public void setReject(JDialog owner, String actionText) {

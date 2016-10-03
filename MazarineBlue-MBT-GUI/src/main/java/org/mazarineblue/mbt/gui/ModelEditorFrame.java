@@ -20,9 +20,10 @@ package org.mazarineblue.mbt.gui;
 import static java.awt.EventQueue.invokeLater;
 import java.util.Collection;
 import java.util.List;
-import static java.util.logging.Logger.getLogger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import static org.mazarineblue.mbt.gui.StringConstants.NEW_STATE;
+import static org.mazarineblue.mbt.gui.StringConstants.NEW_TRANSITION;
 import org.mazarineblue.mbt.gui.model.GraphModel;
 import org.mazarineblue.mbt.gui.model.ModelListener;
 import org.mazarineblue.mbt.gui.model.State;
@@ -34,8 +35,6 @@ public class ModelEditorFrame
         extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 1L;
-    private static final String NEW_STATE = "New State";
-    private static final String NEW_TRANSITION = "New Transition";
 
     private final GraphModel model;
     private final TableModelConvertor convertor;
@@ -55,60 +54,6 @@ public class ModelEditorFrame
     private javax.swing.JLabel viewLabel;
     // End of variables declaration//GEN-END:variables
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-        } catch (ClassNotFoundException ex) {
-            getLogger(ModelEditorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            getLogger(ModelEditorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            getLogger(ModelEditorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            getLogger(ModelEditorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        GraphModel model = GraphModel.createDefault();
-        State start = new State("Start").addViews("Login");
-        State l0 = new State("Level 0").addViews("Login", "Stairs");
-        State l1 = new State("Level 1").addViews("Stairs");
-        State l2 = new State("Level 2").addViews("Stairs");
-        State l3 = new State("Level 3").addViews("Stairs");
-        model.addState(start, l0, l1, l2, l3);
-
-        model.addTransition(new Transition("Wrong username").setSources(start).setDestination(start));
-        model.addTransition(new Transition("Wrong password").setSources(start).setDestination(start));
-        model.addTransition(new Transition("Correct username & password").setSources(start).setDestination(l0));
-
-        model.addTransition(new Transition("To Level 0").setSources(l1).setDestination(l0));
-        model.addTransition(new Transition("To Level 1").setSources(l0, l2).setDestination(l1));
-        model.addTransition(new Transition("To Level 2").setSources(l1).setDestination(l2));
-
-        ModelEditorFrame frame = new ModelEditorFrame(model);
-        invokeLater(() -> frame.setVisible(true));
-        Thread.setDefaultUncaughtExceptionHandler((t, ex) -> {
-            ExceptionDialog dialog = new ExceptionDialog(frame, ex);
-            invokeLater(() -> dialog.setVisible(true));
-        });
-    }
-
-    /**
-     * Creates new form TestingModelEditor
-     */
     public ModelEditorFrame(GraphModel model) {
         this.model = model;
         convertor = createConvertor(model);

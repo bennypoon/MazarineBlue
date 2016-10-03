@@ -25,6 +25,7 @@ import org.mazarineblue.mbt.gui.model.Transition;
 
 class AddAction
         extends AbstractAction {
+
     private final JFrame owner;
 
     AddAction(JFrame owner, TablePopupMenuListener position, TableModelConvertor convertor) {
@@ -34,7 +35,7 @@ class AddAction
 
     @Override
     public boolean isVisible(int row, int column) {
-        return !isHeader(row) &&  isModelElement(row, column);
+        return !isHeader(row) && isModelElement(row, column);
     }
 
     private boolean isModelElement(int row, int column) {

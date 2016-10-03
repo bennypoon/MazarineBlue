@@ -22,6 +22,8 @@ import static java.util.Arrays.asList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import static org.mazarineblue.mbt.gui.StringConstants.BUSINESS_VALUE_MAX;
+import static org.mazarineblue.mbt.gui.StringConstants.BUSINESS_VALUE_MIN;
 import org.mazarineblue.mbt.gui.exceptions.BusinessValueOutOfRangeException;
 import org.mazarineblue.mbt.gui.exceptions.DestinationStateRequiredException;
 import org.mazarineblue.mbt.gui.exceptions.IncompatibleViewsException;
@@ -70,7 +72,7 @@ public class Transition
     }
 
     public Transition setBusinessValue(int value) {
-        if (value < 0 || value > 100)
+        if (value < BUSINESS_VALUE_MIN || value > BUSINESS_VALUE_MAX)
             throw new BusinessValueOutOfRangeException(value);
         this.businessValue = value;
         return this;
