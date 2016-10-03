@@ -17,7 +17,7 @@
  */
 package org.mazarineblue.mbt.gui.model.ui;
 
-import java.awt.EventQueue;
+import static java.awt.EventQueue.invokeLater;
 import javax.swing.JFrame;
 import org.mazarineblue.mbt.gui.StateDialog;
 import org.mazarineblue.mbt.gui.TransitionDialog;
@@ -53,13 +53,15 @@ class EditAction
         StateDialog dialog = new StateDialog(owner, "Edit State");
         dialog.setOptions(getViews());
         dialog.setOld((State) value);
-        EventQueue.invokeLater(() -> dialog.setVisible(true));
+        dialog.setAcceptAction(this::replace);
+        invokeLater(() -> dialog.setVisible(true));
     }
 
     private void editTransition(Object value) {
         TransitionDialog dialog = new TransitionDialog(owner, "Edit Transition");
-        dialog.setOptions(getStatesByView());
+        dialog.setOptions(getStates());
         dialog.setOld((Transition) value);
-        EventQueue.invokeLater(() -> dialog.setVisible(true));
+        dialog.setAcceptAction(this::replace);
+        invokeLater(() -> dialog.setVisible(true));
     }
 }

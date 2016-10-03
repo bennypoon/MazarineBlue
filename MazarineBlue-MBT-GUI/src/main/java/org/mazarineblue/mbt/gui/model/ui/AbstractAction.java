@@ -39,13 +39,29 @@ abstract class AbstractAction {
     protected Object getValueAt(int row, int column) {
         return convertor.getValueAt(row, column);
     }
-
-    protected List<State> getStatesByView() {
-        return convertor.getModel().getStatesByView(convertor.getView());
+    
+    protected List<State> getStates() {
+        return convertor.getStates();
     }
 
-    protected List<Transition> getTransitionsByView() {
-        return convertor.getModel().getTransitionsByView(convertor.getView());
+    protected List<Transition> getTransitions() {
+        return convertor.getTransitions();
+    }
+
+    protected void replace(State oldState, State newState) {
+        convertor.replace(oldState, newState);
+    }
+
+    protected void replace(Transition oldTransition, Transition newTransition) {
+        convertor.replace(oldTransition, newTransition);
+    }
+
+    protected void remove(State oldState, State newState) {
+        convertor.remove(oldState);
+    }
+
+    protected void remove(Transition oldTransition, Transition newTransition) {
+        convertor.remove(oldTransition);
     }
 
     protected Collection<String> getViews() {
@@ -64,13 +80,11 @@ abstract class AbstractAction {
 
     public TableManipulationAction createAction() {
         if (action == null) {
-            action = new TableManipulationAction(name,
-                                                 this::doAction);
+            action = new TableManipulationAction(name, this::doAction);
             position.addListener(action);
         }
         return action;
     }
 
     public abstract void doAction(int row, int column);
-
 }

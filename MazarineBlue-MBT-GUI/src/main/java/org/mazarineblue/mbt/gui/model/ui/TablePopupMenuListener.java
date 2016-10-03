@@ -21,8 +21,6 @@ import static java.awt.EventQueue.invokeLater;
 import java.awt.Point;
 import javax.swing.JTable;
 import static javax.swing.SwingUtilities.convertPoint;
-import static javax.swing.SwingUtilities.convertPointFromScreen;
-import static javax.swing.SwingUtilities.convertPointToScreen;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -43,11 +41,6 @@ class TablePopupMenuListener
     @Override
     public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
         invokeLater(() -> {
-            Point p1 = new Point(0, 0);
-            Point p2 = new Point(0, 0);
-            convertPointToScreen(p1, popup);
-            convertPointFromScreen(p2, table);
-            
             Point point = convertPoint(popup, new Point(0, 0), table);
             int row = table.rowAtPoint(point);
             int column = table.columnAtPoint(point);

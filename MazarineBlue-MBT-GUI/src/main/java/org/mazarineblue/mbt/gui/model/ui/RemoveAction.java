@@ -17,7 +17,7 @@
  */
 package org.mazarineblue.mbt.gui.model.ui;
 
-import java.awt.EventQueue;
+import static java.awt.EventQueue.invokeLater;
 import javax.swing.JFrame;
 import org.mazarineblue.mbt.gui.StateDialog;
 import org.mazarineblue.mbt.gui.TransitionDialog;
@@ -41,7 +41,7 @@ class RemoveAction
     }
 
     private boolean isNotUsed(State state) {
-        return getTransitionsByView().stream().noneMatch(t -> t.contains(state));
+        return getTransitions().stream().noneMatch(t -> t.contains(state));
     }
 
     @Override
@@ -57,14 +57,15 @@ class RemoveAction
         StateDialog dialog = new StateDialog(owner, "Remove State");
         dialog.setOptions(getViews());
         dialog.setOld((State) value);
-        EventQueue.invokeLater(() -> dialog.setVisible(true));
+        dialog.setAcceptAction(this::remove);
+        invokeLater(() -> dialog.setVisible(true));
     }
 
     private void removeTransition(Object value) {
         TransitionDialog dialog = new TransitionDialog(owner, "Remove Transition");
-        dialog.setOptions(getStatesByView());
+        dialog.setOptions(getStates());
         dialog.setOld((Transition) value);
-        dialog.setEnabled(true);
-        EventQueue.invokeLater(() -> dialog.setVisible(true));
+        dialog.setAcceptAction(this::remove);
+        invokeLater(() -> dialog.setVisible(true));
     }
 }

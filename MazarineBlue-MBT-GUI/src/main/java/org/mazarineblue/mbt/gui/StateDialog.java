@@ -103,9 +103,10 @@ public class StateDialog
     private State getNewState() {
         if (!verifyAcceptInput())
             return null;
-        State newState = new State(nameTextField.getText());
+        State newState = State.createDefault(nameTextField.getText());
         newState.addViews(viewListPanel.getAllItems());
         newState.setAction(actionTextArea.getText());
+        newState.verify();
         return newState;
     }
     //</editor-fold>

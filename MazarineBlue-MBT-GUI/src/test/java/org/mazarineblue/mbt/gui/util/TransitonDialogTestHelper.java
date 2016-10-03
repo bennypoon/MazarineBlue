@@ -57,11 +57,11 @@ public abstract class TransitonDialogTestHelper {
     public void setup() {
         okSpy = new FormActionSpy<>();
         Collection<State> states = new ArrayList<>(4);
-        states.add(new State(STATE_A).addViews("View 1", "View 2"));
-        states.add(new State(STATE_B).addViews("View 1"));
-        states.add(new State(STATE_C).addViews("View 2"));
-        states.add(new State(STATE_D).addViews("View 3"));
-        states.add(new State(STATE_E));
+        states.add(State.createDefault(STATE_A).addViews("View 1", "View 2"));
+        states.add(State.createDefault(STATE_B).addViews("View 1"));
+        states.add(State.createDefault(STATE_C).addViews("View 2"));
+        states.add(State.createDefault(STATE_D).addViews("View 3"));
+        states.add(State.createDefault(STATE_E));
 
         dialog = new TransitionDialog(new JFrame(), "Test Transition Dialog");
         dialog.setAcceptAction(okSpy);

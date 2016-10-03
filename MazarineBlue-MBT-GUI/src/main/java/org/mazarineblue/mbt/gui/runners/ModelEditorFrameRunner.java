@@ -52,20 +52,20 @@ public class ModelEditorFrameRunner {
 
         /* Create and display the form */
         GraphModel model = GraphModel.createDefault();
-        State start = new State("Start").addViews("Login");
-        State l0 = new State("Level 0").addViews("Login", "Stairs");
-        State l1 = new State("Level 1").addViews("Stairs");
-        State l2 = new State("Level 2").addViews("Stairs");
-        State l3 = new State("Level 3").addViews("Stairs");
+        State start = State.createDefault("Start").addViews("Login");
+        State l0 = State.createDefault("Level 0").addViews("Login", "Stairs");
+        State l1 = State.createDefault("Level 1").addViews("Stairs");
+        State l2 = State.createDefault("Level 2").addViews("Stairs");
+        State l3 = State.createDefault("Level 3").addViews("Stairs");
         model.addState(start, l0, l1, l2, l3);
 
-        model.addTransition(new Transition("Wrong username").setSources(start).setDestination(start));
-        model.addTransition(new Transition("Wrong password").setSources(start).setDestination(start));
-        model.addTransition(new Transition("Correct username & password").setSources(start).setDestination(l0));
+        model.addTransition(Transition.createDefault("Wrong username").setSources(start).setDestination(start));
+        model.addTransition(Transition.createDefault("Wrong password").setSources(start).setDestination(start));
+        model.addTransition(Transition.createDefault("Correct username & password").setSources(start).setDestination(l0));
 
-        model.addTransition(new Transition("To Level 0").setSources(l1).setDestination(l0));
-        model.addTransition(new Transition("To Level 1").setSources(l0, l2).setDestination(l1));
-        model.addTransition(new Transition("To Level 2").setSources(l1).setDestination(l2));
+        model.addTransition(Transition.createDefault("To Level 0").setSources(l1).setDestination(l0));
+        model.addTransition(Transition.createDefault("To Level 1").setSources(l0, l2).setDestination(l1));
+        model.addTransition(Transition.createDefault("To Level 2").setSources(l1).setDestination(l2));
 
         ModelEditorFrame frame = new ModelEditorFrame(model);
         invokeLater(() -> frame.setVisible(true));
@@ -73,5 +73,8 @@ public class ModelEditorFrameRunner {
             ExceptionDialog dialog = new ExceptionDialog(frame, ex);
             invokeLater(() -> dialog.setVisible(true));
         });
+    }
+
+    private ModelEditorFrameRunner() {
     }
 }

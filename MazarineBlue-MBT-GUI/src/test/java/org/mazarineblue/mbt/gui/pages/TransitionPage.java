@@ -47,6 +47,7 @@ public class TransitionPage
     public final JButton acceptButton;
     public final JButton rejectButton;
 
+    @SuppressWarnings("unchecked")
     public TransitionPage(TransitionDialog dialog) {
         this.dialog = dialog;
 

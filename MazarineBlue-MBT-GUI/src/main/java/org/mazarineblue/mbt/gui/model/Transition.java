@@ -17,91 +17,47 @@
  */
 package org.mazarineblue.mbt.gui.model;
 
-import java.util.ArrayList;
-import static java.util.Arrays.asList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import static org.mazarineblue.mbt.gui.StringConstants.BUSINESS_VALUE_MAX;
-import static org.mazarineblue.mbt.gui.StringConstants.BUSINESS_VALUE_MIN;
-import org.mazarineblue.mbt.gui.exceptions.BusinessValueOutOfRangeException;
-import org.mazarineblue.mbt.gui.exceptions.DestinationStateRequiredException;
-import org.mazarineblue.mbt.gui.exceptions.IncompatibleViewsException;
-import org.mazarineblue.mbt.gui.exceptions.SourceStateRequiredException;
-import org.mazarineblue.mbt.gui.verifiers.StatesShareViewChecker;
 
-public class Transition
+public interface Transition
         extends ModelElement<Transition> {
 
-    private static final long serialVersionUID = 1L;
-
-    private String guard;
-    private int businessValue;
-    private ArrayList<State> sources;
-    private State destination;
-
-    public Transition(String name) {
-        super(name);
+    public static Transition createDefault(String name) {
+        return new TransitionImpl(name);
     }
 
-    public void verify() {
-        if (sources == null)
-            throw new SourceStateRequiredException();
-        if (destination == null)
-            throw new DestinationStateRequiredException();
-        if (!StatesShareViewChecker.doStatePairsShareAView(destination, () -> sources))
-            throw new IncompatibleViewsException(sources, destination);
-        // @TODO add verification implementation here
+    public static Transition createDefault(Transition t, StateConvertor convertor) {
+        return new TransitionImpl(t, convertor);
     }
 
-    boolean containsView(String view) {
-        return sources.stream().noneMatch(s -> !s.containsView(view)) && destination.containsView(view);
-    }
+    public void verify();
 
-    public String getGuard() {
-        return guard;
-    }
+    public boolean containsView(String view);
 
-    public Transition setGuard(String guard) {
-        this.guard = guard;
-        return this;
-    }
+    public String getGuard();
 
-    public int getBusinessValue() {
-        return businessValue;
-    }
+    public Transition setGuard(String guard);
 
-    public Transition setBusinessValue(int value) {
-        if (value < BUSINESS_VALUE_MIN || value > BUSINESS_VALUE_MAX)
-            throw new BusinessValueOutOfRangeException(value);
-        this.businessValue = value;
-        return this;
-    }
+    public int getBusinessValue();
 
-    public List<State> getSources() {
-        return Collections.unmodifiableList(sources);
-    }
+    public Transition setBusinessValue(int value);
 
-    public Transition setSources(State... states) {
-        sources = new ArrayList<>(asList(states));
-        return this;
-    }
+    public List<State> getSources();
 
-    public Transition setSources(Collection<State> collection) {
-        sources = new ArrayList<>(collection);
-        return this;
-    }
+    public Transition setSources(State... states);
 
-    public State getDestination() {
-        return destination;
-    }
+    public Transition setSources(Collection<State> collection);
 
-    public Transition setDestination(State state) {
-        destination = state;
-        return this;
-    }
+    public State getDestination();
 
-    public boolean contains(State state) {
-        return getDestination().equals(state) || getSources().stream().anyMatch(s -> s.equals(state));
-    }
+    public Transition setDestination(State state);
+
+    public boolean contains(State state);
+
+    public boolean isSource(State state);
+
+    public boolean isDestination(State state);
+
+    public void copy(Transition transition, StateConvertor convertor);
 }

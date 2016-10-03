@@ -57,4 +57,7 @@ public class StateDialogRunner {
         });
         invokeLater(() -> dialog.setVisible(true));
     }
+
+    private StateDialogRunner() {
+    }
 }

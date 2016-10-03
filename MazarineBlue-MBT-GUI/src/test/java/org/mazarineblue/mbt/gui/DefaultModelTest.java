@@ -39,11 +39,11 @@ public class DefaultModelTest {
     @Before
     public void setup() {
         model = GraphModel.createDefault();
-        stateA = new State("State A").addViews("view 1", "view 2");
-        stateB = new State("State B").addViews("view 1");
-        stateC = new State("State C").addViews("view 2");
-        stateD = new State("State D").addViews("view 3");
-        stateE = new State("State E");
+        stateA = State.createDefault("State A").addViews("view 1", "view 2");
+        stateB = State.createDefault("State B").addViews("view 1");
+        stateC = State.createDefault("State C").addViews("view 2");
+        stateD = State.createDefault("State D").addViews("view 3");
+        stateE = State.createDefault("State E");
     }
 
     @After
@@ -54,46 +54,46 @@ public class DefaultModelTest {
 
     @Test(expected = SourceStateRequiredException.class)
     public void addTransition_WithoutSourceState() {
-        model.addTransition(new Transition("transition").setDestination(stateA));
+        model.addTransition(Transition.createDefault("transition").setDestination(stateA));
     }
 
     @Test(expected = DestinationStateRequiredException.class)
     public void addTransition_WithoutDestinationState() {
-        model.addTransition(new Transition("transition").setSources(stateA));
+        model.addTransition(Transition.createDefault("transition").setSources(stateA));
     }
 
     @Test
     public void addTransition_StateA_StateB() {
-        model.addTransition(new Transition("transition").setSources(stateA).setDestination(stateB));
+        model.addTransition(Transition.createDefault("transition").setSources(stateA).setDestination(stateB));
     }
 
     @Test
     public void addTransition_StateBC_StateA() {
-        model.addTransition(new Transition("transition").setSources(stateB, stateC).setDestination(stateA));
+        model.addTransition(Transition.createDefault("transition").setSources(stateB, stateC).setDestination(stateA));
     }
 
     @Test(expected = IncompatibleViewsException.class)
     public void addTransition_StateBC_StateB() {
-        model.addTransition(new Transition("transition").setSources(stateB, stateC).setDestination(stateB));
+        model.addTransition(Transition.createDefault("transition").setSources(stateB, stateC).setDestination(stateB));
     }
 
     @Test
     public void addTransition_StateB_StateB() {
-        model.addTransition(new Transition("transition").setSources(stateB).setDestination(stateB));
+        model.addTransition(Transition.createDefault("transition").setSources(stateB).setDestination(stateB));
     }
 
     @Test(expected = IncompatibleViewsException.class)
     public void addTransition_StateB_StateC() {
-        model.addTransition(new Transition("transition").setSources(stateB).setDestination(stateC));
+        model.addTransition(Transition.createDefault("transition").setSources(stateB).setDestination(stateC));
     }
 
     @Test(expected = IncompatibleViewsException.class)
     public void addTransition_StateB_StateE() {
-        model.addTransition(new Transition("transition").setSources(stateB).setDestination(stateE));
+        model.addTransition(Transition.createDefault("transition").setSources(stateB).setDestination(stateE));
     }
 
     @Test
     public void addTransition_StateE_StateE() {
-        model.addTransition(new Transition("transition").setSources(stateE).setDestination(stateE));
+        model.addTransition(Transition.createDefault("transition").setSources(stateE).setDestination(stateE));
     }
 }

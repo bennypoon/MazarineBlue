@@ -15,16 +15,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.mazarineblue.mbt.gui.model;
+package org.mazarineblue.mbt.gui.exceptions;
 
-import java.io.Serializable;
+import org.mazarineblue.mbt.gui.model.State;
 
-public interface ModelElement<T extends ModelElement>
-        extends Serializable {
+/**
+ * A {@code SourceStateRequiredException} is a {@link Transition} when a source
+ * state is not found during validation. Validation usually takes place when a
+ * {@code Transition} is added to a {@link Model}.
+ *
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ */
+public class StateIsUsedException
+        extends ModelBasedException {
 
-    public String getName();
+    private static final long serialVersionUID = 1L;
 
-    public T setAction(String action);
-
-    public String getAction();
+    public StateIsUsedException(State state) {
+        super("state=" + state);
+    }
 }

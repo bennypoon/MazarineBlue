@@ -51,11 +51,11 @@ public class TransitionDialogRunner {
         //</editor-fold>
 
         Collection<State> states = new ArrayList<>(4);
-        states.add(new State("State A").addViews("View 1", "View 2"));
-        states.add(new State("State B").addViews("View 1"));
-        states.add(new State("State C").addViews("View 2"));
-        states.add(new State("State D").addViews("View 3"));
-        states.add(new State("State E"));
+        states.add(State.createDefault("State A").addViews("View 1", "View 2"));
+        states.add(State.createDefault("State B").addViews("View 1"));
+        states.add(State.createDefault("State C").addViews("View 2"));
+        states.add(State.createDefault("State D").addViews("View 3"));
+        states.add(State.createDefault("State E"));
 
         /* Create and display the dialog */
         TransitionDialog dialog = new TransitionDialog(new JFrame(), "Test Transtion Dialog");
@@ -67,5 +67,8 @@ public class TransitionDialogRunner {
             }
         });
         invokeLater(() -> dialog.setVisible(true));
+    }
+
+    private TransitionDialogRunner() {
     }
 }

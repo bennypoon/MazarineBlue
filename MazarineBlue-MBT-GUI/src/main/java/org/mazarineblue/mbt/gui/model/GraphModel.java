@@ -35,11 +35,18 @@ public interface GraphModel
     }
 
     /**
-     * Returns all views that
+     * Returns all views on this model.
      *
-     * @return a collection of views
+     * @return a collection of views.
      */
     public Collection<String> getViews();
+
+    /**
+     * All the states this model holds.
+     *
+     * @return a list 
+     */
+    public List<State> getAllStates();
 
     /**
      * Returns a selection of states of those who have the specified name.
@@ -49,6 +56,8 @@ public interface GraphModel
      */
     public List<State> getStatesByName(String name);
 
+    public List<State> getStatesByView(String view);
+
     /**
      * Add the specified {@code states} to the model.
      *
@@ -56,7 +65,11 @@ public interface GraphModel
      */
     public void addState(State... states);
 
-    public List<State> getStatesByView(String view);
+    public void replaceState(State oldState, State newState);
+
+    public void removeState(State state);
+
+    public List<Transition> getAllTransition();
 
     /**
      * Returns a selection of transitions of those who have the specified name.
@@ -64,15 +77,17 @@ public interface GraphModel
      * @param name the name to filter on.
      * @return a list of all the states with the specified name.
      */
-    public List<Transition> getTransitionByName(String name);
+    public List<Transition> getTransitionsByName(String name);
 
     public List<Transition> getTransitionsByView(String view);
 
     public void addTransition(Transition... transition);
 
-    public List<Transition> getTransitions(String view);
+    public void removeTransition(Transition transition);
 
     public void addModelListener(ModelListener l);
+
+    public void replaceTransition(Transition oldTransition, Transition newTransition);
 
     public void removeModelListener(ModelListener l);
 }

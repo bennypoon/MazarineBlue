@@ -367,9 +367,9 @@ public class TransitonDialogTest
         transitionPage.beforeStateValidationLabel.setVisible(true);
         transitionPage.afterStateValidationLabel.setVisible(true);
 
-        State stateA = new State("State A").addViews("View 1", "View 2").setAction("State Action");
-        State stateB = new State("State B").addViews("View 1", "View 2").setAction("State Action");
-        Transition transition = new Transition("Name").setSources(stateA, stateB).setDestination(stateA);
+        State stateA = State.createDefault("State A").addViews("View 1", "View 2").setAction("State Action");
+        State stateB = State.createDefault("State B").addViews("View 1", "View 2").setAction("State Action");
+        Transition transition = Transition.createDefault("Name").setSources(stateA, stateB).setDestination(stateA);
         transition.setGuard("Guard").setBusinessValue(BUSINESS_VALUE_MAX).setAction("Transition Action");
         dialog.setOptions(asList(stateA, stateB));
         dialog.setOld(transition);
@@ -393,8 +393,8 @@ public class TransitonDialogTest
 
     @Test
     public void setOptions() {
-        State stateA = new State("State A").addViews("View 1", "View 2").setAction("State Action");
-        State stateB = new State("State B").addViews("View 1", "View 2").setAction("State Action");
+        State stateA = State.createDefault("State A").addViews("View 1", "View 2").setAction("State Action");
+        State stateB = State.createDefault("State B").addViews("View 1", "View 2").setAction("State Action");
         dialog.setOptions(asList(stateA, stateB));
 
         assertEquals(2, transitionPage.beforeStateComboBox.getItemCount());

@@ -40,6 +40,7 @@ public class StatePage
     public final JButton acceptButton;
     public final JButton rejectButton;
 
+    @SuppressWarnings("unchecked")
     public StatePage(StateDialog dialog) {
         this.dialog = dialog;
         nameTextField = fetchChildNamed(dialog, "nameTextField", JTextField.class);

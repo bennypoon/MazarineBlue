@@ -51,6 +51,34 @@ public class TableModelConvertor
         return model;
     }
 
+    List<State> getStates() {
+        return model.getStatesByView(view);
+    }
+
+    List<Transition> getTransitions() {
+        return model.getTransitionsByView(view);
+    }
+
+    void replace(State oldState, State newState) {
+        model.replaceState(oldState, newState);
+        fireTableStructureChanged();
+    }
+
+    void replace(Transition oldTransition, Transition newTransition) {
+        model.replaceTransition(oldTransition, newTransition);
+        fireTableDataChanged();
+    }
+
+    void remove(State state) {
+        model.removeState(state);
+        fireTableStructureChanged();
+    }
+
+    void remove(Transition transition) {
+        model.removeTransition(transition);
+        fireTableDataChanged();
+    }
+
     public void setView(String view) {
         this.view = view;
         fireTableStructureChanged();
@@ -62,7 +90,7 @@ public class TableModelConvertor
 
     @Override
     public int getRowCount() {
-        return model.getTransitions(view).size();
+        return model.getTransitionsByView(view).size();
     }
 
     @Override
@@ -79,7 +107,7 @@ public class TableModelConvertor
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (rowIndex < 0)
             return getHeaderValueAt(columnIndex);
-        List<Transition> transitions = model.getTransitions(view);
+        List<Transition> transitions = model.getTransitionsByView(view);
         Transition t = transitions.get(rowIndex);
         return isFirstColumn(columnIndex) ? t
                 : columnContainsDestinationState(columnIndex, t) ? t.getDestination()

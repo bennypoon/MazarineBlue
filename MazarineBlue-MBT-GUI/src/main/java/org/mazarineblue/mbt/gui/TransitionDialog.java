@@ -141,12 +141,13 @@ public class TransitionDialog
     private Transition getNewTransition() {
         if (!verifyAcceptInput())
             return null;
-        Transition newTransition = new Transition(nameTextField.getText());
+        Transition newTransition = Transition.createDefault(nameTextField.getText());
         newTransition.setGuard(guardTextField.getText());
         newTransition.setBusinessValue(businessValueSlider.getValue());
         newTransition.setSources(convert(beforeStateListPanel));
         newTransition.setDestination((State) afterStateComboBox.getSelectedItem());
         newTransition.setAction(actionTextArea.getText());
+        newTransition.verify();
         return newTransition;
     }
     //</editor-fold>

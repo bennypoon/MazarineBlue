@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.swing.event.EventListenerList;
+import org.mazarineblue.mbt.gui.exceptions.StateIsUsedException;
 
 class DefaultModel
         implements GraphModel {
@@ -42,29 +43,32 @@ class DefaultModel
 
     @Override
     public Collection<String> getViews() {
-        Set<String> views = new TreeSet<>();
-        states.stream().forEach(s -> views.addAll(s.getViews()));
-        return Collections.unmodifiableCollection(views);
+        return states.stream()
+                .map(State::getViews)
+                .collect(TreeSet::new, Set::addAll, Set::addAll);
+    }
+
+    @Override
+    public List<State> getAllStates() {
+        return states.stream()
+                .map(s -> new UnmodifiableState(s))
+                .collect(ArrayList::new, List::add, List::addAll);
     }
 
     @Override
     public List<State> getStatesByName(String name) {
         return states.stream()
-                .filter(t -> t.getName().equals(name))
+                .filter(s -> s.getName().equals(name))
+                .map(s -> new UnmodifiableState(s))
                 .collect(ArrayList::new, List::add, List::addAll);
     }
 
     @Override
     public List<State> getStatesByView(String view) {
-        return view == null || view.isEmpty()
-                ? Collections.unmodifiableList(states)
-                : findStatesWithView(view);
-    }
-
-    private List<State> findStatesWithView(String view) {
-        List<State> list = new ArrayList<>(4);
-        states.stream().filter(s -> s.containsView(view)).forEach(list::add);
-        return list;
+        return states.stream()
+                .filter(s -> s.containsView(view))
+                .map(s -> new UnmodifiableState(s))
+                .collect(ArrayList::new, List::add, List::addAll);
     }
 
     @Override
@@ -81,9 +85,56 @@ class DefaultModel
     }
 
     @Override
-    public List<Transition> getTransitionByName(String name) {
+    public void replaceState(State oldState, State newState) {
+        StateConvertor convertor = new StateConvertor(states, oldState, newState);
+        verifyStates(convertor);
+        verifyTransition(convertor);
+        convert(oldState).copy(newState);
+    }
+
+    @Override
+    public void removeState(State state) {
+        if (transitions.stream().noneMatch(t -> t.contains(state)))
+            states.remove(convert(state));
+        else
+            throw new StateIsUsedException(state);
+    }
+
+    void verifyStates(StateConvertor convertor) {
+        states.stream()
+                .map(s -> convertor.convert(s))
+                .forEach(State::verify);                
+    }
+
+    void verifyTransition(StateConvertor convertor) {
+        transitions.stream()
+                .map(t -> Transition.createDefault(t, convertor))
+                .forEach(Transition::verify);
+    }
+
+    private State convert(State s) {
+        return states.get(states.indexOf(s));
+    }
+
+    @Override
+    public List<Transition> getAllTransition() {
+        return transitions.stream()
+                .map(t -> new UnmodifiableTransition(t))
+                .collect(ArrayList::new, List::add, List::addAll);
+    }
+
+    @Override
+    public List<Transition> getTransitionsByName(String name) {
         return transitions.stream()
                 .filter(t -> t.getName().equals(name))
+                .map(t -> new UnmodifiableTransition(t))
+                .collect(ArrayList::new, List::add, List::addAll);
+    }
+
+    @Override
+    public List<Transition> getTransitionsByView(String view) {
+        return transitions.stream()
+                .filter(t -> t.containsView(view))
                 .collect(ArrayList::new, List::add, List::addAll);
     }
 
@@ -95,27 +146,23 @@ class DefaultModel
         fireAddedTransitions(Collections.unmodifiableList(list));
     }
 
+    @Override
+    public void replaceTransition(Transition oldTransition, Transition newTransition) {
+        convert(oldTransition).copy(newTransition, new StateConvertor(states));
+    }
+
+    @Override
+    public void removeTransition(Transition transition) {
+        transitions.remove(convert(transition));
+    }
+
+    private Transition convert(Transition s) {
+        return transitions.get(transitions.indexOf(s));
+    }
+
     private void fireAddedTransitions(List<Transition> list) {
         asList(listeners.getListeners(ModelListener.class)).stream()
                 .forEach(l -> l.addedTransitions(list));
-    }
-
-    @Override
-    public List<Transition> getTransitions(String view) {
-        return Collections.unmodifiableList(view == null || view.isEmpty() ? transitions : findTransitionsWithView(view));
-    }
-
-    @Override
-    public List<Transition> getTransitionsByView(String view) {
-        return view == null || view.isEmpty()
-                ? Collections.unmodifiableList(transitions)
-                : findTransitionsWithView(view);
-    }
-
-    private List<Transition> findTransitionsWithView(String view) {
-        List<Transition> list = new ArrayList<>(4);
-        transitions.stream().filter(t -> t.containsView(view)).forEach(list::add);
-        return list;
     }
 
     @Override

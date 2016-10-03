@@ -177,7 +177,7 @@ public class StateDialogTest
 
     @Test
     public void setOld() {
-        statePage.dialog.setOld(new State("Name").addViews("View 1", "View 2").setAction("Action"));
+        statePage.dialog.setOld(State.createDefault("Name").addViews("View 1", "View 2").setAction("Action"));
         assertEquals("Name", statePage.nameTextField.getText());
         assertFalse(statePage.nameValidationLabel.isVisible());
         assertFalse(statePage.viewValidationLabel.isVisible());

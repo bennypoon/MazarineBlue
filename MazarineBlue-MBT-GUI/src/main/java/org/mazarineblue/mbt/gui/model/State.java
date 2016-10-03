@@ -17,46 +17,27 @@
  */
 package org.mazarineblue.mbt.gui.model;
 
-import java.util.ArrayList;
-import static java.util.Arrays.asList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
-public class State
+public interface State
         extends ModelElement<State> {
 
-    private static final long serialVersionUID = 1L;
-
-    private final ArrayList<String> views = new ArrayList<>(4);
-
-    public State(String name) {
-        super(name);
+    public static State createDefault(String name) {
+        return new StateImpl(name);
     }
 
-    public void verify() {
-        // @TODO implement verification here
-    }
+    public void verify();
 
-    public State addViews(String view) {
-        views.add(view);
-        return this;
-    }
+    public void copy(State newState);
 
-    public State addViews(String... views) {
-        this.views.addAll(asList(views));
-        return this;
-    }
+    public State addViews(String view);
 
-    public State addViews(Collection<String> views) {
-        this.views.addAll(views);
-        return this;
-    }
+    public State addViews(String... views);
 
-    public Collection<String> getViews() {
-        return Collections.unmodifiableCollection(views);
-    }
+    public State addViews(Collection<String> views);
 
-    boolean containsView(String view) {
-        return views.contains(view);
-    }
+    public List<String> getViews();
+
+    public boolean containsView(String view);
 }
