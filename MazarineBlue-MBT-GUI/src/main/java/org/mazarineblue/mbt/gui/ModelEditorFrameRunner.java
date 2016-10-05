@@ -19,8 +19,6 @@ package org.mazarineblue.mbt.gui;
 
 import static java.awt.EventQueue.invokeLater;
 import static java.util.logging.Logger.getLogger;
-import org.mazarineblue.mbt.gui.ExceptionDialog;
-import org.mazarineblue.mbt.gui.ModelEditorFrame;
 import org.mazarineblue.mbt.gui.model.GraphModel;
 import org.mazarineblue.mbt.gui.model.State;
 import org.mazarineblue.mbt.gui.model.Transition;

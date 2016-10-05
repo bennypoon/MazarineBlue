@@ -18,7 +18,7 @@
 package org.mazarineblue.mbt.gui.model;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 /**
  * A {@code State} represent a state that the software may occupy.
@@ -65,7 +65,7 @@ public interface State
      *
      * @return the views this state appears in.
      */
-    public List<String> getViews();
+    public Set<String> getViews();
 
     /**
      * Test if this state appears in the specified view.

@@ -18,7 +18,7 @@
 package org.mazarineblue.mbt.gui.model;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 class UnmodifiableState
         extends UnmodifiableModelElement<State>
@@ -54,7 +54,7 @@ class UnmodifiableState
     }
 
     @Override
-    public List<String> getViews() {
+    public Set<String> getViews() {
         return adaptee.getViews();
     }
 

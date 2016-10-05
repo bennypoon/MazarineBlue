@@ -99,7 +99,7 @@ public class ModelEditorFrame
 
         viewLabel.setText("View");
 
-        viewComboBox.setModel(convert(model));
+        viewComboBox.setModel(getViewComboBoxModel(model));
         viewComboBox.setMinimumSize(new java.awt.Dimension(100, 20));
         viewComboBox.setName("viewComboBox"); // NOI18N
         viewComboBox.setPreferredSize(new java.awt.Dimension(100, 20));
@@ -179,13 +179,14 @@ public class ModelEditorFrame
     }// </editor-fold>//GEN-END:initComponents
 
     //<editor-fold defaultstate="collapsed" desc="Helper methods for Generated Code">
-    private ComboBoxModel<String> convert(GraphModel model) {
+    private ComboBoxModel<String> getViewComboBoxModel(GraphModel model) {
         Collection<String> views = model.getViews();
         DefaultComboBoxModel<String> swingModel = new DefaultComboBoxModel<>(views.toArray(new String[views.size()]));
         model.addModelListener(new ModelListener() {
             @Override
             public void addedStates(List<State> states) {
                 Collection<String> views = model.getViews();
+                // @TODO look here:
                 swingModel.removeAllElements();
                 views.stream().forEach(swingModel::addElement);
             }
@@ -199,6 +200,8 @@ public class ModelEditorFrame
     //</editor-fold>
 
     private void viewComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewComboBoxActionPerformed
+        // @TODO Remove the next line
+        Object selectedItem = viewComboBox.getSelectedItem();
         convertor.setView((String) viewComboBox.getSelectedItem());
     }//GEN-LAST:event_viewComboBoxActionPerformed
 

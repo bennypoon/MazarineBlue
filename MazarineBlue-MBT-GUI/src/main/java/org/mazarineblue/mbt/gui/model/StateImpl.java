@@ -17,12 +17,12 @@
  */
 package org.mazarineblue.mbt.gui.model;
 
-import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 class StateImpl
         extends ModelElementImpl<State>
@@ -30,7 +30,7 @@ class StateImpl
 
     private static final long serialVersionUID = 1L;
 
-    private List<String> views = new ArrayList<>(4);
+    private Set<String> views = new TreeSet<>();
 
     StateImpl(String name) {
         super(name);
@@ -60,13 +60,14 @@ class StateImpl
     }
 
     @Override
-    public List<String> getViews() {
-        return Collections.unmodifiableList(views);
+    public Set<String> getViews() {
+        return Collections.unmodifiableSet(views);
     }
 
     @Override
     public boolean containsView(String view) {
-        return views.contains(view);
+        // @TODO break point: view == null
+        return view == null || views.contains(view);
     }
 
     @Override

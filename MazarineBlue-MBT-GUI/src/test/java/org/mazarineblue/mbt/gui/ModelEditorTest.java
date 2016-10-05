@@ -18,6 +18,7 @@
 package org.mazarineblue.mbt.gui;
 
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
+import static java.awt.EventQueue.invokeAndWait;
 import java.awt.Point;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -26,6 +27,7 @@ import javax.swing.JTable;
 import static javax.swing.SwingUtilities.convertPointToScreen;
 import javax.swing.table.TableColumnModel;
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,8 +40,6 @@ import org.mazarineblue.mbt.gui.pages.StatePage;
 import org.mazarineblue.mbt.gui.pages.TransitionPage;
 import static org.mazarineblue.swing.SwingUtil.waitUntilFalse;
 import static org.mazarineblue.swing.SwingUtil.waitUntilTrue;
-import static java.awt.EventQueue.invokeAndWait;
-import static org.junit.Assert.assertEquals;
 
 @RunWith(HierarchicalContextRunner.class)
 public class ModelEditorTest {
@@ -176,6 +176,8 @@ public class ModelEditorTest {
             StatePage stateA = mainPage.addState();
             stateA.nameTextField.setText(nameStateA);
             stateA.viewComboBox.setSelectedItem(view);
+            // @TODO remove the next line
+            Object selectedItem = stateA.viewComboBox.getSelectedItem();
             stateA.addViewButton.doClick();
             stateA.actionTextArea.setText("Test Action");
             stateA.acceptButton.doClick();
@@ -196,13 +198,15 @@ public class ModelEditorTest {
     public class InitializedModel {
 
         @Before
-        public void setup() {
+        public void setup()
+                throws InterruptedException, InvocationTargetException {
             State stateA = State.createDefault(NAME_STATE_A).addViews(VIEW1);
             State stateB = State.createDefault(NAME_STATE_B).addViews(VIEW1);
             State stateC = State.createDefault(NAME_STATE_C).addViews(VIEW1);
             Transition t = Transition.createDefault("Transition 1").setSources(stateA).setDestination(stateB);
             model.addState(stateA, stateB, stateC);
             model.addTransition(t);
+            invokeAndWait(() -> mainPage.frame.setVisible(true));
         }
 
         @Test

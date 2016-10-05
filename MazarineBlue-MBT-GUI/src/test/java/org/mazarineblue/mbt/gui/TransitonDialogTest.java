@@ -17,6 +17,7 @@
  */
 package org.mazarineblue.mbt.gui;
 
+import static java.awt.EventQueue.invokeLater;
 import static java.util.Arrays.asList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
@@ -235,6 +236,7 @@ public class TransitonDialogTest
     @Test
     public void afterState_StateABC_StateB_Rainy()
             throws TimeoutException {
+        invokeLater(() -> dialog.setVisible(true));
         addBeforeState(STATE_A_INDEX);
         addBeforeState(STATE_B_INDEX);
         addBeforeState(STATE_C_INDEX);
