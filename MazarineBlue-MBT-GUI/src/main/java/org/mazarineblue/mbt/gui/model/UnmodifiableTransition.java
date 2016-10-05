@@ -39,8 +39,18 @@ class UnmodifiableTransition
     }
 
     @Override
-    public boolean containsView(String view) {
-        return adaptee.containsView(view);
+    public Transition copy(Transition transition, StateConvertor convertor) {
+        throw new UnsupportedOperationException("");
+    }
+
+    @Override
+    public boolean containsSourceWithView(String view) {
+        return adaptee.containsSourceWithView(view);
+    }
+
+    @Override
+    public boolean containsDestinationWithView(String view) {
+        return adaptee.containsDestinationWithView(view);
     }
 
     @Override
@@ -101,10 +111,5 @@ class UnmodifiableTransition
     @Override
     public boolean isDestination(State state) {
         return adaptee.isDestination(state);
-    }
-
-    @Override
-    public void copy(Transition transition, StateConvertor convertor) {
-        throw new UnsupportedOperationException("");
     }
 }

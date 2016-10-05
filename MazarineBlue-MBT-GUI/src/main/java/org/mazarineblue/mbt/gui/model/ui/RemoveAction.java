@@ -17,7 +17,6 @@
  */
 package org.mazarineblue.mbt.gui.model.ui;
 
-import static java.awt.EventQueue.invokeLater;
 import javax.swing.JFrame;
 import org.mazarineblue.mbt.gui.StateDialog;
 import org.mazarineblue.mbt.gui.TransitionDialog;
@@ -58,7 +57,7 @@ class RemoveAction
         dialog.setOptions(getViews());
         dialog.setOld((State) value);
         dialog.setAcceptAction(this::remove);
-        invokeLater(() -> dialog.setVisible(true));
+        dialog.setVisible(true);
     }
 
     private void removeTransition(Object value) {
@@ -66,6 +65,6 @@ class RemoveAction
         dialog.setOptions(getStates());
         dialog.setOld((Transition) value);
         dialog.setAcceptAction(this::remove);
-        invokeLater(() -> dialog.setVisible(true));
+        dialog.setVisible(true);
     }
 }

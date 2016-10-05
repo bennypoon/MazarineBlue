@@ -42,9 +42,10 @@ class StateImpl
     }
 
     @Override
-    public void copy(State newState) {
-        super.copy(newState);
-        views = newState.getViews();
+    public State copy(State other) {
+        super.copy(other);
+        views = other.getViews();
+        return this;
     }
 
     @Override

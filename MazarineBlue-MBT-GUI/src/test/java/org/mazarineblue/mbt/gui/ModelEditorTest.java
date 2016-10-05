@@ -68,7 +68,7 @@ public class ModelEditorTest {
             for (int column = 0; column < expected[row].length; ++column)
                 assertEquals(expected[row][column], getValue(table, row, column));
     }
-    
+
     private static Object getValue(JTable table, int row, int column) {
         if (row == 0)
             return table.getColumn(table.getColumnName(column)).getHeaderValue();
@@ -109,7 +109,8 @@ public class ModelEditorTest {
             State stateB = State.createDefault(NAME_STATE_B).addViews(VIEW1);
             State stateC = State.createDefault(NAME_STATE_C).addViews(VIEW1);
             model.addState(stateA, stateB, stateC);
-            model.addTransition(Transition.createDefault(NAME_TRANSITION1).setSources(stateA, stateB).setDestination(stateC));
+            model.addTransition(Transition.createDefault(NAME_TRANSITION1).setSources(stateA, stateB).setDestination(
+                    stateC));
 
             assertEquals(1, mainPage.viewComboBox.getItemCount());
             assertEquals(0, mainPage.viewComboBox.getSelectedIndex());
@@ -152,7 +153,8 @@ public class ModelEditorTest {
         }
 
         @Test
-        public void addNewState() {
+        public void addNewState()
+                throws TimeoutException {
             addNewState(NAME_STATE_A, VIEW1);
 
             assertEquals(VIEW1, mainPage.viewComboBox.getSelectedItem());
@@ -160,7 +162,8 @@ public class ModelEditorTest {
         }
 
         @Test
-        public void addNewTransition() {
+        public void addNewTransition()
+                throws TimeoutException {
             addNewState(NAME_STATE_A, VIEW1);
             addNewState(NAME_STATE_B, VIEW1);
             addNewTransition(NAME_TRANSITION1, NAME_STATE_A, NAME_STATE_B);
@@ -172,7 +175,8 @@ public class ModelEditorTest {
             });
         }
 
-        private void addNewState(String nameStateA, String view) {
+        private void addNewState(String nameStateA, String view)
+                throws TimeoutException {
             StatePage stateA = mainPage.addState();
             stateA.nameTextField.setText(nameStateA);
             stateA.viewComboBox.setSelectedItem(view);
@@ -183,7 +187,8 @@ public class ModelEditorTest {
             stateA.acceptButton.doClick();
         }
 
-        private void addNewTransition(String nameTransition, String source, String destination) {
+        private void addNewTransition(String nameTransition, String source, String destination)
+                throws TimeoutException {
             TransitionPage transitionPage = mainPage.addTransition();
             transitionPage.nameTextField.setText(nameTransition);
             transitionPage.businessValueSlider.setValue(BUSINESS_VALUE_MAX);
@@ -304,7 +309,7 @@ public class ModelEditorTest {
 
         @Test
         public void editState()
-                throws InterruptedException, InvocationTargetException {
+                throws InterruptedException, InvocationTargetException, TimeoutException {
             mainPage.popupMenu.setLocation(convertTableCoordinates(mainPage.table, -1, 2));
             invokeAndWait(() -> mainPage.popupMenu.setVisible(true));
 
@@ -321,10 +326,10 @@ public class ModelEditorTest {
                 {NAME_TRANSITION1, NAME_STATE_D, NA, NA}
             });
         }
-        
+
         @Test
         public void removeState()
-                throws InterruptedException, InvocationTargetException {
+                throws InterruptedException, InvocationTargetException, TimeoutException {
             mainPage.popupMenu.setLocation(convertTableCoordinates(mainPage.table, -1, 3));
             invokeAndWait(() -> mainPage.popupMenu.setVisible(true));
 
@@ -340,7 +345,7 @@ public class ModelEditorTest {
 
         @Test
         public void editTransition()
-                throws InterruptedException, InvocationTargetException {
+                throws InterruptedException, InvocationTargetException, TimeoutException {
             mainPage.popupMenu.setLocation(convertTableCoordinates(mainPage.table, 0, 0));
             invokeAndWait(() -> mainPage.popupMenu.setVisible(true));
 
@@ -360,7 +365,7 @@ public class ModelEditorTest {
 
         @Test
         public void removeTransition()
-                throws InterruptedException, InvocationTargetException {
+                throws InterruptedException, InvocationTargetException, TimeoutException {
             mainPage.popupMenu.setLocation(convertTableCoordinates(mainPage.table, 0, 0));
             invokeAndWait(() -> mainPage.popupMenu.setVisible(true));
 
@@ -375,7 +380,7 @@ public class ModelEditorTest {
 
         @Test
         public void addStateSource()
-                throws InterruptedException, InvocationTargetException {
+                throws InterruptedException, InvocationTargetException, TimeoutException {
             invokeAndWait(() -> mainPage.frame.setVisible(true));
 
             mainPage.popupMenu.setLocation(convertTableCoordinates(mainPage.table, 0, 2));

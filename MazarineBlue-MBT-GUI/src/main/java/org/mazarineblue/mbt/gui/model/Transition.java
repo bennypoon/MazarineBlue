@@ -29,12 +29,24 @@ import java.util.List;
 public interface Transition
         extends ModelElement<Transition> {
 
+    /**
+     * Creates a {@code transition} with the specified name.
+     *
+     * @param name the name of the {@code transition}.
+     * @return the {@code transition} created.
+     */
     public static Transition createDefault(String name) {
         return new TransitionImpl(name);
     }
 
-    public static Transition createDefault(Transition t, StateConvertor convertor) {
-        return new TransitionImpl(t, convertor);
+    /**
+     * Creates a deep copy of the specified {@code transition}.
+     *
+     * @param other the {@code transition} to make a deep copy off.
+     * @return the {@code transition} created.
+     */
+    public static Transition createDefault(Transition other, StateConvertor convertor) {
+        return new TransitionImpl(other.getName()).copy(other, convertor);
     }
 
     public void verify();
@@ -42,33 +54,129 @@ public interface Transition
     /**
      * Deep copies the content of the other state into this state.
      *
-     * @param other the state to perform the deep copy on.
+     * @param other     the {@code transition} to perform the deep copy on.
+     * @param convertor the convertor to use to get the original
+     *                  {@code State states}.
+     * @return the updated {@code transition}.
      */
-    public void copy(Transition transition, StateConvertor convertor);
+    public Transition copy(Transition other, StateConvertor convertor);
 
-    public boolean containsView(String view);
+    /**
+     * Test if all source {@link State states} contains the specified view.
+     *
+     * @param view the specified view to look for.
+     * @return {@code true} if the {@code transition} source {@code State states}
+     *         contains the specified view.
+     */
+    public boolean containsSourceWithView(String view);
 
+    /**
+     * Test if the destination {@link State state} contains the specified view.
+     *
+     * @param view the specified view to look for.
+     * @return {@code true} if the {@code transition} destination {@code State}
+     *         contains the specified view.
+     */
+    public boolean containsDestinationWithView(String view);
+
+    /**
+     * Gets the guard expression for this {@code transition}.
+     *
+     * @return the associated guard expression of this {@code transition}.
+     */
     public String getGuard();
 
+    /**
+     * Sets the specified guard expression for this {@code transition}.
+     *
+     * @param guard the guard expression to associated with this
+     *              {@code transition}.
+     * @return the updated {@code transition}.
+     */
     public Transition setGuard(String guard);
 
+    /**
+     * Gets the business value associated with for this {@code transition}.
+     *
+     * @return the associated business value of this {@code transition}.
+     */
     public int getBusinessValue();
 
+    /**
+     * Sets the specified business value for this {@code transition}.
+     *
+     * @param value the business value to be associated with this {@code transition}.
+     * @return the updated {@code transition}.
+     */
     public Transition setBusinessValue(int value);
 
+    /**
+     * Fetches the source {@link State states} from which a {@code transition} can be
+     * made to the destination {@code state}.
+     *
+     * @return the source {@code state} associated with this {@code transition}.
+     */
     public List<State> getSources();
 
+    /**
+     * Sets the source {@link State states} from which a {@code transition} can be
+     * made to the destination {@code state}.
+     *
+     * @param states the source {@code states} to set.
+     * @return the updated {@code transition}.
+     */
     public Transition setSources(State... states);
 
-    public Transition setSources(Collection<State> collection);
+    /**
+     * Sets the source {@link State states} from which a {@code transition} can be
+     * made to the destination {@code state}.
+     *
+     * @param states the source {@link State states} to set.
+     * @return the updated {@code transition}.
+     */
+    public Transition setSources(Collection<State> states);
 
+    /**
+     * Fetches the destination {@link State state} to which a {@code transition} can be
+     * made from any of the source {@code states}.
+     *
+     * @return the source {@code state} associated with this {@code transition}.
+     */
     public State getDestination();
 
+    /**
+     * Sets the destination {@link State states} from which a {@code transition} can be
+     * made to the source {@code states}.
+     *
+     * @param state the destination {@code states} to set.
+     * @return the updated {@code transition}.
+     */
     public Transition setDestination(State state);
 
+    /**
+     * Test if the specified {@link State state} is used in this {@code transition} as
+     * a source or destination.
+     *
+     * @param state the {@code state} to look for.
+     * @return {@code true} if the {@code state} is found.
+     */
     public boolean contains(State state);
 
+    /**
+     * Test if the specified {@link State state} is used in this {@code transition} as
+     * a source.
+     *
+     * @param state the {@code state} to look for.
+     * @return {@code true} if the {@code state} is found.
+     */
     public boolean isSource(State state);
 
+    /**
+     * Test if the specified {@link State state} is used in this {@code transition} as
+     * a destination.
+     *
+     * @param state the {@code state} to look for.
+     * @return {@code true} if the {@code state} is found.
+     */
     public boolean isDestination(State state);
 }

@@ -86,7 +86,7 @@ class DefaultModel
 
     @Override
     public void replaceState(State oldState, State newState) {
-        StateConvertor convertor = new StateConvertor(states, oldState, newState);
+        StateConvertor convertor = new StateConvertor(states, s -> s.equals(oldState) ? newState : s);
         verifyStates(convertor);
         verifyTransition(convertor);
         convert(oldState).copy(newState);
@@ -134,7 +134,7 @@ class DefaultModel
     @Override
     public List<Transition> getTransitionsByView(String view) {
         return transitions.stream()
-                .filter(t -> t.containsView(view))
+                .filter(t -> t.containsSourceWithView(view) && t.containsDestinationWithView(view))
                 .collect(ArrayList::new, List::add, List::addAll);
     }
 

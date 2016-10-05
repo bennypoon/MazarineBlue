@@ -30,8 +30,24 @@ import java.util.Set;
 public interface State
         extends ModelElement<State> {
 
+    /**
+     * Creates a {@code state} with the specified name.
+     *
+     * @param name the name of the {@code state}.
+     * @return the {@code state} created.
+     */
     public static State createDefault(String name) {
         return new StateImpl(name);
+    }
+
+    /**
+     * Creates a deep copy of the specified {@code state}.
+     *
+     * @param other the {@code state} to make a deep copy off.
+     * @return the {@code state} created.
+     */
+    public static State createDefault(State other) {
+        return new StateImpl(other.getName()).copy(other);
     }
 
     public void verify();
@@ -40,8 +56,9 @@ public interface State
      * Deep copies the content of the other state into this state.
      *
      * @param other the state to perform the deep copy on.
+     * @return the updated state.
      */
-    public void copy(State other);
+    public State copy(State other);
 
     /**
      * Appends the specified views to this state.

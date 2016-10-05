@@ -46,14 +46,6 @@ class TransitionImpl
         super(name);
     }
 
-    TransitionImpl(Transition t, StateConvertor convertor) {
-        super(t);
-        guard = t.getGuard();
-        businessValue = t.getBusinessValue();
-        sources = convertor.convert(t.getSources());
-        destination = convertor.convert(t.getDestination());
-    }
-
     @Override
     public void verify() {
         if (sources == null)
@@ -66,17 +58,23 @@ class TransitionImpl
     }
 
     @Override
-    public void copy(Transition t, StateConvertor convertor) {
-        super.copy(t);
-        guard = t.getGuard();
-        businessValue = t.getBusinessValue();
-        sources = convertor.convert(t.getSources());
-        destination = convertor.convert(t.getDestination());
+    public Transition copy(Transition other, StateConvertor convertor) {
+        super.copy(other);
+        guard = other.getGuard();
+        businessValue = other.getBusinessValue();
+        sources = convertor.convert(other.getSources());
+        destination = convertor.convert(other.getDestination());
+        return this;
     }
 
     @Override
-    public boolean containsView(String view) {
-        return sources.stream().noneMatch(s -> !s.containsView(view)) && destination.containsView(view);
+    public boolean containsSourceWithView(String view) {
+        return sources.stream().noneMatch(s -> !s.containsView(view));
+    }
+    
+    @Override
+    public boolean containsDestinationWithView(String view) {
+        return destination.containsView(view);
     }
 
     @Override
@@ -105,7 +103,9 @@ class TransitionImpl
 
     @Override
     public List<State> getSources() {
-        return Collections.unmodifiableList(sources);
+        return Collections.unmodifiableList(sources.stream()
+                .map(s -> new UnmodifiableState(s))
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
     }
 
     @Override
@@ -115,14 +115,14 @@ class TransitionImpl
     }
 
     @Override
-    public TransitionImpl setSources(Collection<State> collection) {
-        sources = new ArrayList<>(collection);
+    public TransitionImpl setSources(Collection<State> states) {
+        this.sources = new ArrayList<>(states);
         return this;
     }
 
     @Override
     public State getDestination() {
-        return destination;
+        return new UnmodifiableState(destination);
     }
 
     @Override

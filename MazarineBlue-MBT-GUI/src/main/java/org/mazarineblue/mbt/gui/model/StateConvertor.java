@@ -19,36 +19,81 @@ package org.mazarineblue.mbt.gui.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
-public class StateConvertor {
+/**
+ * A {@code StateConvertor} is an object that is able to convert a given state
+ * into another equal state contained within the convertor.
+ * 
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ */
+class StateConvertor {
 
     private final List<State> states;
-    private final State oldState;
-    private final State newState;
+    private final List<State> cached = new ArrayList<>();
+    private final Function<State, State> mapper;
 
+    /**
+     * Sets up a {@code StateConvertor} with a set of states to use as
+     * replacements.
+     *
+     * @param states the states to use as replacements.
+     */
     StateConvertor(List<State> states) {
         this.states = states;
-        this.oldState = null;
-        this.newState = null;
+        mapper = s -> s;
     }
 
-    StateConvertor(List<State> states, State oldState, State newState) {
+    /**
+     * Sets up a {@code StateConvertor} with a set of states to use as
+     * replacements and a mapper function to apply to each convertion.
+     *
+     * @param states the states to use as replacements.
+     * @param mapper a function to apply to each convertion.
+     */
+    StateConvertor(List<State> states, Function<State, State> mapper) {
         this.states = states;
-        this.oldState = oldState;
-        this.newState = newState;
+        this.mapper = mapper;
     }
 
+    /**
+     * Converts the specified {@code states} to another {@code state}, using
+     * first the mapper function and then looking for an equal {@code state}.
+     *
+     * @param list a list of {@code states} to convert.
+     * @return the converted list of {@code states}.
+     */
     List<State> convert(List<State> list) {
         return list.stream()
-                .map(s -> s.equals(oldState) ? newState : convertHelper(s))
+                .map(mapper)
+                .map(s -> convertHelper(s))
                 .collect(ArrayList::new, List::add, List::addAll);
     }
 
+    /**
+     * Converts the specified {@code state} to another {@code state}, using
+     * first the mapper function and then looking for an equal {@code state}.
+     * 
+     * @param s a {@code state} to convert.
+     * @return the converted {@code state}.
+     */
     State convert(State s) {
-        return s.equals(oldState) ? newState : convertHelper(s);
+        return convertHelper(mapper.apply(s));
     }
 
-    private State convertHelper(State s) {
-        return states.get(states.indexOf(s));
+    private State convertHelper(State state) {
+        int index = states.indexOf(state);
+        return index >= 0 ? states.get(index) : createOrFetchCopy(state);
+    }
+
+    private State createOrFetchCopy(State state) {
+        int index = cached.indexOf(state);
+        return index >= 0 ? cached.get(index) : createCopy(state);
+    }
+
+    private State createCopy(State state) {
+        State s = State.createDefault(state);
+        cached.add(s);
+        return s;
     }
 }

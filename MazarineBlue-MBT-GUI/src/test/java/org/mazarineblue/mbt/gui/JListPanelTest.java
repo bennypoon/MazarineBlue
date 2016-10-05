@@ -28,7 +28,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
-import org.mazarineblue.mbt.gui.list.InvalidContentException;
+import org.mazarineblue.mbt.gui.exceptions.InvalidContentException;
 import org.mazarineblue.mbt.gui.list.JListPanel;
 import org.mazarineblue.mbt.gui.verifiers.PatternInputVerifier;
 import org.mazarineblue.mbt.gui.verifiers.ValidationLabelSwitcher;

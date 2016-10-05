@@ -17,6 +17,8 @@
  */
 package org.mazarineblue.mbt.gui.pages;
 
+import static java.awt.EventQueue.invokeLater;
+import java.util.concurrent.TimeoutException;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -26,13 +28,16 @@ import org.mazarineblue.mbt.gui.StateDialog;
 import org.mazarineblue.mbt.gui.TransitionDialog;
 import static org.mazarineblue.swing.SwingUtil.fetchChildNamed;
 import static org.mazarineblue.swing.SwingUtil.fetchWindowTitled;
+import static org.mazarineblue.swing.SwingUtil.waitFor;
 
 public class ModelEditorPage
         implements AutoCloseable {
 
+    private static final int TIMEOUT = 500;
+
     public final ModelEditorFrame frame;
-    public final JMenuItem newStateMenuItem;
-    public final JMenuItem newTransitionMenuItem;
+    private final JMenuItem newStateMenuItem;
+    private final JMenuItem newTransitionMenuItem;
     public final JComboBox<?> viewComboBox;
     public final JTable table;
     public final JPopupMenu popupMenu;
@@ -52,40 +57,48 @@ public class ModelEditorPage
         editMenuItem = (JMenuItem) popupMenu.getComponent(1);
         removeMenuItem = (JMenuItem) popupMenu.getComponent(2);
     }
-    
-    public StatePage addState() {
-        newStateMenuItem.doClick();
-        return new StatePage(fetchWindowTitled(frame, "New State", StateDialog.class));
+
+    public StatePage addState()
+            throws TimeoutException {
+        invokeLater(() -> newStateMenuItem.doClick());
+        return waitFor(() -> new StatePage(fetchWindowTitled(frame, "New State", StateDialog.class)), TIMEOUT);
+
     }
 
-    public StatePage editStage() {
-        editMenuItem.doClick();
-        return new StatePage(fetchWindowTitled(frame, "Edit State", StateDialog.class));
+    public StatePage editStage()
+            throws TimeoutException {
+        invokeLater(() -> editMenuItem.doClick());
+        return waitFor(() -> new StatePage(fetchWindowTitled(frame, "Edit State", StateDialog.class)), TIMEOUT);
     }
 
-    public StatePage removeStage() {
-        removeMenuItem.doClick();
-        return new StatePage(fetchWindowTitled(frame, "Remove State", StateDialog.class));
+    public StatePage removeStage()
+            throws TimeoutException {
+        invokeLater(() -> removeMenuItem.doClick());
+        return waitFor(() -> new StatePage(fetchWindowTitled(frame, "Remove State", StateDialog.class)), TIMEOUT);
     }
 
-    public TransitionPage addTransition() {
-        newTransitionMenuItem.doClick();
-        return new TransitionPage(fetchWindowTitled(frame, "New Transition", TransitionDialog.class));
+    public TransitionPage addTransition()
+            throws TimeoutException {
+        invokeLater(() -> newTransitionMenuItem.doClick());
+        return waitFor(() -> new TransitionPage(fetchWindowTitled(frame, "New Transition", TransitionDialog.class)), TIMEOUT);
     }
 
-    public TransitionPage addStateSource() {
-        addMenuItem.doClick();
-        return new TransitionPage(fetchWindowTitled(frame, "Edit Transition", TransitionDialog.class));
+    public TransitionPage addStateSource()
+            throws TimeoutException {
+        invokeLater(() -> addMenuItem.doClick());
+        return waitFor(() -> new TransitionPage(fetchWindowTitled(frame, "Edit Transition", TransitionDialog.class)), TIMEOUT);
     }
 
-    public TransitionPage editTransition() {
-        editMenuItem.doClick();
-        return new TransitionPage(fetchWindowTitled(frame, "Edit Transition", TransitionDialog.class));
+    public TransitionPage editTransition()
+            throws TimeoutException {
+        invokeLater(() -> editMenuItem.doClick());
+        return waitFor(() -> new TransitionPage(fetchWindowTitled(frame, "Edit Transition", TransitionDialog.class)), TIMEOUT);
     }
 
-    public TransitionPage removeTransition() {
-        removeMenuItem.doClick();
-        return new TransitionPage(fetchWindowTitled(frame, "Remove Transition", TransitionDialog.class));
+    public TransitionPage removeTransition()
+            throws TimeoutException {
+        invokeLater(() -> removeMenuItem.doClick());
+        return waitFor(() -> new TransitionPage(fetchWindowTitled(frame, "Remove Transition", TransitionDialog.class)), TIMEOUT);
     }
 
     @Override

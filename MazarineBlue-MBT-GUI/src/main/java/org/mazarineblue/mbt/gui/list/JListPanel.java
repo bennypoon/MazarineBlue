@@ -26,6 +26,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import org.mazarineblue.mbt.gui.exceptions.InvalidContentException;
 import org.mazarineblue.mbt.gui.verifiers.SerializableInputVerifier;
 import org.mazarineblue.mbt.gui.verifiers.ValidationLabel;
 
@@ -52,19 +53,37 @@ public class JListPanel<T extends Serializable>
     private transient javax.swing.JLabel validationLabel;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Creates a default JListPanel.
+     */
     public JListPanel() {
         this(new DefaultComboBoxModel<>());
     }
 
+    /**
+     * Creates a {@code JListPanel} with the options in specified model.
+     *
+     * @param model the model with the options.
+     */
     public JListPanel(DefaultComboBoxModel<T> model) {
         this.model = model;
         initComponents();
     }
 
+    /**
+     * Determines whether the options field is editable.
+     *
+     * @param editable when {@code true} indicated editable.
+     */
     public void setEditable(boolean editable) {
         optionsComboBox.setEditable(editable);
     }
 
+    /**
+     * Sets the input verifier for the options field.
+     *
+     * @param verifier the verifier to use on the options field.
+     */
     public void setVerifier(SerializableInputVerifier verifier) {
         optionsComboBox.setInputVerifier(verifier);
     }
@@ -127,13 +146,9 @@ public class JListPanel<T extends Serializable>
     }
 
     /**
-     * Gets the content in this container.
-     * <p>
-     * Note: This method should be called under AWT tree lock.
+     * Fetches the content in this container.
      *
      * @return a collection of all content in this container.
-     *
-     * @see Component#getTreeLock()
      */
     @SuppressWarnings("unchecked")
     public Collection<T> getAllItems() {
@@ -143,8 +158,14 @@ public class JListPanel<T extends Serializable>
                 .collect(() -> new ArrayList<>(contentPanel.getComponentCount()), Collection::add, Collection::addAll);
     }
 
-    public T getItem(int index) {
-        return getItemPanel(index).getItem();
+    /**
+     * Gets the n<sup>th</sup> item.
+     *
+     * @param n the index of the item to get.
+     * @return the n<sup>th</sup> item.
+     */
+    public T getItem(int n) {
+        return getItemPanel(n).getItem();
     }
 
     @SuppressWarnings("unchecked")

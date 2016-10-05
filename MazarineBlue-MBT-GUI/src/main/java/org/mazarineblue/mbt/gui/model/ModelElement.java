@@ -19,12 +19,27 @@ package org.mazarineblue.mbt.gui.model;
 
 import java.io.Serializable;
 
-public interface ModelElement<T extends ModelElement>
+interface ModelElement<T extends ModelElement>
         extends Serializable {
 
+    /**
+     * Gets the name for this element.
+     *
+     * @return the name of this element.
+     */
     public String getName();
 
+    /**
+     * Sets the action for this element.
+     *
+     * @return the associated guard expression of this element.
+     */
     public T setAction(String action);
 
+    /**
+     * Gets the action for this element.
+     *
+     * @return the associated guard expression of this element.
+     */
     public String getAction();
 }

@@ -39,7 +39,7 @@ class UnmodifiableState
     }
 
     @Override
-    public void copy(State newState) {
+    public State copy(State newState) {
         throw new UnsupportedOperationException();
     }
 
