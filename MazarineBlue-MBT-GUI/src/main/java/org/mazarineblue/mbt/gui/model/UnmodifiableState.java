@@ -44,11 +44,6 @@ class UnmodifiableState
     }
 
     @Override
-    public State addViews(String view) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public State addViews(String... views) {
         throw new UnsupportedOperationException();
     }

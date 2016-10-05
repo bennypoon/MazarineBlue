@@ -48,12 +48,6 @@ class StateImpl
     }
 
     @Override
-    public StateImpl addViews(String view) {
-        views.add(view);
-        return this;
-    }
-
-    @Override
     public StateImpl addViews(String... views) {
         this.views.addAll(asList(views));
         return this;

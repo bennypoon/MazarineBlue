@@ -20,6 +20,13 @@ package org.mazarineblue.mbt.gui.model;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * A {@code State} represent a state that the software may occupy.
+ * <p>
+ * A state can belong to multiple views (on the {@link GraphModel model}).
+ *
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ */
 public interface State
         extends ModelElement<State> {
 
@@ -29,15 +36,42 @@ public interface State
 
     public void verify();
 
-    public void copy(State newState);
+    /**
+     * Deep copies the content of the other state into this state.
+     *
+     * @param other the state to perform the deep copy on.
+     */
+    public void copy(State other);
 
-    public State addViews(String view);
-
+    /**
+     * Appends the specified views to this state.
+     *
+     * @param views the views to append to this state.
+     * @return the updated state.
+     */
     public State addViews(String... views);
 
+    /**
+     * Appends the specified views to this state.
+     *
+     * @param views the views to append to this state.
+     * @return the updated state.
+     */
     public State addViews(Collection<String> views);
 
+    /**
+     * Fetches the views on the {@link GraphModel model} that this state
+     * appears in.
+     *
+     * @return the views this state appears in.
+     */
     public List<String> getViews();
 
+    /**
+     * Test if this state appears in the specified view.
+     *
+     * @param view the view to use for testing.
+     * @return {@code true} if this state appears in the specified view.
+     */
     public boolean containsView(String view);
 }

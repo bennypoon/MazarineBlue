@@ -66,6 +66,15 @@ class TransitionImpl
     }
 
     @Override
+    public void copy(Transition t, StateConvertor convertor) {
+        super.copy(t);
+        guard = t.getGuard();
+        businessValue = t.getBusinessValue();
+        sources = convertor.convert(t.getSources());
+        destination = convertor.convert(t.getDestination());
+    }
+
+    @Override
     public boolean containsView(String view) {
         return sources.stream().noneMatch(s -> !s.containsView(view)) && destination.containsView(view);
     }
@@ -153,14 +162,5 @@ class TransitionImpl
                 && Objects.equals(guard, ((Transition) obj).getGuard())
                 && Objects.equals(sources, ((Transition) obj).getSources())
                 && Objects.equals(destination, ((Transition) obj).getDestination());
-    }
-
-    @Override
-    public void copy(Transition t, StateConvertor convertor) {
-        super.copy(t);
-        guard = t.getGuard();
-        businessValue = t.getBusinessValue();
-        sources = convertor.convert(t.getSources());
-        destination = convertor.convert(t.getDestination());
     }
 }

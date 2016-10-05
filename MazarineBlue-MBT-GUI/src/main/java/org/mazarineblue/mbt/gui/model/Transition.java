@@ -20,6 +20,12 @@ package org.mazarineblue.mbt.gui.model;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * A {@code Transition} represent the way to move change from one state to
+ * another.
+ *
+ * @author Alex de Kruijff <alex.de.kruijff@MazarineBlue.org>
+ */
 public interface Transition
         extends ModelElement<Transition> {
 
@@ -32,6 +38,13 @@ public interface Transition
     }
 
     public void verify();
+
+    /**
+     * Deep copies the content of the other state into this state.
+     *
+     * @param other the state to perform the deep copy on.
+     */
+    public void copy(Transition transition, StateConvertor convertor);
 
     public boolean containsView(String view);
 
@@ -58,6 +71,4 @@ public interface Transition
     public boolean isSource(State state);
 
     public boolean isDestination(State state);
-
-    public void copy(Transition transition, StateConvertor convertor);
 }
