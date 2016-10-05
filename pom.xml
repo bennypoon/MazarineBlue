@@ -58,6 +58,7 @@
         <module>MazarineBlue-VariableStore</module>
         <module>MazarineBlue-PluginLibrary</module>
         <module>MazarineBlue-MBT-GUI</module>
+        <module>MazarineBlue-MBT</module>
     </modules>
 
     <scm>
