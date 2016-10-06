@@ -17,7 +17,9 @@
  */
 package org.mazarineblue.mbt;
 
+import java.util.Collection;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class StepPattern {
 
@@ -29,10 +31,10 @@ public class StepPattern {
     // 1. Visit c
     // 2. Trigger 1 e -> sattisfying 1 cvs
     // 3. Traversing 1 t
-    public StepPattern(StateConfiguration c, Set<Event> e, ConditionValueAssignement cva, Set<Transition> t) {
+    public StepPattern(StateConfiguration c, Set<Event> e, ConditionValueAssignement cva, Collection<Transition> t) {
         this.c = c;
         this.e = e;
         this.cva = cva;
-        this.t = t;
+        this.t = new TreeSet<>(t);
     }
 }

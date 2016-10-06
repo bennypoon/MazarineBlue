@@ -17,10 +17,9 @@
  */
 package org.mazarineblue.mbt;
 
-class Expression
-        extends ConditionValueAssignement {
+class FalseExpression
+        extends Expression {
 
-    void addOr(ConditionValueAssignement cva) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public FalseExpression() {
     }
 }

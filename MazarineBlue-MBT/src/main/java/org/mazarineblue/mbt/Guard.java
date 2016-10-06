@@ -18,10 +18,19 @@
 package org.mazarineblue.mbt;
 
 import java.util.Collection;
+import java.util.List;
 
 class Guard {
 
     Collection<ValueAssigment> getValueAssigments() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    boolean satisfied(ConditionValueAssignement cva) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    List<ConditionValueAssignement> getAtomicConditions() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -17,6 +17,8 @@
  */
 package org.mazarineblue.mbt;
 
+import java.util.Set;
+
 class Transition {
 
     State getTarget() {
@@ -24,6 +26,14 @@ class Transition {
     }
 
     Guard getGuard() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    State getSource() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    Set<Event> getEvents() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

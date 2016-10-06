@@ -17,7 +17,10 @@
  */
 package org.mazarineblue.mbt;
 
-public class Not<T> {
+class Not
+        extends ConditionValueAssignement {
 
-    private T obj;
+    public Not(ConditionValueAssignement ac) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
